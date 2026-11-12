@@ -1,0 +1,23 @@
+# Build outputs (see AGENTS.md)
+docs/build/
+slides/build/
+
+# LaTeX auxiliary files
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.nav
+*.snm
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Editor and OS
+.DS_Store

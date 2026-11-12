@@ -1,0 +1,40 @@
+# environment.yml
+# Conda environment for dynamics_memo.
+# Create:  conda env create -f environment.yml
+# Update:  conda env update -f environment.yml --prune
+
+name: dynamics_memo
+
+channels:
+  - conda-forge
+
+dependencies:
+  # Python
+  - python >=3.14,<3.15
+
+  # Scientific computing and symbolic math
+  - numpy >=2.5
+  - scipy >=1.18
+  - sympy >=1.14
+  - matplotlib >=3.11
+  - pandas >=3.1
+
+  # Jupyter notebooks (Jupytext pairs, output stripping)
+  - jupyterlab >=4.6
+  - jupytext >=1.19
+  - nbstripout >=0.9
+
+  # Slides and XML handling
+  - python-pptx >=1.0
+  - lxml >=6.1
+  - latex2mathml >=3.77
+
+  # Tests and style
+  - pytest >=9.2
+  - black >=26.10
+  - isort >=9.0
+
+  # Packages not available on conda-forge
+  - pip >=26
+  - pip:
+      - mathml2omml-as >=0.1.0

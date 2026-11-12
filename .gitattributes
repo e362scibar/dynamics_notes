@@ -1,0 +1,4 @@
+# Strip notebook outputs and execution counts on commit (see AGENTS.md).
+# Requires `nbstripout --install` once per clone to register the filter driver.
+*.ipynb filter=nbstripout
+*.ipynb diff=ipynb
