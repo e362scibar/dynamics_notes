@@ -35,8 +35,8 @@
 \slidemath{K = -(1+hx)\Big[\sqrt{\tfrac{E^2}{c^2} - m^2c^2 - P_x^2 - P_y^2} + qA_s\Big]}
 
 \slidetitle{\en{Normalized Hamiltonian}\ja{規格化されたハミルトニアン}}
-\slidepoint{\en{Normalized with P0; delta is a constant of motion for static fields}%
-            \ja{P0 で規格化。静的場では delta は運動の定数}}
+\slidepoint{\en{Normalized with P0; delta is a constant of motion for a static B-field}%
+            \ja{P0 で規格化。静磁場では delta は運動の定数}}
 \slidemath{H = -(1+hx)\sqrt{(1+\delta)^2 - (p_x-a_x)^2 - (p_y-a_y)^2} - (1+hx)\,a_s}
 
 \slidetitle{\en{Ideal dipole potential}\ja{理想的な偏向磁石のポテンシャル}}
@@ -93,9 +93,10 @@ convention are}%
   \frac{d\mathbf{e}_x}{ds} &= h\,\mathbf{T}, &
   \mathbf{T} &= \frac{d\mathbf{R}}{ds},
 \end{align}
-\en{where $\mathbf{e}_x$ is the outward horizontal unit normal and $\mathbf{e}_y$ is the vertical unit vector. A
-particle near the reference orbit is at}%
-\ja{ここで $\mathbf{e}_x$ は外向きの水平単位法線，$\mathbf{e}_y$ は鉛直単位ベクトルである。基準軌道の近傍の粒子の位置は}
+\en{where $\mathbf{T} = d\mathbf{R}/ds$ is the unit tangent vector of $\mathbf{R}(s)$, $\mathbf{e}_x$ is the outward
+horizontal unit normal, and $\mathbf{e}_y$ is the vertical unit vector. A particle near the reference orbit is at}%
+\ja{ここで $\mathbf{T} = d\mathbf{R}/ds$ は $\mathbf{R}(s)$ の単位接線ベクトル，$\mathbf{e}_x$ は外向きの水平単位法線，
+$\mathbf{e}_y$ は鉛直単位ベクトルである。基準軌道の近傍の粒子の位置は}
 \begin{equation}
   \mathbf{r}(s, x, y) = \mathbf{R}(s) + x\,\mathbf{e}_x(s) + y\,\mathbf{e}_y .
 \end{equation}
@@ -112,31 +113,97 @@ The metric is checked for a circular orbit in the notebook.}%
 \section{\en{Lagrangian and Hamiltonian with $s$ as the independent variable}%
          \ja{$s$ を独立変数とするラグランジアンとハミルトニアン}}
 
-\en{With time $t$ as the independent variable, the Lagrangian of a particle in static fields is}%
-\ja{時間 $t$ を独立変数とすると，静的場中の粒子のラグランジアンは}
+\en{With time $t$ as the independent variable, the Lagrangian of a particle in a static magnetic field is}%
+\ja{時間 $t$ を独立変数とすると，静磁場中の粒子のラグランジアンは}
 \begin{equation}
   L = -mc^2\sqrt{1 - \frac{v^2}{c^2}} + q\,\mathbf{v}\cdot\mathbf{A} .
 \end{equation}
-\en{Using $t' = dt/ds$, $x' = dx/ds$, and $y' = dy/ds$, and the metric \eqref{eq:metric}, the Lagrangian with $s$ as the
-independent variable is}%
-\ja{$t' = dt/ds$，$x' = dx/ds$，$y' = dy/ds$ と計量 \eqref{eq:metric} を用いると，$s$ を独立変数とするラグランジアンは}
+\en{The Euler-Lagrange equation for the Cartesian position $\mathbf{r}$ is}%
+\ja{デカルト座標の位置 $\mathbf{r}$ に対するオイラー・ラグランジュ方程式は}
+\begin{equation}
+  \frac{d}{dt}\frac{\partial L}{\partial \mathbf{v}} - \frac{\partial L}{\partial \mathbf{r}} = 0,
+  \qquad \mathbf{v} = \dot{\mathbf{r}} .
+  \label{eq:el}
+\end{equation}
+\en{The velocity derivative is}%
+\ja{速度による微分は}
+\begin{equation}
+  \frac{\partial L}{\partial \mathbf{v}} = \gamma m\,\mathbf{v} + q\,\mathbf{A},
+  \qquad \gamma = \frac{1}{\sqrt{1 - v^2/c^2}} ,
+  \label{eq:el_velocity}
+\end{equation}
+\en{and the position derivative, with $\mathbf{v}$ held fixed, is}%
+\ja{であり，$\mathbf{v}$ を固定した位置による微分は}
+\begin{equation}
+  \frac{\partial L}{\partial \mathbf{r}} = q\,\nabla(\mathbf{v}\cdot\mathbf{A})
+  = q\big[(\mathbf{v}\cdot\nabla)\mathbf{A} + \mathbf{v}\times(\nabla\times\mathbf{A})\big] .
+  \label{eq:el_position}
+\end{equation}
+\en{The vector potential is evaluated along the trajectory, so its total time derivative is}%
+\ja{ベクトルポテンシャルは軌道上で評価するので，その全時間微分は}
+\begin{equation}
+  \frac{d\mathbf{A}}{dt} = \frac{\partial \mathbf{A}}{\partial t} + (\mathbf{v}\cdot\nabla)\mathbf{A} .
+  \label{eq:dA_dt}
+\end{equation}
+\en{Substituting \eqref{eq:el_velocity}--\eqref{eq:dA_dt} into \eqref{eq:el}, the directional derivative
+$(\mathbf{v}\cdot\nabla)\mathbf{A}$ of the vector potential along the trajectory cancels and}%
+\ja{\eqref{eq:el_velocity}--\eqref{eq:dA_dt} を \eqref{eq:el} に代入すると，軌道に沿ったベクトルポテンシャルの
+方向微分 $(\mathbf{v}\cdot\nabla)\mathbf{A}$ が相殺して}
+\begin{equation}
+  \frac{d}{dt}(\gamma m\,\mathbf{v}) = q\,\mathbf{v}\times\mathbf{B} - q\,\frac{\partial \mathbf{A}}{\partial t},
+  \qquad \mathbf{B} = \nabla\times\mathbf{A} .
+  \label{eq:lorentz}
+\end{equation}
+\en{For a static magnetic field $\partial\mathbf{A}/\partial t = 0$, and \eqref{eq:lorentz} is the Lorentz force
+equation $d\mathbf{p}/dt = q\,\mathbf{v}\times\mathbf{B}$ with the mechanical momentum
+$\mathbf{p} = \gamma m\mathbf{v}$. The same Euler-Lagrange procedure applied to $L_s$ with $s$ as the independent
+variable gives the equations of motion used in the following sections. The notebook verifies the Cartesian
+identity \eqref{eq:lorentz} with sympy.}%
+\ja{静磁場では $\partial\mathbf{A}/\partial t = 0$ であるから，\eqref{eq:lorentz} は力学的運動量
+$\mathbf{p} = \gamma m\mathbf{v}$ を用いてローレンツ力の運動方程式
+$d\mathbf{p}/dt = q\,\mathbf{v}\times\mathbf{B}$ にほかならない。$s$ を独立変数とする $L_s$ に同じ手続きを
+適用すると，以降の節で用いる運動方程式が得られる。デカルト座標での恒等式 \eqref{eq:lorentz} は，
+ノートブックで sympy により検証している。}
+
+\en{The action does not depend on the choice of the independent variable, so $L\,dt = L_s\,ds$. With
+$t' = dt/ds$, $x' = dx/ds$, and $y' = dy/ds$, the velocity components satisfy $v_T t' = 1+hx$, $v_x t' = x'$, and
+$v_y t' = y'$. Using these and the metric \eqref{eq:metric}, the Lagrangian with $s$ as the independent variable is}%
+\ja{作用は独立変数の取り方によらないので $L\,dt = L_s\,ds$ である。$t' = dt/ds$，$x' = dx/ds$，$y' = dy/ds$ とすると，
+速度成分は $v_T t' = 1+hx$，$v_x t' = x'$，$v_y t' = y'$ を満たす。これらと計量 \eqref{eq:metric} を用いると，
+$s$ を独立変数とするラグランジアンは}
 \begin{equation}
   L_s = -mc^2\sqrt{t'^2 - \frac{(1+hx)^2 + x'^2 + y'^2}{c^2}}
         + q\big[(1+hx)A_s + x'A_x + y'A_y\big] .
 \end{equation}
-\en{The conjugate momenta are $p_t = -E$, $p_x = \gamma m v_x + qA_x$, and $p_y = \gamma m v_y + qA_y$. The
-Hamiltonian with $s$ as the time-like variable is $K = p_x x' + p_y y' + p_t t' - L_s$. Writing the mechanical
+\en{The variable $t'$ is not independent. The tangential velocity is $v_T = (1+hx)\,ds/dt = (1+hx)/t'$, and the
+tangential mechanical momentum is $P_T = \gamma m v_T = E v_T/c^2$, so}%
+\ja{変数 $t'$ は独立ではない。接線方向の速度は $v_T = (1+hx)\,ds/dt = (1+hx)/t'$ であり，接線方向の力学的運動量は
+$P_T = \gamma m v_T = E v_T/c^2$ であるから}
+\begin{equation}
+  t' = \frac{(1+hx)\,E}{P_T c^2},
+  \qquad P_T = \sqrt{\frac{E^2}{c^2} - m^2c^2 - P_x^2 - P_y^2} .
+  \label{eq:tprime}
+\end{equation}
+\en{The generalized coordinates are $(t, x, y)$, and their conjugate momenta are}%
+\ja{一般化座標は $(t, x, y)$ であり，その共役運動量は}
+\begin{equation}
+  \begin{aligned}
+    p_t &= \frac{\partial L_s}{\partial t'} = -\gamma m c^2 = -E, \\
+    p_x &= \frac{\partial L_s}{\partial x'} = \gamma m v_x + qA_x, \qquad
+    p_y = \frac{\partial L_s}{\partial y'} = \gamma m v_y + qA_y .
+  \end{aligned}
+  \label{eq:momenta}
+\end{equation}
+\en{The Hamiltonian with $s$ as the time-like variable is $K = p_x x' + p_y y' + p_t t' - L_s$. Writing the mechanical
 transverse momenta as $P_x = p_x - qA_x$ and $P_y = p_y - qA_y$, the Legendre transform gives}%
-\ja{共役運動量は $p_t = -E$，$p_x = \gamma m v_x + qA_x$，$p_y = \gamma m v_y + qA_y$ である。
-$s$ を時間的変数とするハミルトニアンは $K = p_x x' + p_y y' + p_t t' - L_s$ である。力学的な横方向運動量を
+\ja{$s$ を時間的変数とするハミルトニアンは $K = p_x x' + p_y y' + p_t t' - L_s$ である。力学的な横方向運動量を
 $P_x = p_x - qA_x$，$P_y = p_y - qA_y$ とすると，Legendre 変換により次の式が得られる。}
 \begin{equation}
   K = -(1+hx)\Big[\sqrt{\frac{E^2}{c^2} - m^2c^2 - P_x^2 - P_y^2} + qA_s\Big].
   \label{eq:K}
 \end{equation}
-\en{The square root is the tangential mechanical momentum. The prefactor $-(1+hx)$ comes from $t'$ and the
-metric factor.}%
-\ja{平方根の項は接線方向の力学的運動量である。前因子 $-(1+hx)$ は $t'$ と計量因子に由来する。}
+\en{The prefactor $-(1+hx)$ comes from $t'$ and the metric factor.}%
+\ja{前因子 $-(1+hx)$ は $t'$ と計量因子に由来する。}
 
 \section{\en{Normalization}\ja{規格化}}
 
@@ -149,10 +216,10 @@ $a_x = qA_x/P_0$，$a_y = qA_y/P_0$，$a_s = qA_s/P_0$ とする。\eqref{eq:K} 
   \label{eq:H_general}
 \end{equation}
 \en{The time-like variable $\tau$ is conjugate to $\delta$. It comes from $(t,E)$ by a canonical transformation
-(the standard choice in \cite{lee2019} and \cite{wiedemann2015}). For static fields $H$ does not depend on $\tau$,
-so $\delta$ is a constant of motion.}%
+(the standard choice in \cite{lee2019} and \cite{wiedemann2015}). For a static magnetic field $H$ does not depend
+on $\tau$, so $\delta$ is a constant of motion.}%
 \ja{時間的変数 $\tau$ は $\delta$ と共役である。$(t,E)$ からの正準変換により得られる
-（\cite{lee2019} と \cite{wiedemann2015} の標準的な選択）。静的場では $H$ は $\tau$ に依らないため，$\delta$ は運動の定数である。}
+（\cite{lee2019} と \cite{wiedemann2015} の標準的な選択）。静磁場では $H$ は $\tau$ に依らないため，$\delta$ は運動の定数である。}
 
 \en{If the energy deviation $\delta_L = \Delta E/(P_0c)$ is used instead, the momentum ratio becomes}%
 \ja{エネルギー偏差 $\delta_L = \Delta E/(P_0c)$ を用いる場合，運動量比は次のとおりである。}

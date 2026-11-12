@@ -53,7 +53,8 @@
 # \mathbf{T} = \frac{d\mathbf{R}}{ds},
 # $$
 #
-# where $\mathbf{e}_x$ is the outward horizontal unit normal and $\mathbf{e}_y$ is the vertical unit vector.
+# where $\mathbf{T} = d\mathbf{R}/ds$ is the unit tangent vector of $\mathbf{R}(s)$, $\mathbf{e}_x$ is the outward
+# horizontal unit normal, and $\mathbf{e}_y$ is the vertical unit vector.
 # The position of a particle near the reference orbit is
 #
 # $$
@@ -92,7 +93,7 @@ assert sp.simplify(metric[0, 1]) == 0 and sp.simplify(metric[0, 2]) == 0 and sp.
 # %% [markdown]
 # ## 2. Lagrangian with $s$ as the independent variable
 #
-# For a particle with charge $q$ in static fields with potentials $(A_x, A_y, A_s)$ (physical components along
+# For a particle with charge $q$ in a static magnetic field with potentials $(A_x, A_y, A_s)$ (physical components along
 # $\mathbf{e}_x$, $\mathbf{e}_y$, $\mathbf{T}$), the Lagrangian with time $t$ as the independent variable is
 #
 # $$
@@ -100,12 +101,78 @@ assert sp.simplify(metric[0, 1]) == 0 and sp.simplify(metric[0, 2]) == 0 and sp.
 # v_T = (1+hx)\frac{ds}{dt}, \quad v_x = \frac{dx}{dt}, \quad v_y = \frac{dy}{dt}.
 # $$
 #
+# **Euler-Lagrange equation and the Lorentz force.** The Euler-Lagrange equation for the Cartesian position
+# $\mathbf{r}$ is
+#
+# $$
+# \frac{d}{dt}\frac{\partial L}{\partial \mathbf{v}} - \frac{\partial L}{\partial \mathbf{r}} = 0,
+# \qquad \mathbf{v} = \dot{\mathbf{r}} .
+# $$
+#
+# The velocity derivative is $\partial L/\partial\mathbf{v} = \gamma m\mathbf{v} + q\mathbf{A}$ with
+# $\gamma = 1/\sqrt{1 - v^2/c^2}$. The position derivative, with $\mathbf{v}$ held fixed, is
+#
+# $$
+# \frac{\partial L}{\partial \mathbf{r}} = q\,\nabla(\mathbf{v}\cdot\mathbf{A})
+# = q\big[(\mathbf{v}\cdot\nabla)\mathbf{A} + \mathbf{v}\times(\nabla\times\mathbf{A})\big].
+# $$
+#
+# The vector potential is evaluated along the trajectory, so
+# $d\mathbf{A}/dt = \partial\mathbf{A}/\partial t + (\mathbf{v}\cdot\nabla)\mathbf{A}$. Substituting these
+# into the Euler-Lagrange equation, the directional derivative $(\mathbf{v}\cdot\nabla)\mathbf{A}$ of the vector
+# potential along the trajectory cancels and
+#
+# $$
+# \frac{d}{dt}(\gamma m\,\mathbf{v}) = q\,\mathbf{v}\times\mathbf{B} - q\,\frac{\partial \mathbf{A}}{\partial t},
+# \qquad \mathbf{B} = \nabla\times\mathbf{A} .
+# $$
+#
+# For a static magnetic field $\partial\mathbf{A}/\partial t = 0$, so this is the Lorentz force equation
+# $d\mathbf{p}/dt = q\,\mathbf{v}\times\mathbf{B}$ with $\mathbf{p} = \gamma m\mathbf{v}$. The next cell checks
+# the identity with sympy.
+
+# %%
+# Euler-Lagrange equation in Cartesian coordinates: d/dt(dL/dv) - dL/dr = 0 must give the Lorentz force.
+t_ = sp.symbols('t', real=True)
+m_, c_, q_ = sp.symbols('m c q', positive=True)
+X = sp.Function('X')(t_)
+Y = sp.Function('Y')(t_)
+Z = sp.Function('Z')(t_)
+Ax_f = sp.Function('Ax')(X, Y, Z)
+Ay_f = sp.Function('Ay')(X, Y, Z)
+Az_f = sp.Function('Az')(X, Y, Z)
+vx, vy, vz = sp.diff(X, t_), sp.diff(Y, t_), sp.diff(Z, t_)
+v2 = vx**2 + vy**2 + vz**2
+gamma = 1 / sp.sqrt(1 - v2 / c_**2)
+L_cart = -m_ * c_**2 * sp.sqrt(1 - v2 / c_**2) + q_ * (vx * Ax_f + vy * Ay_f + vz * Az_f)
+
+Bx = sp.diff(Az_f, Y) - sp.diff(Ay_f, Z)
+By = sp.diff(Ax_f, Z) - sp.diff(Az_f, X)
+Bz = sp.diff(Ay_f, X) - sp.diff(Ax_f, Y)
+v_cross_B = (vy * Bz - vz * By, vz * Bx - vx * Bz, vx * By - vy * Bx)
+
+for name, coord, vel, cross in zip(("x", "y", "z"), (X, Y, Z), (vx, vy, vz), v_cross_B):
+    euler_lagrange = sp.diff(sp.diff(L_cart, vel), t_) - sp.diff(L_cart, coord)
+    lorentz = sp.diff(gamma * m_ * vel, t_) - q_ * cross
+    residual = sp.simplify(euler_lagrange - lorentz)
+    print(f"{name}: residual = {residual}")
+    assert residual == 0
+
+# %% [markdown]
 # Use $s$ as the independent variable by writing $t' = dt/ds$, $x' = dx/ds$, $y' = dy/ds$. Then
 # $v_T t' = 1 + hx$, $v_x t' = x'$, $v_y t' = y'$, and $L\,dt = L_s\,ds$ with
 #
 # $$
 # L_s = -mc^2\,\underbrace{\sqrt{t'^2 - \frac{(1+hx)^2 + x'^2 + y'^2}{c^2}}}_{Q}
 #       + q\big[(1+hx)A_s + x'A_x + y'A_y\big].
+# $$
+#
+# The variable $t'$ is not independent. The tangential velocity is $v_T = (1+hx)\,ds/dt = (1+hx)/t'$, and the
+# tangential mechanical momentum is $P_T = \gamma m v_T = E v_T/c^2$, so
+#
+# $$
+# t' = \frac{(1+hx)\,E}{P_T c^2}, \qquad
+# P_T = \sqrt{\frac{E^2}{c^2} - m^2c^2 - P_x^2 - P_y^2} .
 # $$
 #
 # The generalized coordinates are $(t, x, y)$ and their conjugate momenta are
@@ -152,6 +219,14 @@ print(f"K (Legendre transform) = {K_num.real:.12f}")
 print(f"K (closed form)        = {K_closed_num.real:.12f}")
 assert abs(K_num - K_closed_num) < 1e-10
 
+# t' is not independent: t' = (1+hx) E / (P_T c^2).
+t_prime_closed = (1 + h_ * xv) * E_expr / (P_T_expr * c_**2)
+t_prime_num = complex(sp.N(T1.subs(numeric_values)))
+t_prime_closed_num = complex(sp.N(t_prime_closed.subs(numeric_values)))
+print(f"t' (independent)       = {t_prime_num.real:.12f}")
+print(f"t' (closed form)       = {t_prime_closed_num.real:.12f}")
+assert abs(t_prime_num - t_prime_closed_num) < 1e-10
+
 # %% [markdown]
 # ## 3. Normalization: $\delta$, $p_x$, $p_y$ and the normalized Hamiltonian
 #
@@ -169,7 +244,7 @@ assert abs(K_num - K_closed_num) < 1e-10
 # $$
 #
 # The time-like variable $\tau$ is conjugate to $\delta$. It is obtained from $(t, E)$ by a canonical transformation
-# (the standard choice in [lee2019] and [wiedemann2015]). For static fields, $H$ does not depend on $\tau$, so
+# (the standard choice in [lee2019] and [wiedemann2015]). For a static magnetic field, $H$ does not depend on $\tau$, so
 # $\delta$ is a constant of motion. The transverse EOM do not depend on $\tau$ either, so $\tau$ is not needed here.
 #
 # **Energy deviation.** Some texts use the energy deviation $\delta_L = \Delta E/(P_0 c)$ instead of $\delta$.
