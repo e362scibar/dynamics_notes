@@ -29,4 +29,5 @@ __pycache__/
 .pytest_cache/
 
 # Editor and OS
+.vscode/
 .DS_Store
