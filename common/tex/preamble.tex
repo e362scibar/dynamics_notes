@@ -1,0 +1,28 @@
+% common/tex/preamble.tex
+% Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center)
+% SPDX-License-Identifier: CC-BY-4.0
+%
+% Shared preamble for all topic documents. Loaded by topics/<topic>/main.tex with \input.
+% Build with lualatex; the language is selected with \memolang (en or ja) through latexmk -pretex.
+
+\documentclass[11pt,a4paper]{article}
+
+% Language switch. The default is English. latexmk -pretex='\def\memolang{ja}' overrides it.
+\providecommand{\memolang}{en}
+% \ifx compares macro meanings. Unlike \ifdefstring, it is expandable, so \en and \ja also work inside \edef.
+\def\memolangEN{en}
+\def\memolangJA{ja}
+\newcommand{\en}[1]{\ifx\memolang\memolangEN #1\fi}
+\newcommand{\ja}[1]{\ifx\memolang\memolangJA #1\fi}
+
+\usepackage{luatexja-preset}
+\usepackage{etoolbox}
+\usepackage{amsmath,amssymb}
+\usepackage[style=numeric,backend=biber,sorting=none]{biblatex}
+\addbibresource{common/references/references.bib}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+
+% Slide markers (write build/<topic>/<jobname>.slides for common/slides/build_slides.py).
+\input{common/tex/slides.tex}

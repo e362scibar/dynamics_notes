@@ -42,3 +42,4 @@ dependencies:
   - pip >=26
   - pip:
       - mathml2omml-as >=0.1.0
+      - -e ./common/python

@@ -1,0 +1,30 @@
+% common/tex/slides.tex
+% Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center)
+% SPDX-License-Identifier: CC-BY-4.0
+%
+% Slide markers. Each marker writes one line "kind:payload" to build/<topic>/<jobname>.slides during compilation.
+% common/slides/build_slides.py reads that file and builds the PowerPoint deck. The markers print nothing in the PDF.
+% Arguments are expanded at the point of use, so \en{...} and \ja{...} select the language of the current build.
+% Do not use fragile commands (for example \cite or \label) inside slide arguments.
+
+\newwrite\slidesfile
+\AtBeginDocument{\immediate\openout\slidesfile=\jobname.slides\relax}
+\AtEndDocument{\immediate\closeout\slidesfile}
+
+% #1: entry kind, #2: payload. The payload is expanded, then written as plain characters.
+\newcommand{\slideentry}[2]{%
+  \begingroup
+  \edef\slidetmp{#2}%
+  \edef\slidedet{\detokenize\expandafter{\slidetmp}}%
+  \immediate\write\slidesfile{#1:\slidedet}%
+  \endgroup}
+
+% Raw entries are written without expansion. Use them for math and paths, which contain fragile commands.
+\newcommand{\slideentryraw}[2]{%
+  \immediate\write\slidesfile{#1:\detokenize{#2}}}
+
+\newcommand{\slidetitle}[1]{\slideentry{title}{#1}}
+\newcommand{\slidepoint}[1]{\slideentry{point}{#1}}
+\newcommand{\slidemath}[1]{\slideentryraw{math}{#1}}
+\newcommand{\slidefigure}[1]{\slideentryraw{figure}{#1}}
+\newcommand{\slidenote}[1]{\slideentry{note}{#1}}

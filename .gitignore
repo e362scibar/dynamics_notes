@@ -23,6 +23,7 @@ common/references/*
 
 # Python
 __pycache__/
+*.egg-info/
 *.py[cod]
 .ipynb_checkpoints/
 .pytest_cache/
