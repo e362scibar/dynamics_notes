@@ -21,7 +21,16 @@ from dataclasses import dataclass
 from pathlib import Path
 from xml.sax.saxutils import escape
 
-from dynamics_common import Block, BlockKind, Slide, latex_to_omml, read_slide_aux
+from dynamics_common import (
+    WIDESCREEN_HEIGHT_IN,
+    WIDESCREEN_WIDTH_IN,
+    Block,
+    BlockKind,
+    Slide,
+    latex_to_omml,
+    read_slide_aux,
+    set_widescreen_size,
+)
 from lxml import etree
 from pptx import Presentation
 from pptx.oxml.ns import qn
@@ -38,11 +47,14 @@ BUILD_DIR_NAME = "build"
 LANGUAGES = ("en", "ja")
 JAPANESE_LANGUAGE = "ja"
 
-SLIDE_WIDTH_IN = 13.333
-SLIDE_HEIGHT_IN = 7.5
+SLIDE_WIDTH_IN = WIDESCREEN_WIDTH_IN
+SLIDE_HEIGHT_IN = WIDESCREEN_HEIGHT_IN
 TITLE_ONLY_LAYOUT_INDEX = 5
-BODY_LEFT_IN = 0.8
-BODY_WIDTH_IN = 11.7
+MARGIN_LEFT_IN = 0.8
+MARGIN_RIGHT_IN = 0.8
+BODY_WIDTH_IN = SLIDE_WIDTH_IN - MARGIN_LEFT_IN - MARGIN_RIGHT_IN
+TITLE_TOP_IN = 0.35
+TITLE_HEIGHT_IN = 1.35
 BODY_TOP_IN = 1.8
 POINT_HEIGHT_IN = 0.7
 MATH_HEIGHT_IN = 1.0
@@ -161,7 +173,7 @@ def _add_point(shapes: SlideShapes, text: str, lang: str, top: float) -> float:
     Returns:
         The top position of the next block in inches.
     """
-    box = shapes.add_textbox(Inches(BODY_LEFT_IN), Inches(top), Inches(BODY_WIDTH_IN), Inches(POINT_HEIGHT_IN))
+    box = shapes.add_textbox(Inches(MARGIN_LEFT_IN), Inches(top), Inches(BODY_WIDTH_IN), Inches(POINT_HEIGHT_IN))
     frame = box.text_frame
     frame.word_wrap = True
     run = frame.paragraphs[0].add_run()
@@ -182,7 +194,7 @@ def _add_math(shapes: SlideShapes, latex: str, top: float) -> float:
     Returns:
         The top position of the next block in inches.
     """
-    box = shapes.add_textbox(Inches(BODY_LEFT_IN), Inches(top), Inches(BODY_WIDTH_IN), Inches(MATH_HEIGHT_IN))
+    box = shapes.add_textbox(Inches(MARGIN_LEFT_IN), Inches(top), Inches(BODY_WIDTH_IN), Inches(MATH_HEIGHT_IN))
     _append_omml(box.text_frame.paragraphs[0]._p, latex)
     return top + MATH_HEIGHT_IN + BLOCK_GAP_IN
 
@@ -206,8 +218,13 @@ def _add_figure(shapes: SlideShapes, relative_path: str, topic_dir: Path, top: f
     if not path.is_file():
         logger.error("Figure not found: path=%s", path)
         raise FileNotFoundError(path)
-    shapes.add_picture(str(path), Inches(BODY_LEFT_IN), Inches(top), height=Inches(FIGURE_HEIGHT_IN))
-    return top + FIGURE_HEIGHT_IN + BLOCK_GAP_IN
+    picture = shapes.add_picture(str(path), Inches(MARGIN_LEFT_IN), Inches(top), height=Inches(FIGURE_HEIGHT_IN))
+    max_width = Inches(BODY_WIDTH_IN)
+    if picture.width > max_width:
+        aspect_ratio = picture.height / picture.width
+        picture.width = max_width
+        picture.height = round(max_width * aspect_ratio)
+    return top + picture.height.inches + BLOCK_GAP_IN
 
 
 def _add_block(shapes: SlideShapes, block: Block, lang: str, topic_dir: Path, top: float) -> float:
@@ -241,7 +258,12 @@ def _add_slide(presentation: Presentation, slide: Slide, lang: str, topic_dir: P
     """
     layout = presentation.slide_layouts[TITLE_ONLY_LAYOUT_INDEX]
     pptx_slide: PptxSlide = presentation.slides.add_slide(layout)
-    title_frame = pptx_slide.shapes.title.text_frame
+    title_shape = pptx_slide.shapes.title
+    title_shape.left = Inches(MARGIN_LEFT_IN)
+    title_shape.top = Inches(TITLE_TOP_IN)
+    title_shape.width = Inches(BODY_WIDTH_IN)
+    title_shape.height = Inches(TITLE_HEIGHT_IN)
+    title_frame = title_shape.text_frame
     title_frame.text = slide.title
     for run in title_frame.paragraphs[0].runs:
         _style_run(run, lang)
@@ -264,8 +286,7 @@ def build_deck(slides: Sequence[Slide], lang: str, topic_dir: Path) -> Presentat
         The built presentation. The caller saves it.
     """
     presentation = Presentation()
-    presentation.slide_width = Inches(SLIDE_WIDTH_IN)
-    presentation.slide_height = Inches(SLIDE_HEIGHT_IN)
+    set_widescreen_size(presentation)
     for slide in slides:
         _add_slide(presentation, slide, lang, topic_dir)
     return presentation
