@@ -19,3 +19,7 @@ Outputs go to `build/`, which is not tracked.
 - Equations: written once and shared.
 - Figures: shared; text inside figures is language-neutral or generated per language.
 - Japanese typesetting uses `luatexja`. Do not use `pdflatex` or `platex`.
+
+## License
+
+This document and its LaTeX sources are licensed under [CC BY 4.0](../LICENSES/CC-BY-4.0.txt). Code snippets are GPL-3.0-or-later. See [LICENSING.md](../LICENSING.md).

@@ -23,6 +23,7 @@ The English and Japanese LaTeX and slide versions must describe the same content
 
 ## Git rules
 
+- **Work on the `devel` branch.** Do not commit directly to `main`. If the current branch is `main` when you start a change, switch to `devel` first (create it from `main` if it does not exist yet).
 - **Do not run `git commit` unless the user explicitly asks for a commit.** Staging, editing, and building are fine without a commit request. Approval for one commit does not extend to later changes.
 - Do not push, rebase, or rewrite history unless explicitly asked.
 
@@ -173,3 +174,24 @@ Notebook `.py` files (Jupytext pairs) are exempt from the formatting rules above
 ## Documentation
 
 - Write documentation, code comments, and display strings in US English, except for the Japanese versions of LaTeX and slide content.
+
+## Licensing
+
+The repository is split by material type. The full policy is in [LICENSING.md](LICENSING.md).
+
+- **Source code** (Python, notebook `.py` files, `environment.yml`, build scripts): GPL-3.0-or-later.
+- **Documents, slides, figures, and narrative text in notebooks**: CC BY 4.0.
+
+Rules for agents:
+
+- Every new source code file must start with the GPL header (copyright, `SPDX-License-Identifier: GPL-3.0-or-later`, and the warranty disclaimer). Use the exact form in LICENSING.md, with the comment syntax of the file type and the file path on the first line.
+- Every new LaTeX source must carry the CC BY 4.0 header (`SPDX-License-Identifier: CC-BY-4.0`) in `%` comments.
+- Every new Markdown document must end with a `## License` section that states CC BY 4.0 and links to LICENSING.md.
+- Code snippets inside documents are GPL-3.0-or-later.
+- Do not add a file of unknown or incompatible license. Third-party code must be checked and attributed.
+- Do not change the license texts (`LICENSE`, `LICENSES/CC-BY-4.0.txt`) or the copyright line without the user's instruction.
+- Headers and license sections are part of a change. Do not leave them out to save space.
+
+## License
+
+This document is licensed under [CC BY 4.0](LICENSES/CC-BY-4.0.txt). Code snippets are GPL-3.0-or-later. See [LICENSING.md](LICENSING.md).

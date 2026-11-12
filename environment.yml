@@ -1,4 +1,8 @@
 # environment.yml
+# Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center)
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Licensed under GPL-3.0-or-later; see LICENSE. Provided WITHOUT ANY WARRANTY.
+#
 # Conda environment for dynamics_memo.
 # Create:  conda env create -f environment.yml
 # Update:  conda env update -f environment.yml --prune

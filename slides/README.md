@@ -18,3 +18,7 @@ Outputs go to `slides/build/`, which is not tracked.
 - Each slide has a short title and a few points. Longer explanation goes into speaker notes.
 - Japanese decks set the East Asian font on text runs.
 - Comments and code are in English.
+
+## License
+
+The generator scripts in this directory are source code and are licensed under [GPL-3.0-or-later](../LICENSE). Generated slide decks are documents and are licensed under [CC BY 4.0](../LICENSES/CC-BY-4.0.txt). See [LICENSING.md](../LICENSING.md).

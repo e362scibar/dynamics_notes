@@ -83,3 +83,12 @@ Topics are added as notebooks, sections of `docs/main.tex`, and slide sections t
 - スライド: `slides/` の共通スクリプト `build_slides.py` で英語版・日本語版を生成します。数式は PowerPoint のネイティブ数式（OMML）として埋め込みます。
 - 環境: conda 環境 `dynamics_memo`（Python 3.14）。定義は `environment.yml` です。
 - コミットは明示的に依頼された場合にのみ行います。
+
+## License
+
+- Source code (Python, notebook `.py` files, `environment.yml`, build scripts): [GPL-3.0-or-later](LICENSE).
+- Documents, slides, figures, and narrative text in notebooks: [CC BY 4.0](LICENSES/CC-BY-4.0.txt).
+
+Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center). See [LICENSING.md](LICENSING.md) for the full policy.
+
+日本語: ソースコードは GPL-3.0-or-later、文書・スライド・図などは CC BY 4.0 です。詳細は [LICENSING.md](LICENSING.md) を参照してください。

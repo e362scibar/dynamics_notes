@@ -12,3 +12,7 @@ Jupyter notebooks for beam dynamics memo topics. English only.
 | Topic | File | Status |
 |---|---|---|
 | (none yet) | | |
+
+## License
+
+Notebook `.py` files are source code and are licensed under [GPL-3.0-or-later](../LICENSE). Narrative text in markdown cells is licensed under [CC BY 4.0](../LICENSES/CC-BY-4.0.txt). See [LICENSING.md](../LICENSING.md).
