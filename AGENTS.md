@@ -27,6 +27,8 @@ common/                shared material used by all topics
   slides/              shared slide generator (build_slides.py, README.md)
   python/              shared Python package dynamics_common (pyproject.toml, tests/)
   references/          reference index (README.md) and BibTeX database; PDFs are local only
+  glossary.toml        Japanese terminology glossary (single source of truth)
+  glossary.md          generated index of glossary.toml
 build/<topic>/         generated outputs (git-ignored)
 ```
 
@@ -42,6 +44,7 @@ Rules:
 - **Notebooks, Python scripts, and code comments**: English only. This includes comments, docstrings, log messages, and display strings in code.
 - **LaTeX and slides**: English and Japanese versions.
 - **Japanese text in LaTeX and slides**: use the plain form (だ・である調) at the end of sentences, for example 「求める。」「得られる。」「確認すること。」. Do not use the polite form (です・ます調). Keep the English versions unchanged.
+- **Japanese technical terms**: follow [common/glossary.toml](common/glossary.toml), the single source of truth for term translations. Read [common/glossary.md](common/glossary.md) before translating. When a term is missing, add it to `glossary.toml` and regenerate the index with `python common/python/dynamics_common/glossary.py --write`. Do not introduce a second Japanese form for a term that already has one.
 - **Commit messages**: English only.
 - **Chat replies to the user**: Japanese, unless the user asks otherwise.
 
@@ -147,6 +150,20 @@ Topic code imports the shared helpers with `from dynamics_common import ...`.
 ```bash
 python -m pytest -q
 ```
+
+### Glossary
+
+`common/glossary.toml` is the single source of truth for Japanese technical terms. `common/glossary.md` is generated from it; do not edit the Markdown by hand.
+
+```bash
+# Regenerate common/glossary.md after editing glossary.toml
+python common/python/dynamics_common/glossary.py --write
+
+# Check every topics/*/main.tex for forbidden Japanese forms
+python common/python/dynamics_common/glossary.py
+```
+
+`common/python/tests/test_topics_glossary.py` runs the same check under `pytest`, so a forbidden form fails the test suite.
 
 ## Critical rules
 

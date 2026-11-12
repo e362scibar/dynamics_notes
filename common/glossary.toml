@@ -1,0 +1,134 @@
+# common/glossary.toml
+# Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center)
+# SPDX-License-Identifier: CC-BY-4.0
+#
+# Single source of truth for the Japanese translation of technical terms.
+# Read by dynamics_common.glossary; checked against topics/*/main.tex by
+# common/python/tests/test_topics_glossary.py. The human-readable index
+# common/glossary.md is generated from this file.
+#
+# Fields per term:
+#   en            English term as it appears in the LaTeX source.
+#   ja            Preferred Japanese translation.
+#   forbidden_ja  Japanese forms that must not be used. Optional.
+#   note          Reason for the choice, or a usage restriction. Optional.
+
+[terms.dipole_magnet]
+en = "dipole magnet"
+ja = "偏向磁石"
+note = "Kept as is. Do not shorten to 偏向 alone."
+
+[terms.quadrupole_magnet]
+en = "quadrupole magnet"
+ja = "四極磁石"
+
+[terms.sextupole_magnet]
+en = "sextupole magnet"
+ja = "六極磁石"
+
+[terms.octupole_magnet]
+en = "octupole magnet"
+ja = "八極磁石"
+
+[terms.frenet_serret_frame]
+en = "Frenet-Serret frame"
+ja = "Frenet-Serret 座標系"
+forbidden_ja = ["標構"]
+note = "標構 is a correct translation of moving frame but reads as jargon here. Use 座標系."
+
+[terms.curvilinear_coordinates]
+en = "curvilinear coordinates"
+ja = "曲線座標"
+
+[terms.reference_orbit]
+en = "reference orbit"
+ja = "基準軌道"
+
+[terms.ideal_orbit]
+en = "ideal orbit"
+ja = "理想軌道"
+
+[terms.independent_variable]
+en = "independent variable"
+ja = "独立変数"
+
+[terms.canonical]
+en = "canonical"
+ja = "正準"
+
+[terms.conjugate]
+en = "conjugate"
+ja = "共役"
+
+[terms.normalization]
+en = "normalization"
+ja = "規格化"
+forbidden_ja = ["正規化"]
+note = "規格化 is the accelerator-physics usage. 正規化 is the statistics usage."
+
+[terms.dispersion]
+en = "dispersion"
+ja = "分散"
+
+[terms.focusing]
+en = "focusing"
+ja = "集束"
+forbidden_ja = ["収束"]
+note = "集束 for beam focusing. 収束 is for numerical convergence."
+
+[terms.line_element]
+en = "line element"
+ja = "線要素"
+
+[terms.metric]
+en = "metric"
+ja = "計量"
+
+[terms.curvature]
+en = "curvature"
+ja = "曲率"
+
+[terms.torsion]
+en = "torsion"
+ja = "ねじれ"
+note = "Use ねじれ for the geometric property (e.g. zero torsion). Use 捩率 only when a concrete value is given, e.g. 捩率 τ = 0.5 m^-1."
+
+[terms.hamiltonian]
+en = "Hamiltonian"
+ja = "ハミルトニアン"
+
+[terms.lagrangian]
+en = "Lagrangian"
+ja = "ラグランジアン"
+
+[terms.legendre_transformation]
+en = "Legendre transformation"
+ja = "Legendre 変換"
+
+[terms.equation_of_motion]
+en = "equation of motion"
+ja = "運動方程式"
+
+[terms.vector_potential]
+en = "vector potential"
+ja = "ベクトルポテンシャル"
+
+[terms.energy_deviation]
+en = "energy deviation"
+ja = "エネルギー偏差"
+
+[terms.constant_of_motion]
+en = "constant of motion"
+ja = "運動の定数"
+
+[terms.equilibrium_point]
+en = "equilibrium point"
+ja = "平衡点"
+
+[terms.gradient]
+en = "gradient"
+ja = "勾配"
+
+[terms.linear_optics]
+en = "linear optics"
+ja = "線形光学"

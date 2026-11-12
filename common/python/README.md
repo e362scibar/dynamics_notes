@@ -17,6 +17,17 @@ common/python/
 - The package name `dynamics_common` is a placeholder. Rename it before the first module is committed if a better name is chosen.
 - Topic notebooks and the slide generator import from `dynamics_common`. Do not copy helper code into a topic.
 
+## Modules
+
+| Module | Purpose |
+|---|---|
+| `omml.py` | LaTeX math → OMML for native PowerPoint equations |
+| `slide_aux.py` | Read the `kind:payload` slide markers written by the LaTeX build |
+| `slide_geometry.py` | Set the 16:9 slide size and rescale the template geometry |
+| `glossary.py` | Load `common/glossary.toml`, check topic sources, render `common/glossary.md` |
+
+The glossary is the single source of truth for Japanese technical terms. See [common/glossary.md](../glossary.md) for the current index and [AGENTS.md](../../AGENTS.md) for the workflow.
+
 ## Installation
 
 The package is installed in editable mode into the `dynamics_notes` conda environment so that `import dynamics_common` works from any topic:
