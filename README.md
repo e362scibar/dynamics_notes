@@ -82,17 +82,18 @@ The index is in [topics/README.md](topics/README.md). Planned topics are placeho
 
 ## 日本語概要
 
-加速器における高エネルギー電子ビームのダイナミクスに関するメモです。トピックごとにディレクトリを分け、各トピックに Jupyter Notebook（sympy による式の導出を含む、英語のみ）、LaTeX 文書（英語・日本語）、PowerPoint スライド（英語・日本語）を置きます。
+加速器における高エネルギー電子ビームのダイナミクスに関するメモである。トピックごとにディレクトリを分け、各トピックに Jupyter Notebook（sympy による式の導出を含む、英語のみ）、LaTeX 文書（英語・日本語）、PowerPoint スライド（英語・日本語）を置く。
 
-- トピック: `topics/<topic>/`。一覧は [topics/README.md](topics/README.md) にあります。
-- Notebook: `topics/<topic>/<topic>.py`。英語のみです。`.py`（Jupytext）が原本で、コミット時に `nbstripout` で出力を削除します。
-- LaTeX: `topics/<topic>/main.tex` 1 ファイルで両言語を扱い、`\memolang` でビルド時に言語を選択します（`latexmk` + `lualatex`）。共通のプリアンブルは `common/tex/` にあります。
-- スライド: `common/slides/build_slides.py --topic <topic>` で英語版・日本語版を生成します。数式は PowerPoint のネイティブ数式（OMML）として埋め込みます。
-- 共通の Python コード: `common/python/` の `dynamics_common` パッケージにまとめ、トピックから import します。
-- 参考文献: 索引は `common/references/README.md`、BibTeX は `common/references/references.bib` にあります。PDF は手元にのみ置き、git には含めません。文書では `\cite{key}` や `[key]` で引用します。
-- 生成物は `build/<topic>/` に出力され、git 管理しません。
-- 環境: conda 環境 `dynamics_notes`（Python 3.14）。定義は `environment.yml` です。
-- コミットは明示的に依頼された場合にのみ行います。
+- トピック: `topics/<topic>/`。一覧は [topics/README.md](topics/README.md) にある。
+- Notebook: `topics/<topic>/<topic>.py`。英語のみである。`.py`（Jupytext）が原本で、コミット時に `nbstripout` で出力を削除する。
+- LaTeX: `topics/<topic>/main.tex` 1 ファイルで両言語を扱い、`\memolang` でビルド時に言語を選択する（`latexmk` + `lualatex`）。共通のプリアンブルは `common/tex/` にある。
+- スライド: `common/slides/build_slides.py --topic <topic> --lang en|ja` で英語版・日本語版を生成する。数式は PowerPoint のネイティブ数式（OMML）として埋め込む。
+- 共通の Python コード: `common/python/` の `dynamics_common` パッケージにまとめ、トピックから import する。
+- 参考文献: 索引は `common/references/README.md`、BibTeX は `common/references/references.bib` にある。PDF は手元にのみ置き、git には含めない。文書では `\cite{key}` や `[key]` で引用する。
+- 日本語の文章は だ・である調で書く。です・ます調は使わない（詳細は [AGENTS.md](AGENTS.md)）。
+- 生成物は `build/<topic>/` に出力され、git 管理しない。
+- 環境: conda 環境 `dynamics_notes`（Python 3.14）。定義は `environment.yml` である。
+- コミットは明示的に依頼された場合にのみ行う。
 
 ## License
 
@@ -101,4 +102,4 @@ The index is in [topics/README.md](topics/README.md). Planned topics are placeho
 
 Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center). See [LICENSING.md](LICENSING.md) for the full policy.
 
-日本語: ソースコードは GPL-3.0-or-later、文書・スライド・図などは CC BY 4.0 です。詳細は [LICENSING.md](LICENSING.md) を参照してください。
+日本語: ソースコードは GPL-3.0-or-later、文書・スライド・図などは CC BY 4.0 である。詳細は [LICENSING.md](LICENSING.md) を参照すること。

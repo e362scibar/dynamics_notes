@@ -41,6 +41,7 @@ Rules:
 
 - **Notebooks, Python scripts, and code comments**: English only. This includes comments, docstrings, log messages, and display strings in code.
 - **LaTeX and slides**: English and Japanese versions.
+- **Japanese text in LaTeX and slides**: use the plain form (だ・である調) at the end of sentences, for example 「求める。」「得られる。」「確認すること。」. Do not use the polite form (です・ます調). Keep the English versions unchanged.
 - **Commit messages**: English only.
 - **Chat replies to the user**: Japanese, unless the user asks otherwise.
 
@@ -182,7 +183,7 @@ Do not disable or bypass the filter (for example with `git -c filter...` tricks 
 - **One generator, two languages, any topic.** `common/slides/build_slides.py` is the only generator; `--topic <topic>` selects the input and `--lang en|ja` selects the output. Do not write separate scripts per topic or per language.
 - Reusable generator helpers (OMML conversion, JSON reading) go in `common/python/dynamics_common/`, not in the generator script.
 - Do not hand-edit generated `.pptx` files.
-- Slide content must be derived from the topic's LaTeX document, not written twice. The planned mechanism is that LaTeX slide-marker macros write structured entries (titles, bullet points, math strings, figure paths, speaker notes) for each language to an auxiliary JSON file during compilation, and the Python builder reads that JSON. If that mechanism is not yet implemented, say so explicitly rather than duplicating content silently.
+- Slide content must be derived from the topic's LaTeX document, not written twice. The mechanism is implemented. The slide-marker macros in `common/tex/slides.tex` (`\slidetitle`, `\slidepoint`, `\slidemath`, `\slidefigure`, `\slidenote`) write `kind:payload` lines to `build/<topic>/main-<lang>.slides` during compilation. The builder reads that file with `dynamics_common.read_slide_aux`. The format is line based instead of JSON because TeX cannot escape JSON strings reliably.
 - **Equations are native PowerPoint equations (OMML).** The pipeline is LaTeX math string → MathML (`latex2mathml`) → OMML (`mathml2omml.convert`, from the `mathml2omml-as` package) → inserted into the slide XML with `lxml`, because `python-pptx` has no equation API. Do not fall back to rendered images or mathtext unless the user asks for them.
 - Each slide should carry a concise title and a small number of points. Put longer explanation in speaker notes.
 - Japanese decks must set the East Asian font attribute on text runs so that the text renders in a Japanese font.

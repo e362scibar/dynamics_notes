@@ -18,7 +18,7 @@ topics/<topic>/
 
 | Topic | Notebook | LaTeX | Slides | Status |
 |---|---|---|---|---|
-| (none yet) | | | | |
+| [curvilinear_coordinates](curvilinear_coordinates/) | [curvilinear_coordinates.py](curvilinear_coordinates/curvilinear_coordinates.py) | [main.tex](curvilinear_coordinates/main.tex) (en, ja) | `build/curvilinear_coordinates/slides-{en,ja}.pptx` via `common/slides/build_slides.py` | Draft |
 
 ## Adding a topic
 
@@ -26,6 +26,7 @@ topics/<topic>/
 2. Add the license headers described in [LICENSING.md](../LICENSING.md).
 3. Cite the references the topic uses with `\cite{key}` in `main.tex` and `[key]` in the notebook. Keys come from [common/references/references.bib](../common/references/references.bib).
 4. Add a row to the index above in the same change.
+5. Write the Japanese text in `main.tex` in the plain form (だ・である調). Do not use the polite form (です・ます調). See [AGENTS.md](../AGENTS.md).
 
 ## License
 

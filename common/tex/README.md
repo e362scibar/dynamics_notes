@@ -19,6 +19,10 @@ latexmk -C -outdir=build/<topic> topics/<topic>/main.tex
 
 PDFs are written to `build/<topic>/`. The Japanese build uses `luatexja`; do not use `pdflatex` or `platex`.
 
+## Japanese text style
+
+Write the Japanese text inside `\ja{...}` in the plain form (だ・である調). Do not use the polite form (です・ます調). For example, write 「求める。」「得られる。」「確認すること。」 and not 「求めます。」「得られます。」「確認してください。」. Keep the English text in `\en{...}` as it is.
+
 ## Bibliography
 
 The shared preamble loads `biblatex` with `biber` and the database `common/references/references.bib`. Cite with `\cite{key}` in `main.tex`. Do not write bibliography entries inside topic files. `latexmk` runs `biber` automatically. See [common/references/README.md](../references/README.md) for the reference policy.
