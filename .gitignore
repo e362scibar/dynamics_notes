@@ -1,6 +1,5 @@
-# Build outputs (see AGENTS.md)
-docs/build/
-slides/build/
+# Build outputs for all topics (see AGENTS.md)
+build/
 
 # LaTeX auxiliary files
 *.aux

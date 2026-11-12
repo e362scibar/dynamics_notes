@@ -5,7 +5,7 @@ This repository uses two licenses, split by the kind of material:
 | Material | Files | License |
 |---|---|---|
 | Source code | Python scripts, notebook `.py` files, `environment.yml`, other programs and build scripts | [GNU GPL v3 or later](LICENSE) (`GPL-3.0-or-later`) |
-| Documents, slides, figures | Markdown files, LaTeX sources (`docs/`), generated PDFs and slide decks, figures and other images, narrative text in notebooks | [Creative Commons Attribution 4.0 International](LICENSES/CC-BY-4.0.txt) (`CC-BY-4.0`) |
+| Documents, slides, figures | Markdown files, LaTeX sources (`topics/*/main.tex`, `common/tex/`), generated PDFs and slide decks, figures and other images, narrative text in notebooks | [Creative Commons Attribution 4.0 International](LICENSES/CC-BY-4.0.txt) (`CC-BY-4.0`) |
 
 Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center), unless stated otherwise.
 
@@ -19,7 +19,7 @@ Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center), unless stated other
 Every source code file carries a short header with the copyright, the SPDX identifier, and a warranty disclaimer. Use the following form, with the comment syntax of the file type:
 
 ```python
-# notebooks/twiss_example.py
+# topics/twiss_optics/twiss_optics.py
 # Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center)
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Licensed under GPL-3.0-or-later; see LICENSE. Provided WITHOUT ANY WARRANTY.
