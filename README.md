@@ -1,4 +1,4 @@
-# dynamics_memo
+# dynamics_notes
 
 Personal memo notes on **high-energy electron beam dynamics in accelerators**, kept as
 
@@ -15,14 +15,14 @@ Math and figures are shared between the two languages; only prose and labels dif
 | `notebooks/` | Jupytext-paired notebooks, English only (`.py` is the source, `.ipynb` is generated) |
 | `docs/` | Bilingual LaTeX document (`main.tex`), built with `latexmk` and `lualatex` |
 | `slides/` | Shared `python-pptx` generator that builds English and Japanese decks from the LaTeX content |
-| `environment.yml` | Conda environment `dynamics_memo` (Python 3.14) |
+| `environment.yml` | Conda environment `dynamics_notes` (Python 3.14) |
 | `AGENTS.md` | Working rules for AI coding agents |
 
 ## Setup
 
 ```bash
 conda env create -f environment.yml
-conda activate dynamics_memo
+conda activate dynamics_notes
 ```
 
 The LaTeX build also needs a TeX distribution (TeX Live or MacTeX) providing `latexmk`, `lualatex`, and `luatexja`.
@@ -81,7 +81,7 @@ Topics are added as notebooks, sections of `docs/main.tex`, and slide sections t
 - Notebook: `notebooks/`。英語のみです。`.py`（Jupytext）が原本で、コミット時に `nbstripout` で出力を削除します。
 - LaTeX: `docs/main.tex` 1 ファイルで両言語を扱い、`\memolang` でビルド時に言語を選択します（`latexmk` + `lualatex`）。
 - スライド: `slides/` の共通スクリプト `build_slides.py` で英語版・日本語版を生成します。数式は PowerPoint のネイティブ数式（OMML）として埋め込みます。
-- 環境: conda 環境 `dynamics_memo`（Python 3.14）。定義は `environment.yml` です。
+- 環境: conda 環境 `dynamics_notes`（Python 3.14）。定義は `environment.yml` です。
 - コミットは明示的に依頼された場合にのみ行います。
 
 ## License

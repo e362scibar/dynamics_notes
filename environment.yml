@@ -3,11 +3,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Licensed under GPL-3.0-or-later; see LICENSE. Provided WITHOUT ANY WARRANTY.
 #
-# Conda environment for dynamics_memo.
+# Conda environment for dynamics_notes.
 # Create:  conda env create -f environment.yml
 # Update:  conda env update -f environment.yml --prune
 
-name: dynamics_memo
+name: dynamics_notes
 
 channels:
   - conda-forge

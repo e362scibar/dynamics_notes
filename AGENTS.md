@@ -29,7 +29,7 @@ The English and Japanese LaTeX and slide versions must describe the same content
 
 ## Environment
 
-- **Conda environment**: `dynamics_memo`
+- **Conda environment**: `dynamics_notes`
 - **Python**: 3.14
 - **Definition**: `environment.yml` at the repository root is the single place where the environment is specified. Do not hand-edit an exported lock file to add packages.
 
@@ -37,7 +37,7 @@ Create and activate the environment:
 
 ```bash
 conda env create -f environment.yml
-conda activate dynamics_memo
+conda activate dynamics_notes
 ```
 
 Update after changing `environment.yml`:
