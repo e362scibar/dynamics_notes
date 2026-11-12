@@ -50,6 +50,10 @@ Rules:
 - **Work on the `devel` branch.** Do not commit directly to `main`. If the current branch is `main` when you start a change, switch to `devel` first (create it from `main` if it does not exist yet).
 - **Do not run `git commit` unless the user explicitly asks for a commit.** Staging, editing, and building are fine without a commit request. Approval for one commit does not extend to later changes.
 - Do not push, rebase, or rewrite history unless explicitly asked.
+- **Push to both remotes.** When a push is requested, push to `origin` and to `github`. Do not push to only one of them.
+  - Push `devel` first: `git push origin devel` and `git push github devel`.
+  - To fast-forward `main`, run `git push origin devel:main` and `git push github devel:main`. Do not force-push `main`.
+  - Check that the remotes are in sync afterwards (for example with `git fetch --all` and `git status -sb`).
 - **Never commit reference PDFs.** Under `common/references/`, only `README.md` and `references.bib` are tracked. Do not `git add -f` other files there. Check `git status` before every commit.
 
 ## Environment
