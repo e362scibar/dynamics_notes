@@ -41,6 +41,8 @@ Pure configuration files, such as `.gitattributes` and `.gitignore`, carry no he
 
 Third-party code and data keep their own licenses. Mention their origin and license in the file that uses them. Do not copy code into this repository without checking that its license is compatible with GPL-3.0-or-later.
 
+Reference literature is kept under `common/references/`. Its PDFs are third-party works and are **not committed**, because their redistribution terms are not controlled by this repository. Only the index (`common/references/README.md`) and the BibTeX database (`common/references/references.bib`) are tracked. Cite the works instead of redistributing them.
+
 ## License
 
 This document is licensed under [CC BY 4.0](LICENSES/CC-BY-4.0.txt). Code snippets are GPL-3.0-or-later.

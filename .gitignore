@@ -1,6 +1,11 @@
 # Build outputs for all topics (see AGENTS.md)
 build/
 
+# Reference PDFs: kept locally, never committed (see common/references/README.md)
+common/references/*
+!common/references/README.md
+!common/references/references.bib
+
 # LaTeX auxiliary files
 *.aux
 *.fdb_latexmk
@@ -11,6 +16,10 @@ build/
 *.toc
 *.nav
 *.snm
+*.bbl
+*.blg
+*.bcf
+*.run.xml
 
 # Python
 __pycache__/

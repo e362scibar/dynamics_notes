@@ -17,6 +17,7 @@ Math and figures are shared between the two languages; only prose and labels dif
 | `common/tex/` | Shared LaTeX preamble and bilingual macros |
 | `common/slides/` | Shared `python-pptx` generator, run once per topic and language |
 | `common/python/` | Shared Python package `dynamics_common` (sympy helpers, utilities) |
+| `common/references/` | Reference index (`README.md`) and BibTeX database (`references.bib`). PDFs are local only, not committed |
 | `build/<topic>/` | Generated PDFs and slide decks (not tracked) |
 | `environment.yml` | Conda environment `dynamics_notes` (Python 3.14) |
 | `AGENTS.md` | Working rules for AI coding agents |
@@ -88,6 +89,7 @@ The index is in [topics/README.md](topics/README.md). Planned topics are placeho
 - LaTeX: `topics/<topic>/main.tex` 1 ファイルで両言語を扱い、`\memolang` でビルド時に言語を選択します（`latexmk` + `lualatex`）。共通のプリアンブルは `common/tex/` にあります。
 - スライド: `common/slides/build_slides.py --topic <topic>` で英語版・日本語版を生成します。数式は PowerPoint のネイティブ数式（OMML）として埋め込みます。
 - 共通の Python コード: `common/python/` の `dynamics_common` パッケージにまとめ、トピックから import します。
+- 参考文献: 索引は `common/references/README.md`、BibTeX は `common/references/references.bib` にあります。PDF は手元にのみ置き、git には含めません。文書では `\cite{key}` や `[key]` で引用します。
 - 生成物は `build/<topic>/` に出力され、git 管理しません。
 - 環境: conda 環境 `dynamics_notes`（Python 3.14）。定義は `environment.yml` です。
 - コミットは明示的に依頼された場合にのみ行います。

@@ -26,6 +26,7 @@ common/                shared material used by all topics
   tex/                 shared LaTeX preamble and bilingual macros
   slides/              shared slide generator (build_slides.py, README.md)
   python/              shared Python package dynamics_common (pyproject.toml, tests/)
+  references/          reference index (README.md) and BibTeX database; PDFs are local only
 build/<topic>/         generated outputs (git-ignored)
 ```
 
@@ -48,6 +49,7 @@ Rules:
 - **Work on the `devel` branch.** Do not commit directly to `main`. If the current branch is `main` when you start a change, switch to `devel` first (create it from `main` if it does not exist yet).
 - **Do not run `git commit` unless the user explicitly asks for a commit.** Staging, editing, and building are fine without a commit request. Approval for one commit does not extend to later changes.
 - Do not push, rebase, or rewrite history unless explicitly asked.
+- **Never commit reference PDFs.** Under `common/references/`, only `README.md` and `references.bib` are tracked. Do not `git add -f` other files there. Check `git status` before every commit.
 
 ## Environment
 
@@ -150,6 +152,7 @@ python -m pytest -q
 - Use **sympy** for every symbolic expression, derivation, or algebraic transformation. Do not hand-type a transformed equation and leave it unverified. Derive it in sympy, check it numerically when practical, and then present it using `sympy.latex()` or an equivalent that matches the LaTeX source.
 - Notebook outputs are **stripped on commit by `nbstripout`**. Do not rely on committed outputs. The `.gitattributes` filter must stay configured (see below).
 - Never add a topic notebook without also adding the topic's row to `topics/README.md` in the same change.
+- Cite references in notebook markdown cells and comments with `[key]` (see References).
 
 ### nbstripout
 
@@ -172,6 +175,7 @@ Do not disable or bypass the filter (for example with `git -c filter...` tricks 
 - Figures are shared. If a figure contains text labels, either make the labels language-neutral (symbols, axes with math only) or generate one figure per language and reference it through the same macro.
 - Use `luatexja` / `luatexja-preset` for Japanese typesetting. Do not use `pdflatex` or `platex`.
 - Keep package use minimal and explicit; declare every package in the preamble.
+- Bibliography: use `biblatex` with `biber` and the database `common/references/references.bib`, loaded by the shared preamble in `common/tex/`. Do not use BibTeX styles for new documents. `latexmk` runs `biber` automatically once the preamble is set up.
 
 ### Slides
 
@@ -182,6 +186,19 @@ Do not disable or bypass the filter (for example with `git -c filter...` tricks 
 - **Equations are native PowerPoint equations (OMML).** The pipeline is LaTeX math string → MathML (`latex2mathml`) → OMML (`mathml2omml.convert`, from the `mathml2omml-as` package) → inserted into the slide XML with `lxml`, because `python-pptx` has no equation API. Do not fall back to rendered images or mathtext unless the user asks for them.
 - Each slide should carry a concise title and a small number of points. Put longer explanation in speaker notes.
 - Japanese decks must set the East Asian font attribute on text runs so that the text renders in a Japanese font.
+
+## References
+
+Reference literature is indexed in `common/references/README.md` and stored in `common/references/references.bib`. The PDFs are local copies and are not committed.
+
+- **Cite what you use.** When a document, notebook, or slide uses content, an equation, a figure, or a result from a reference, cite it. Use the BibTeX key from `references.bib`.
+  - LaTeX: `\cite{key}`. Do not write bibliography entries inside `main.tex`.
+  - Notebooks (English markdown cells and comments): `[key]`, for example `[wiedemann2015, Sec. 6.3]`.
+  - Slides: put the short key in the slide footer or speaker notes. The LaTeX citations are carried into the slide JSON.
+- **Paraphrase and cite.** Do not copy long passages. Reproduce a figure from a reference only after checking its license. Prefer redrawing it from the source equations with a citation.
+- **Add a reference properly.** Add a BibTeX entry to `references.bib` (with a `doi` field whenever a DOI exists), add an index row to `common/references/README.md` with the source and access status, and, if the PDF is available locally, link it as `common/references/<key>.pdf` with a symbolic link (`ln -sn`) to the original file. Keep the original file and do not rename it.
+- **Prefer open access.** When you suggest a reference, check whether an open-access version exists and record the access status in the index. Do not add a paywalled source without noting that it is not open access.
+- Do not fabricate bibliographic data. If details are uncertain, write them with a `note` field saying so, as in `references.bib`.
 
 ## Python code style
 
@@ -206,7 +223,7 @@ Notebook `.py` files (Jupytext pairs) are exempt from the formatting rules above
 
 - Use [Conventional Commits](https://www.conventionalcommits.org/): `<type>(<scope>): <short summary>`.
 - Write commit messages entirely in English.
-- Common scopes: `topics`, `common`, `common/slides`, `common/python`, `env`, `repo`. For changes inside one topic, use the topic name as the scope (for example `feat(twiss_optics): ...`).
+- Common scopes: `topics`, `common`, `common/slides`, `common/python`, `common/references`, `env`, `repo`. For changes inside one topic, use the topic name as the scope (for example `feat(twiss_optics): ...`).
 - Commit only when the user explicitly asks (see Git rules).
 
 ## Documentation
@@ -229,6 +246,7 @@ Rules for agents:
 - Do not add a file of unknown or incompatible license. Third-party code must be checked and attributed.
 - Do not change the license texts (`LICENSE`, `LICENSES/CC-BY-4.0.txt`) or the copyright line without the user's instruction.
 - Headers and license sections are part of a change. Do not leave them out to save space.
+- Reference PDFs in `common/references/` are third-party works. Do not copy their text or figures into tracked files beyond short quotations with a citation. See [LICENSING.md](LICENSING.md).
 
 ## License
 

@@ -24,7 +24,8 @@ topics/<topic>/
 
 1. Create `topics/<topic>/` with `<topic>.py`, `main.tex`, and `figures/`.
 2. Add the license headers described in [LICENSING.md](../LICENSING.md).
-3. Add a row to the index above in the same change.
+3. Cite the references the topic uses with `\cite{key}` in `main.tex` and `[key]` in the notebook. Keys come from [common/references/references.bib](../common/references/references.bib).
+4. Add a row to the index above in the same change.
 
 ## License
 
