@@ -6,8 +6,8 @@
 
 \input{common/tex/preamble.tex}
 
-\title{\en{Curvilinear (Frenet-Serret) coordinates and the Hamiltonian of a bending magnet}%
-       \ja{曲線座標（Frenet-Serret 座標）における偏向磁石のハミルトニアン}}
+\title{\en{Canonical equations of motion in curvilinear (Frenet-Serret) coordinates for beamlines with bending magnets}%
+       \ja{偏向磁石を含むビームラインの曲線座標（Frenet-Serret 座標系）における正準運動方程式}}
 \author{Hirokazu Maesaka}
 \date{2026}
 
@@ -15,8 +15,8 @@
 \maketitle
 
 % Slide deck source. These markers print nothing in the PDF; common/slides/build_slides.py builds the deck from them.
-\slidetitle{\en{Curvilinear coordinates and the Hamiltonian of a bending magnet}%
-            \ja{曲線座標における偏向磁石のハミルトニアン}}
+\slidetitle{\en{Canonical equations of motion in curvilinear (Frenet-Serret) coordinates for beamlines with bending magnets}%
+            \ja{偏向磁石を含むビームラインの曲線座標における正準運動方程式}}
 \slidepoint{\en{Frenet-Serret frame, s as the independent variable}%
             \ja{Frenet-Serret 座標系と，s を独立変数とする定式化}}
 \slidenote{\en{Derivation follows [lee2019, Chap. 2] and [wiedemann2015, p. 93].}%
@@ -110,8 +110,7 @@ The metric is checked for a circular orbit in the notebook.}%
 \ja{非自明な計量係数は $1+hx$ だけである。したがってハミルトニアンはデカルト座標の形にはならない。
 円軌道に対する計量は，ノートブックで確認している。}
 
-\section{\en{Lagrangian and equations of motion with $s$ as the independent variable}%
-         \ja{$s$ を独立変数とするラグランジアンと運動方程式}}
+\section{\en{Lagrangian and equations of motion}\ja{ラグランジアンと運動方程式}}
 
 \en{With time $t$ as the independent variable, the Lagrangian of a particle in a static magnetic field is}%
 \ja{時間 $t$ を独立変数とすると，静磁場中の粒子のラグランジアンは}
@@ -156,14 +155,17 @@ $(\mathbf{v}\cdot\nabla)\mathbf{A}$ of the vector potential along the trajectory
 \end{equation}
 \en{For a static magnetic field $\partial\mathbf{A}/\partial t = 0$, and \eqref{eq:lorentz} is the Lorentz force
 equation $d\mathbf{p}/dt = q\,\mathbf{v}\times\mathbf{B}$ with the mechanical momentum
-$\mathbf{p} = \gamma m\mathbf{v}$. The same Euler-Lagrange procedure applied to $L_s$ with $s$ as the independent
-variable gives the equations of motion used in the following sections. The notebook verifies the Cartesian
+$\mathbf{p} = \gamma m\mathbf{v}$. The same Euler-Lagrange procedure applied to $L_s$, with $s$ as the independent
+variable, is given in Section 4. The notebook verifies the Cartesian
 identity \eqref{eq:lorentz} with sympy.}%
 \ja{静磁場では $\partial\mathbf{A}/\partial t = 0$ であるから，\eqref{eq:lorentz} は力学的運動量
 $\mathbf{p} = \gamma m\mathbf{v}$ を用いてローレンツ力の運動方程式
 $d\mathbf{p}/dt = q\,\mathbf{v}\times\mathbf{B}$ にほかならない。$s$ を独立変数とする $L_s$ に同じ手続きを
-適用すると，以降の節で用いる運動方程式が得られる。デカルト座標での恒等式 \eqref{eq:lorentz} は，
+適用する場合は第 4 節で扱う。デカルト座標での恒等式 \eqref{eq:lorentz} は，
 ノートブックで sympy により検証している。}
+
+\section{\en{Lagrangian with $s$ as the independent variable}%
+         \ja{$s$ を独立変数とするラグランジアン}}
 
 \en{The action does not depend on the choice of the independent variable, so $L\,dt = L_s\,ds$. With
 $t' = dt/ds$, $x' = dx/ds$, and $y' = dy/ds$, the velocity components satisfy $v_T t' = 1+hx$, $v_x t' = x'$, and
@@ -184,19 +186,52 @@ independent variable. For a static field $\partial L_s/\partial t = 0$, so the e
   \frac{d}{ds}\frac{\partial L_s}{\partial x'} - \frac{\partial L_s}{\partial x} &= 0, \label{eq:el_s_x} \\
   \frac{d}{ds}\frac{\partial L_s}{\partial y'} - \frac{\partial L_s}{\partial y} &= 0. \label{eq:el_s_y}
 \end{align}
-\en{The first equation shows that $\partial L_s/\partial t' = -E$ is a constant of motion. Solving it for $t'$ gives
-\eqref{eq:tprime}, which eliminates $t'$ from the other two equations.}%
-\ja{第 1 式より，$\partial L_s/\partial t' = -E$ は運動の定数である。これを $t'$ について解くと
-\eqref{eq:tprime} が得られ，残りの 2 式から $t'$ が消去される。}
-\en{The variable $t'$ is not independent. The tangential velocity is $v_T = (1+hx)\,ds/dt = (1+hx)/t'$, and the
-tangential mechanical momentum is $P_T = \gamma m v_T = E v_T/c^2$, so}%
-\ja{変数 $t'$ は独立ではない。接線方向の速度は $v_T = (1+hx)\,ds/dt = (1+hx)/t'$ であり，接線方向の力学的運動量は
-$P_T = \gamma m v_T = E v_T/c^2$ であるから}
+
+\en{The partial derivatives of $L_s$ are}%
+\ja{$L_s$ の偏微分は次のとおりである。}
+\begin{align*}
+  \frac{\partial L_s}{\partial t'} &= -\frac{mc^2\,t'}{Q} = -\gamma m c^2 = -E , \\
+  \frac{\partial L_s}{\partial x'} &= \frac{m\,x'}{Q} + qA_x = \gamma m v_x + qA_x , \\
+  \frac{\partial L_s}{\partial y'} &= \frac{m\,y'}{Q} + qA_y = \gamma m v_y + qA_y , \\
+  \frac{\partial L_s}{\partial x} &= \frac{m h(1+hx)}{Q}
+    + q\big[hA_s + (1+hx)\,\partial_x A_s + x'\,\partial_x A_x + y'\,\partial_x A_y\big] , \\
+  \frac{\partial L_s}{\partial y} &= q\big[(1+hx)\,\partial_y A_s + x'\,\partial_y A_x + y'\,\partial_y A_y\big] , \\
+  \frac{\partial L_s}{\partial t} &= 0 .
+\end{align*}
+\en{Here $Q = \sqrt{t'^2 - ((1+hx)^2+x'^2+y'^2)/c^2}$ and $\gamma = t'/Q$. The last line holds for static fields.}%
+\ja{ここで $Q = \sqrt{t'^2 - ((1+hx)^2+x'^2+y'^2)/c^2}$，$\gamma = t'/Q$ である。最後の式は静磁場に対して成り立つ。}
+
+\en{From \eqref{eq:el_s_t}, $\partial L_s/\partial t' = -E$ is a constant of motion. Here
+$P_x = \gamma m v_x$ and $P_y = \gamma m v_y$ are the mechanical transverse momenta, with $v_x = x'/t'$ and
+$v_y = y'/t'$. Using $\gamma = t'/Q$, these momenta and $P_T = \gamma m v_T$ are written in $Q$ as}%
+\ja{\eqref{eq:el_s_t} より，$\partial L_s/\partial t' = -E$ は運動の定数である。ここで $P_x = \gamma m v_x$，$P_y = \gamma m v_y$ は力学的な横方向運動量であり，$v_x = x'/t'$，$v_y = y'/t'$ である。$\gamma = t'/Q$ を用いると，これらの運動量と $P_T = \gamma m v_T$ は $Q$ を用いて次のように書ける。}
+\[
+  P_x = \frac{m\,x'}{Q}, \qquad P_y = \frac{m\,y'}{Q}, \qquad P_T = \frac{m\,(1+hx)}{Q} .
+\]
+\en{Solving $\partial L_s/\partial t' = -E$ for $t'$ gives}%
+\ja{$\partial L_s/\partial t' = -E$ を $t'$ について解くと}
 \begin{equation}
   t' = \frac{(1+hx)\,E}{P_T c^2},
   \qquad P_T = \sqrt{\frac{E^2}{c^2} - m^2c^2 - P_x^2 - P_y^2} .
   \label{eq:tprime}
 \end{equation}
+\en{The tangential velocity is $v_T = (1+hx)\,ds/dt = (1+hx)/t'$, and the tangential mechanical momentum is
+$P_T = \gamma m v_T = E v_T/c^2$. These give \eqref{eq:tprime}, which eliminates $t'$ from \eqref{eq:el_s_x} and
+\eqref{eq:el_s_y}.}%
+\ja{接線方向の速度は $v_T = (1+hx)\,ds/dt = (1+hx)/t'$ であり，接線方向の力学的運動量は
+$P_T = \gamma m v_T = E v_T/c^2$ である。これらから \eqref{eq:tprime} が得られ，\eqref{eq:el_s_x} と
+\eqref{eq:el_s_y} から $t'$ が消去される。}
+
+\en{With $s$ as the independent variable, the Lorentz factor is written in terms of $t'$, $x'$, and $y'$ as}%
+\ja{$s$ を独立変数とすると，ローレンツ因子は $t'$，$x'$，$y'$ を用いて次のように表される。}
+\[
+  \gamma = \frac{t'}{Q} = \frac{t'}{\sqrt{t'^2 - \dfrac{(1+hx)^2 + x'^2 + y'^2}{c^2}}} .
+\]
+\en{Substituting \eqref{eq:tprime}, which follows from the first integral $\partial L_s/\partial t' = -E$, gives
+$\gamma = E/(mc^2)$, a constant of motion. In natural units $m = c = 1$, $\gamma = E$.}%
+\ja{\eqref{eq:tprime}（第 1 積分 $\partial L_s/\partial t' = -E$ から得られる）を代入すると $\gamma = E/(mc^2)$ となり，
+これは運動の定数である。自然単位系（$m = c = 1$）では $\gamma = E$ である。}
+
 \en{For the $x$ equation, the derivatives with $t'$ treated as independent are}%
 \ja{$x$ の方程式では，$t'$ を独立な変数とみなした偏微分は次のとおりである。}
 \begin{align}
@@ -205,11 +240,11 @@ $P_T = \gamma m v_T = E v_T/c^2$ であるから}
     + x'\,\partial_x A_x + y'\,\partial_x A_y\big] .
 \end{align}
 \en{The second line uses $\partial Q/\partial x = -(1+hx)h/(c^2 Q)$ with $Q = t'/\gamma$ and $v_T t' = 1+hx$. Work in
-units $m = c = 1$ and take the gauge $A_x = A_y = 0$, as in the notebook. Then $p_x$ and $p_y$ are
+natural units $m = c = 1$ and take the gauge $A_x = A_y = 0$, as in the notebook. Then $p_x$ and $p_y$ are
 $\sqrt{E^2-1}\,x'/\sqrt{S}$ and $\sqrt{E^2-1}\,y'/\sqrt{S}$, and $\gamma m v_T = \sqrt{E^2-1}\,(1+hx)/\sqrt{S}$,
 where $S = (1+hx)^2 + x'^2 + y'^2$. Substituting these into the $x$ and $y$ equations gives}%
 \ja{第 2 式は，$Q = t'/\gamma$，$v_T t' = 1+hx$ と $\partial Q/\partial x = -(1+hx)h/(c^2 Q)$ を用いて得られる。
-単位系を $m = c = 1$ とし，ノートブックと同じゲージ $A_x = A_y = 0$ を用いる。このとき $p_x$，$p_y$，$\gamma m v_T$ は，
+自然単位系（$m = c = 1$）とし，ノートブックと同じゲージ $A_x = A_y = 0$ を用いる。このとき $p_x$，$p_y$，$\gamma m v_T$ は，
 $S = (1+hx)^2 + x'^2 + y'^2$ として，それぞれ $\sqrt{E^2-1}\,x'/\sqrt{S}$，$\sqrt{E^2-1}\,y'/\sqrt{S}$，
 $\sqrt{E^2-1}\,(1+hx)/\sqrt{S}$ となる。これらを $x$ と $y$ の方程式に代入すると，次が得られる。}
 \begin{align}
@@ -219,9 +254,9 @@ $\sqrt{E^2-1}\,(1+hx)/\sqrt{S}$ となる。これらを $x$ と $y$ の方程�
     &= q\,(1+hx)\,\partial_y A_s . \label{eq:el_y}
 \end{align}
 \en{Linearize \eqref{eq:el_x} and \eqref{eq:el_y} with $\sqrt{E^2-1} = P_0(1+\delta)$, $qA_s = P_0 a_s$, and the
-expansions of Section 5. Keeping first-order terms in $x$, $x'$, $y$, $y'$, and $\delta$, the zeroth-order terms cancel
+expansions of Section 6. Keeping first-order terms in $x$, $x'$, $y$, $y'$, and $\delta$, the zeroth-order terms cancel
 because the reference orbit satisfies $\sqrt{E_0^2-1} = P_0$. The result is}%
-\ja{\eqref{eq:el_x} と \eqref{eq:el_y} を，$\sqrt{E^2-1} = P_0(1+\delta)$，$qA_s = P_0 a_s$，第 5 節の展開を用いて線形化する。
+\ja{\eqref{eq:el_x} と \eqref{eq:el_y} を，$\sqrt{E^2-1} = P_0(1+\delta)$，$qA_s = P_0 a_s$，第 6 節の展開を用いて線形化する。
 $x$，$x'$，$y$，$y'$，$\delta$ について 1 次の項を残すと，0 次の項は基準軌道が $\sqrt{E_0^2-1} = P_0$ を満たすため
 消える。結果は次のとおりである。}
 \begin{equation}
@@ -344,8 +379,9 @@ $\tfrac{1}{2}k\,(x^2 - y^2)$ である。四極項の曲率補正は高次であ
   x'' + (h^2 + k)\,x = h\,\delta, \qquad y'' - k\,y = 0 .
   \label{eq:linear}
 \end{equation}
-\en{These agree with the linearized Euler--Lagrange equations \eqref{eq:el_linear} of Section 3.}%
-\ja{これらは第 3 節の Euler--Lagrange 方程式を線形化した \eqref{eq:el_linear} と一致する。}
+\en{These agree with the linearized Euler--Lagrange equations \eqref{eq:el_linear} of Section 4.}%
+\ja{これらは第 4 節の Euler--Lagrange 方程式を線形化した \eqref{eq:el_linear} と一致する。}
+
 \en{The first equation is the Hill equation with the inhomogeneous term $h\delta$ from the bend. The second has no
 $h^2$ term, as expected for a horizontal bend.}%
 \ja{第 1 式は偏向による非斉次項 $h\delta$ を持つ Hill 方程式である。第 2 式は水平偏向のため $h^2$ 項を持たない。}
