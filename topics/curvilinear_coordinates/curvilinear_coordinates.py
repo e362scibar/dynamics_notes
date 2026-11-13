@@ -68,6 +68,15 @@
 # d\ell^2 = (1 + hx)^2\,ds^2 + dx^2 + dy^2 .
 # $$
 #
+# The velocity of a particle is $\mathbf{v} = \dot{\mathbf{r}}$ with $\dot s = ds/dt$. From $\partial_s\mathbf{r}$,
+# $\partial_x\mathbf{r}$, and $\partial_y\mathbf{r}$, it is
+#
+# $$
+# \mathbf{v} = (1+hx)\,\dot s\,\mathbf{T} + \dot x\,\mathbf{e}_x + \dot y\,\mathbf{e}_y .
+# $$
+#
+# Its tangential component is therefore $v_T = (1+hx)\,\dot s$. This is the origin of the metric factor.
+#
 # The factor $1 + hx$ is the only non-trivial metric coefficient. It is the reason the Hamiltonian is not
 # a simple Cartesian one.
 
@@ -143,6 +152,18 @@ dl2 = sp.expand((dl_vec.T * dl_vec)[0])
 dl2_expected = (1 + x / rho) ** 2 * ds_**2 + dx_**2 + dy_**2
 display(sp.Eq(sp.Symbol("d\\ell^2"), dl2_expected))
 assert sp.simplify(dl2 - dl2_expected) == 0
+
+# Velocity on the circular orbit: v = dr/dt must equal (1+hx) s-dot T + x-dot e_x + y-dot e_y.
+tt_v = sp.Symbol('t', real=True)
+s_v, x_v, y_v = (sp.Function(name)(tt_v) for name in ('s', 'x', 'y'))
+r_v_t = (R_v + x_f * ex_v + y_f * ey_v).subs({s_f: s_v, x_f: x_v, y_f: y_v})
+v_v_t = r_v_t.diff(tt_v)
+v_model = (1 + x_v / rho_f) * s_v.diff(tt_v) * T_v.subs(s_f, s_v) + x_v.diff(tt_v) * ex_v.subs(s_f, s_v) \
+    + y_v.diff(tt_v) * ey_v
+check_v = (v_v_t - v_model).applyfunc(sp.simplify) == sp.zeros(3, 1)
+print("v = (1+hx) s-dot T + x-dot e_x + y-dot e_y on the circular orbit:")
+display(check_v)
+assert check_v
 
 # %% [markdown]
 # ## 3. Lagrangian and equations of motion
@@ -239,6 +260,21 @@ display(sp.Eq(sp.diff(gamma * m_ * vx, t_), q_ * v_cross_B[0]))
 # %% [markdown]
 # ## 4. Lagrangian with $s$ as the independent variable
 #
+# Before writing $L_s$, the vector potential is decomposed in the local orthonormal frame. Its physical components
+# along $\mathbf{T}$, $\mathbf{e}_x$, and $\mathbf{e}_y$ are $A_s$, $A_x$, and $A_y$:
+#
+# $$
+# \mathbf{A} = A_s\,\mathbf{T} + A_x\,\mathbf{e}_x + A_y\,\mathbf{e}_y .
+# $$
+#
+# With the velocity of Section 2, the scalar product is
+#
+# $$
+# \mathbf{v}\cdot\mathbf{A} = (1+hx)\,\dot s\,A_s + \dot x\,A_x + \dot y\,A_y .
+# $$
+#
+# The next cell checks both relations on the explicit circular orbit.
+#
 # Use $s$ as the independent variable by writing $t' = dt/ds$, $x' = dx/ds$, $y' = dy/ds$. Then
 # $v_T t' = 1 + hx$, $v_x t' = x'$, $v_y t' = y'$, and $L\,dt = L_s\,ds$ with
 #
@@ -246,6 +282,42 @@ display(sp.Eq(sp.diff(gamma * m_ * vx, t_), q_ * v_cross_B[0]))
 # L_s = -mc^2\,\underbrace{\sqrt{t'^2 - \frac{(1+hx)^2 + x'^2 + y'^2}{c^2}}}_{Q}
 #       + q\big[(1+hx)A_s + x'A_x + y'A_y\big].
 # $$
+#
+# %%
+# Vector potential in the local frame and v . A (blocks above), on the explicit circular orbit of section 2.
+tt = sp.Symbol('t', real=True)
+s_t, x_t, y_t = (sp.Function(name)(tt) for name in ('s', 'x', 'y'))
+AS_, AX_, AY_ = sp.symbols('A_s A_x A_y', real=True)
+T_t = T_v.subs(s_f, s_t)
+ex_t = ex_v.subs(s_f, s_t)
+ey_t = ey_v
+A_t = AS_ * T_t + AX_ * ex_t + AY_ * ey_t
+display(sp.Eq(sp.Symbol(r"\mathbf{A}"), AS_ * sp.Symbol(r"\mathbf{T}") + AX_ * sp.Symbol(r"\mathbf{e}_x")
+              + AY_ * sp.Symbol(r"\mathbf{e}_y")))
+r_t = (R_v + x_f * ex_v + y_f * ey_v).subs({s_f: s_t, x_f: x_t, y_f: y_t})
+v_t = r_t.diff(tt)
+v_dot_A = (v_t.T * A_t)[0]
+v_dot_A_model = (1 + x_t / rho_f) * s_t.diff(tt) * AS_ + x_t.diff(tt) * AX_ + y_t.diff(tt) * AY_
+display(sp.Eq(sp.Symbol(r"\mathbf{v}\cdot\mathbf{A}"), v_dot_A_model))
+check_vA = sp.simplify(v_dot_A - v_dot_A_model) == 0
+print("v . A = (1+hx) s-dot A_s + x-dot A_x + y-dot A_y on the circular orbit:")
+display(check_vA)
+assert check_vA
+
+# %%
+# L_s with s as the independent variable and the t' relation (blocks above).
+tp_s, xp_s, yp_s = sp.Symbol("t'", real=True), sp.Symbol("x'", real=True), sp.Symbol("y'", real=True)
+xv_s, yv_s = sp.symbols('x y', real=True)
+As_s, Ax_s, Ay_s = sp.symbols('A_s A_x A_y', real=True)
+h_s = sp.Symbol('h', real=True)
+E_s = sp.Symbol('E', positive=True)
+Px_s, Py_s = sp.symbols('P_x P_y', real=True)
+Q_s = sp.sqrt(tp_s**2 - ((1 + h_s * xv_s) ** 2 + xp_s**2 + yp_s**2) / c_**2)
+L_s_model = -m_ * c_**2 * Q_s + q_ * ((1 + h_s * xv_s) * As_s + xp_s * Ax_s + yp_s * Ay_s)
+display(sp.Eq(sp.Symbol('L_s'), L_s_model))
+display(sp.Eq(sp.Symbol('Q'), Q_s))
+# %% [markdown]
+# ## 5. Euler-Lagrange equations of $L_s$
 #
 # The variable $t'$ is not independent. The tangential velocity is $v_T = (1+hx)\,ds/dt = (1+hx)/t'$, and the
 # tangential mechanical momentum is $P_T = \gamma m v_T = E v_T/c^2$, so
@@ -264,16 +336,8 @@ display(sp.Eq(sp.diff(gamma * m_ * vx, t_), q_ * v_cross_B[0]))
 # P_T = \sqrt{\frac{E^2}{c^2} - m^2c^2 - P_x^2 - P_y^2} .
 # $$
 #
-# %% [markdown]
-# ### Euler-Lagrange equations of $L_s$ (check)
-#
-# Take $m = c = 1$ and the gauge $A_x = A_y = 0$, with $qA_s = P_0 a_s$. The $t$ equation gives the constant
-# $\partial L_s/\partial t' = -E$, which fixes $t'$. The $x$ and $y$ equations are then second-order equations for
-# $x(s)$ and $y(s)$. Linearizing them with $\sqrt{E^2-1} = P_0(1+\delta)$ must reproduce
-# $x'' + (h^2+k)x = h\delta$ and $y'' - ky = 0$.
-
 # %%
-# L_s with s as the independent variable and the t' relation (blocks above).
+# t' relation and the transverse momenta written in terms of Q (section 5).
 tp_s, xp_s, yp_s = sp.Symbol("t'", real=True), sp.Symbol("x'", real=True), sp.Symbol("y'", real=True)
 xv_s, yv_s = sp.symbols('x y', real=True)
 As_s, Ax_s, Ay_s = sp.symbols('A_s A_x A_y', real=True)
@@ -282,14 +346,22 @@ E_s = sp.Symbol('E', positive=True)
 Px_s, Py_s = sp.symbols('P_x P_y', real=True)
 Q_s = sp.sqrt(tp_s**2 - ((1 + h_s * xv_s) ** 2 + xp_s**2 + yp_s**2) / c_**2)
 L_s_model = -m_ * c_**2 * Q_s + q_ * ((1 + h_s * xv_s) * As_s + xp_s * Ax_s + yp_s * Ay_s)
-display(sp.Eq(sp.Symbol('L_s'), L_s_model))
-display(sp.Eq(sp.Symbol('Q'), Q_s))
+E_s = sp.Symbol('E', positive=True)
+Px_s, Py_s = sp.symbols('P_x P_y', real=True)
 P_T_s = sp.sqrt(E_s**2 / c_**2 - m_**2 * c_**2 - Px_s**2 - Py_s**2)
 display(sp.Eq(sp.Symbol("t'"), (1 + h_s * xv_s) * E_s / (P_T_s * c_**2)))
 display(sp.Eq(sp.Symbol('P_T'), P_T_s))
 display(sp.Eq(sp.Symbol('P_x'), m_ * xp_s / Q_s))
 display(sp.Eq(sp.Symbol('P_y'), m_ * yp_s / Q_s))
 display(sp.Eq(P_T_s, m_ * (1 + h_s * xv_s) / Q_s))
+
+# %% [markdown]
+# ### Checks of the Euler-Lagrange equations
+#
+# Take $m = c = 1$ and the gauge $A_x = A_y = 0$, with $qA_s = P_0 a_s$. The $t$ equation gives the constant
+# $\partial L_s/\partial t' = -E$, which fixes $t'$. The $x$ and $y$ equations are then second-order equations for
+# $x(s)$ and $y(s)$. Linearizing them with $\sqrt{E^2-1} = P_0(1+\delta)$ must reproduce
+# $x'' + (h^2+k)x = h\delta$ and $y'' - ky = 0$.
 
 # %%
 h, k = sp.symbols('h k', real=True)
@@ -384,7 +456,7 @@ for values in [{E_sym: 2.5, h: 0.3, xv: 0.1, xp: 0.2, yp: -0.1}, {E_sym: 4.0, h:
 print("P_x = x'/Q, P_y = y'/Q and P_T = (1+hx)/Q in natural units")
 
 # %% [markdown]
-# ## 5. Hamiltonian derivation and normalization
+# ## 6. Hamiltonian derivation and normalization
 #
 # The generalized coordinates are $(t, x, y)$ and their conjugate momenta are
 #
@@ -507,7 +579,7 @@ print("K / P_0 reproduces the normalized Hamiltonian")
 display(sp.Eq(lhs, rhs))
 
 # %% [markdown]
-# ## 6. Vector potentials of the ideal dipole and the quadrupole
+# ## 7. Vector potentials of the ideal dipole and the quadrupole
 #
 # ### Dipole
 #
@@ -564,7 +636,7 @@ H_dip = -(1 + h * x_) * sp.sqrt((1 + d) ** 2 - px**2 - py**2) + h * (x_ + h * x_
 display(sp.Eq(sp.Symbol('H_dip'), H_dip))
 
 # %% [markdown]
-# ## 7. Full Hamiltonian and exact equations of motion
+# ## 8. Full Hamiltonian and exact equations of motion
 #
 # Collecting the terms, with the straight-quadrupole approximation for the quadrupole:
 #
@@ -609,7 +681,7 @@ display(sp.Eq(sp.Symbol("p_y'"), -sp.diff(H_full, y_)))
 display(sp.Eq(sp.Symbol("delta'"), 0))
 
 # %% [markdown]
-# ## 8. Linearized equations of motion
+# ## 9. Linearized equations of motion
 #
 # Linearize around the reference orbit. The Jacobian of the exact EOM at the origin gives the linear matrix
 # $\mathbf{A}$, with $\mathbf{z}' = \mathbf{A}\,\mathbf{z}$ and $\mathbf{z} = (x, p_x, y, p_y, \delta)^\mathsf{T}$.
@@ -667,7 +739,7 @@ D_const = h / (h**2 + k)
 assert sp.simplify((h**2 + k) * D_const - h) == 0
 
 # %% [markdown]
-# ## 9. Summary
+# ## 10. Summary
 #
 # 1. Metric in Frenet-Serret coordinates: $d\ell^2 = (1+hx)^2 ds^2 + dx^2 + dy^2$.
 # 2. Hamiltonian with $s$ as the independent variable:

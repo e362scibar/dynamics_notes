@@ -110,6 +110,17 @@ The metric is checked for a circular orbit in the notebook.}%
 \ja{非自明な計量係数は $1+hx$ だけである。したがってハミルトニアンはデカルト座標の形にはならない。
 円軌道に対する計量は，ノートブックで確認している。}
 
+\en{The velocity of a particle is $\mathbf{v} = \dot{\mathbf{r}}$ with $\dot{s} = ds/dt$. From $\partial_s\mathbf{r}$,
+$\partial_x\mathbf{r}$, and $\partial_y\mathbf{r}$, it is}%
+\ja{粒子の速度は $\mathbf{v} = \dot{\mathbf{r}}$ である（$\dot{s} = ds/dt$）。$\partial_s\mathbf{r}$，$\partial_x\mathbf{r}$，
+$\partial_y\mathbf{r}$ より，}
+\[
+  \mathbf{v} = (1+hx)\,\dot{s}\,\mathbf{T} + \dot{x}\,\mathbf{e}_x + \dot{y}\,\mathbf{e}_y .
+\]
+\en{Its tangential component is therefore $v_T = (1+hx)\,\dot{s}$. This is the origin of the metric factor in
+\eqref{eq:metric}.}%
+\ja{したがって接線成分は $v_T = (1+hx)\,\dot{s}$ である。これが \eqref{eq:metric} の計量因子の起源である。}
+
 \section{\en{Lagrangian and equations of motion}\ja{ラグランジアンと運動方程式}}
 
 \en{With time $t$ as the independent variable, the Lagrangian of a particle in a static magnetic field is}%
@@ -167,6 +178,26 @@ $d\mathbf{p}/dt = q\,\mathbf{v}\times\mathbf{B}$ にほかならない。$s$ を
 \section{\en{Lagrangian with $s$ as the independent variable}%
          \ja{$s$ を独立変数とするラグランジアン}}
 
+\en{Before writing $L_s$, the vector potential is decomposed in the local orthonormal frame. Its physical
+components along $\mathbf{T}$, $\mathbf{e}_x$, and $\mathbf{e}_y$ are $A_s$, $A_x$, and $A_y$:}%
+\ja{$L_s$ を書く前に，ベクトルポテンシャルを局所正規直交系で分解する。$\mathbf{T}$，$\mathbf{e}_x$，$\mathbf{e}_y$
+方向の物理成分をそれぞれ $A_s$，$A_x$，$A_y$ とすると，}
+\[
+  \mathbf{A} = A_s\,\mathbf{T} + A_x\,\mathbf{e}_x + A_y\,\mathbf{e}_y .
+\]
+\en{With the velocity of Section 2, the scalar product is}%
+\ja{第 2 節の速度 $\mathbf{v}$ を用いると，スカラー積は}
+\[
+  \mathbf{v}\cdot\mathbf{A} = (1+hx)\,\dot{s}\,A_s + \dot{x}\,A_x + \dot{y}\,A_y .
+\]
+\en{The factor $1+hx$ in front of $A_s$ is the metric factor of the tangential direction. Multiplying $L$ by
+$t' = dt/ds$, so that $L\,dt = L_s\,ds$, gives the $(1+hx)A_s$ term in $L_s$. The components $A_x$, $A_y$, and $A_s$
+are physical components, so no further metric factor appears. The relation between $A_s$ and $B_y$ is derived in
+Section 7.}%
+\ja{$A_s$ の前の因子 $1+hx$ は接線方向の計量因子である。$L$ に $t' = dt/ds$ を掛けて $L\,dt = L_s\,ds$ とすると，
+$L_s$ の $(1+hx)A_s$ の項が得られる。$A_x$，$A_y$，$A_s$ は物理成分であるから，これ以上の計量因子は現れない。
+$A_s$ と $B_y$ の関係は第 7 節で導く。}
+
 \en{The action does not depend on the choice of the independent variable, so $L\,dt = L_s\,ds$. With
 $t' = dt/ds$, $x' = dx/ds$, and $y' = dy/ds$, the velocity components satisfy $v_T t' = 1+hx$, $v_x t' = x'$, and
 $v_y t' = y'$. Using these and the metric \eqref{eq:metric}, the Lagrangian with $s$ as the independent variable is}%
@@ -177,6 +208,8 @@ $s$ を独立変数とするラグランジアンは}
   L_s = -mc^2\sqrt{t'^2 - \frac{(1+hx)^2 + x'^2 + y'^2}{c^2}}
         + q\big[(1+hx)A_s + x'A_x + y'A_y\big] .
 \end{equation}
+\section{\en{Euler--Lagrange equations for $L_s$}\ja{$L_s$ に対するオイラー・ラグランジュ方程式}}
+
 \en{Euler--Lagrange equations for $L_s$. Take $t$, $x$, and $y$ as generalized coordinates and $s$ as the
 independent variable. For a static field $\partial L_s/\partial t = 0$, so the equations are}%
 \ja{$L_s$ に対するオイラー・ラグランジュ方程式。$t$，$x$，$y$ を一般化座標とし，$s$ を独立変数とする。
@@ -254,9 +287,9 @@ $\sqrt{E^2-1}\,(1+hx)/\sqrt{S}$ となる。これらを $x$ と $y$ の方程�
     &= q\,(1+hx)\,\partial_y A_s . \label{eq:el_y}
 \end{align}
 \en{Linearize \eqref{eq:el_x} and \eqref{eq:el_y} with $\sqrt{E^2-1} = P_0(1+\delta)$, $qA_s = P_0 a_s$, and the
-expansions of Section 6. Keeping first-order terms in $x$, $x'$, $y$, $y'$, and $\delta$, the zeroth-order terms cancel
+expansions of Section 7. Keeping first-order terms in $x$, $x'$, $y$, $y'$, and $\delta$, the zeroth-order terms cancel
 because the reference orbit satisfies $\sqrt{E_0^2-1} = P_0$. The result is}%
-\ja{\eqref{eq:el_x} と \eqref{eq:el_y} を，$\sqrt{E^2-1} = P_0(1+\delta)$，$qA_s = P_0 a_s$，第 6 節の展開を用いて線形化する。
+\ja{\eqref{eq:el_x} と \eqref{eq:el_y} を，$\sqrt{E^2-1} = P_0(1+\delta)$，$qA_s = P_0 a_s$，第 7 節の展開を用いて線形化する。
 $x$，$x'$，$y$，$y'$，$\delta$ について 1 次の項を残すと，0 次の項は基準軌道が $\sqrt{E_0^2-1} = P_0$ を満たすため
 消える。結果は次のとおりである。}
 \begin{equation}
@@ -379,8 +412,8 @@ $\tfrac{1}{2}k\,(x^2 - y^2)$ である。四極項の曲率補正は高次であ
   x'' + (h^2 + k)\,x = h\,\delta, \qquad y'' - k\,y = 0 .
   \label{eq:linear}
 \end{equation}
-\en{These agree with the linearized Euler--Lagrange equations \eqref{eq:el_linear} of Section 4.}%
-\ja{これらは第 4 節の Euler--Lagrange 方程式を線形化した \eqref{eq:el_linear} と一致する。}
+\en{These agree with the linearized Euler--Lagrange equations \eqref{eq:el_linear} of Section 5.}%
+\ja{これらは第 5 節の Euler--Lagrange 方程式を線形化した \eqref{eq:el_linear} と一致する。}
 
 \en{The first equation is the Hill equation with the inhomogeneous term $h\delta$ from the bend. The second has no
 $h^2$ term, as expected for a horizontal bend.}%
