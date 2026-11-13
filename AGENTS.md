@@ -172,6 +172,8 @@ python common/python/dynamics_common/glossary.py
 - **Edit `.py`, never `.ipynb`.** Jupytext-paired `.ipynb` files are generated artifacts.
 - Notebooks are **English only**. Do not create Japanese notebook versions.
 - Use **sympy** for every symbolic expression, derivation, or algebraic transformation. Do not hand-type a transformed equation and leave it unverified. Derive it in sympy, check it numerically when practical, and then present it using `sympy.latex()` or an equivalent that matches the LaTeX source.
+- **Display equations with `display()`, not `print()`.** Use `print()` only for text and numeric messages.
+- **Define every displayed equation in sympy.** Each display equation (`$$ ... $$`) in a markdown cell must also be defined in sympy in a code cell after it, and shown with `display()`. Inline math in prose is not required to have a sympy definition. Where practical, `assert` that the sympy form agrees with the earlier results in the notebook.
 - Notebook outputs are **stripped on commit by `nbstripout`**. Do not rely on committed outputs. The `.gitattributes` filter must stay configured (see below).
 - Never add a topic notebook without also adding the topic's row to `topics/README.md` in the same change.
 - Cite references in notebook markdown cells and comments with `[key]` (see References).
