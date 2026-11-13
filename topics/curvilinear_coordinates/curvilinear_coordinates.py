@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.6
 #   kernelspec:
 #     display_name: dynamics_notes
 #     language: python
@@ -400,7 +400,61 @@ D_const = h / (h**2 + k)
 assert sp.simplify((h**2 + k) * D_const - h) == 0
 
 # %% [markdown]
-# ## 7. Summary
+# ## 7. Cross-check: Euler-Lagrange equations of $L_s$
+#
+# Take $m = c = 1$ and the gauge $A_x = A_y = 0$, with $qA_s = P_0 a_s$. The $t$ equation gives the constant
+# $\partial L_s/\partial t' = -E$, which fixes $t'$. The $x$ and $y$ equations are then second-order equations for
+# $x(s)$ and $y(s)$. Linearizing them with $\sqrt{E^2-1} = P_0(1+\delta)$ must reproduce
+# $x'' + (h^2+k)x = h\delta$ and $y'' - ky = 0$.
+
+# %%
+tp, xp, yp, xv, yv = sp.symbols('tp xp yp xv yv', real=True)
+E_sym, delta_sym = sp.symbols('E delta', real=True)
+P0_sym = sp.Symbol('P0', positive=True)
+S_expr = (1 + h * xv) ** 2 + xp**2 + yp**2
+F_expr = P0_sym * (-h * (xv + h * xv**2 / 2) / (1 + h * xv) - k * (xv**2 - yv**2) / 2)
+L_fn = -sp.sqrt(tp**2 - S_expr) + (1 + h * xv) * F_expr
+
+# t equation: dL/dt' = -E is a constant of motion. Its positive root is t' = E sqrt(S/(E^2-1)).
+tp_expected = E_sym * sp.sqrt(S_expr / (E_sym**2 - 1))
+t_residual = sp.diff(L_fn, tp).subs(tp, tp_expected) + E_sym
+for values in [{E_sym: 2.5, h: 0.3, xv: 0.1, xp: 0.2, yp: -0.1}, {E_sym: 4.0, h: -0.2, xv: -0.3, xp: 0.1, yp: 0.4}]:
+    assert abs(complex(sp.N(t_residual.subs(values)))) < 1e-12
+print("t' = E sqrt(S/(E^2-1)) satisfies dL/dt' = -E")
+
+# Momenta and the x-force with t' eliminated, checked against the closed forms in the memo (m = c = 1).
+p_x_closed = sp.sqrt(E_sym**2 - 1) * xp / sp.sqrt(S_expr)
+p_x_expr = sp.diff(L_fn, xp).subs(tp, tp_expected)
+dL_dx_expr = sp.diff(L_fn, xv).subs(tp, tp_expected)
+gamma_v_T = sp.sqrt(E_sym**2 - 1) * (1 + h * xv) / sp.sqrt(S_expr)
+for values in [{E_sym: 2.5, h: 0.3, xv: 0.1, xp: 0.2, yp: -0.1, P0_sym: 1.0, k: 0.4, yv: 0.05},
+               {E_sym: 4.0, h: -0.2, xv: -0.3, xp: 0.1, yp: 0.4, P0_sym: 2.0, k: -0.7, yv: -0.2}]:
+    assert abs(complex(sp.N((p_x_expr - p_x_closed).subs(values)))) < 1e-12
+    # The curvature part of dL/dx equals h * gamma m v_T; the rest is the potential term.
+    curvature_part = dL_dx_expr - (h * F_expr + (1 + h * xv) * sp.diff(F_expr, xv))
+    assert abs(complex(sp.N((curvature_part - h * gamma_v_T).subs(values)))) < 1e-12
+print("p_x = sqrt(E^2-1) x' / sqrt(S) and the curvature term of dL/dx checked numerically")
+
+# Trajectory: x(s), y(s) are O(eps), and delta is O(eps). Substitute and expand the Euler-Lagrange equations.
+eps = sp.Symbol('epsilon')
+X, Y = sp.Function('X')(s), sp.Function('Y')(s)
+dL_dyp = sp.diff(L_fn, yp).subs(tp, tp_expected)
+dL_dy = sp.diff(L_fn, yv).subs(tp, tp_expected)
+trajectory = {xv: eps * X, yv: eps * Y, xp: eps * X.diff(s), yp: eps * Y.diff(s), E_sym: sp.sqrt(1 + P0_sym**2 * (1 + eps * delta_sym)**2)}
+EL_x = sp.diff(p_x_expr.subs(trajectory), s) - dL_dx_expr.subs(trajectory)
+EL_y = sp.diff(dL_dyp.subs(trajectory), s) - dL_dy.subs(trajectory)
+order0_x = sp.simplify(sp.series(EL_x, eps, 0, 2).removeO().coeff(eps, 0))
+order1_x = sp.simplify(sp.series(EL_x, eps, 0, 2).removeO().coeff(eps, 1))
+order1_y = sp.simplify(sp.series(EL_y, eps, 0, 2).removeO().coeff(eps, 1))
+print("zeroth order of x equation:", order0_x)
+print("first order of x equation:", order1_x)
+print("first order of y equation:", order1_y)
+assert order0_x == 0
+assert sp.simplify(order1_x - P0_sym * (X.diff(s, 2) + (h**2 + k) * X - h * delta_sym)) == 0
+assert sp.simplify(order1_y - P0_sym * (Y.diff(s, 2) - k * Y)) == 0
+
+# %% [markdown]
+# ## 8. Summary
 #
 # 1. Metric in Frenet-Serret coordinates: $d\ell^2 = (1+hx)^2 ds^2 + dx^2 + dy^2$.
 # 2. Hamiltonian with $s$ as the independent variable:

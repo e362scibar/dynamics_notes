@@ -110,8 +110,8 @@ The metric is checked for a circular orbit in the notebook.}%
 \ja{非自明な計量係数は $1+hx$ だけである。したがってハミルトニアンはデカルト座標の形にはならない。
 円軌道に対する計量は，ノートブックで確認している。}
 
-\section{\en{Lagrangian and Hamiltonian with $s$ as the independent variable}%
-         \ja{$s$ を独立変数とするラグランジアンとハミルトニアン}}
+\section{\en{Lagrangian and equations of motion with $s$ as the independent variable}%
+         \ja{$s$ を独立変数とするラグランジアンと運動方程式}}
 
 \en{With time $t$ as the independent variable, the Lagrangian of a particle in a static magnetic field is}%
 \ja{時間 $t$ を独立変数とすると，静磁場中の粒子のラグランジアンは}
@@ -175,6 +175,19 @@ $s$ を独立変数とするラグランジアンは}
   L_s = -mc^2\sqrt{t'^2 - \frac{(1+hx)^2 + x'^2 + y'^2}{c^2}}
         + q\big[(1+hx)A_s + x'A_x + y'A_y\big] .
 \end{equation}
+\en{Euler--Lagrange equations for $L_s$. Take $t$, $x$, and $y$ as generalized coordinates and $s$ as the
+independent variable. For a static field $\partial L_s/\partial t = 0$, so the equations are}%
+\ja{$L_s$ に対するオイラー・ラグランジュ方程式。$t$，$x$，$y$ を一般化座標とし，$s$ を独立変数とする。
+静磁場では $\partial L_s/\partial t = 0$ であるから，方程式は次のとおりである。}
+\begin{align}
+  \frac{d}{ds}\frac{\partial L_s}{\partial t'} &= 0, \label{eq:el_s_t} \\
+  \frac{d}{ds}\frac{\partial L_s}{\partial x'} - \frac{\partial L_s}{\partial x} &= 0, \label{eq:el_s_x} \\
+  \frac{d}{ds}\frac{\partial L_s}{\partial y'} - \frac{\partial L_s}{\partial y} &= 0. \label{eq:el_s_y}
+\end{align}
+\en{The first equation shows that $\partial L_s/\partial t' = -E$ is a constant of motion. Solving it for $t'$ gives
+\eqref{eq:tprime}, which eliminates $t'$ from the other two equations.}%
+\ja{第 1 式より，$\partial L_s/\partial t' = -E$ は運動の定数である。これを $t'$ について解くと
+\eqref{eq:tprime} が得られ，残りの 2 式から $t'$ が消去される。}
 \en{The variable $t'$ is not independent. The tangential velocity is $v_T = (1+hx)\,ds/dt = (1+hx)/t'$, and the
 tangential mechanical momentum is $P_T = \gamma m v_T = E v_T/c^2$, so}%
 \ja{変数 $t'$ は独立ではない。接線方向の速度は $v_T = (1+hx)\,ds/dt = (1+hx)/t'$ であり，接線方向の力学的運動量は
@@ -184,6 +197,41 @@ $P_T = \gamma m v_T = E v_T/c^2$ であるから}
   \qquad P_T = \sqrt{\frac{E^2}{c^2} - m^2c^2 - P_x^2 - P_y^2} .
   \label{eq:tprime}
 \end{equation}
+\en{For the $x$ equation, the derivatives with $t'$ treated as independent are}%
+\ja{$x$ の方程式では，$t'$ を独立な変数とみなした偏微分は次のとおりである。}
+\begin{align}
+  \frac{\partial L_s}{\partial x'} &= \gamma m v_x + qA_x = p_x , \\
+  \frac{\partial L_s}{\partial x} &= \gamma m h\,v_T + q\big[hA_s + (1+hx)\,\partial_x A_s
+    + x'\,\partial_x A_x + y'\,\partial_x A_y\big] .
+\end{align}
+\en{The second line uses $\partial Q/\partial x = -(1+hx)h/(c^2 Q)$ with $Q = t'/\gamma$ and $v_T t' = 1+hx$. Work in
+units $m = c = 1$ and take the gauge $A_x = A_y = 0$, as in the notebook. Then $p_x$ and $p_y$ are
+$\sqrt{E^2-1}\,x'/\sqrt{S}$ and $\sqrt{E^2-1}\,y'/\sqrt{S}$, and $\gamma m v_T = \sqrt{E^2-1}\,(1+hx)/\sqrt{S}$,
+where $S = (1+hx)^2 + x'^2 + y'^2$. Substituting these into the $x$ and $y$ equations gives}%
+\ja{第 2 式は，$Q = t'/\gamma$，$v_T t' = 1+hx$ と $\partial Q/\partial x = -(1+hx)h/(c^2 Q)$ を用いて得られる。
+単位系を $m = c = 1$ とし，ノートブックと同じゲージ $A_x = A_y = 0$ を用いる。このとき $p_x$，$p_y$，$\gamma m v_T$ は，
+$S = (1+hx)^2 + x'^2 + y'^2$ として，それぞれ $\sqrt{E^2-1}\,x'/\sqrt{S}$，$\sqrt{E^2-1}\,y'/\sqrt{S}$，
+$\sqrt{E^2-1}\,(1+hx)/\sqrt{S}$ となる。これらを $x$ と $y$ の方程式に代入すると，次が得られる。}
+\begin{align}
+  \frac{d}{ds}\Big(\frac{\sqrt{E^2-1}\,x'}{\sqrt{S}}\Big)
+    &= \frac{\sqrt{E^2-1}\,h(1+hx)}{\sqrt{S}} + q\big[hA_s + (1+hx)\,\partial_x A_s\big], \label{eq:el_x} \\
+  \frac{d}{ds}\Big(\frac{\sqrt{E^2-1}\,y'}{\sqrt{S}}\Big)
+    &= q\,(1+hx)\,\partial_y A_s . \label{eq:el_y}
+\end{align}
+\en{Linearize \eqref{eq:el_x} and \eqref{eq:el_y} with $\sqrt{E^2-1} = P_0(1+\delta)$, $qA_s = P_0 a_s$, and the
+expansions of Section 5. Keeping first-order terms in $x$, $x'$, $y$, $y'$, and $\delta$, the zeroth-order terms cancel
+because the reference orbit satisfies $\sqrt{E_0^2-1} = P_0$. The result is}%
+\ja{\eqref{eq:el_x} と \eqref{eq:el_y} を，$\sqrt{E^2-1} = P_0(1+\delta)$，$qA_s = P_0 a_s$，第 5 節の展開を用いて線形化する。
+$x$，$x'$，$y$，$y'$，$\delta$ について 1 次の項を残すと，0 次の項は基準軌道が $\sqrt{E_0^2-1} = P_0$ を満たすため
+消える。結果は次のとおりである。}
+\begin{equation}
+  x'' + (h^2+k)\,x = h\,\delta, \qquad y'' - k\,y = 0 .
+  \label{eq:el_linear}
+\end{equation}
+\en{The derivation was checked with sympy in the notebook.}%
+\ja{導出はノートブックで sympy により検証している。}
+
+\section{\en{Hamiltonian derivation and normalization}\ja{ハミルトニアンの導出と規格化}}
 \en{The generalized coordinates are $(t, x, y)$, and their conjugate momenta are}%
 \ja{一般化座標は $(t, x, y)$ であり，その共役運動量は}
 \begin{equation}
@@ -205,7 +253,6 @@ $P_x = p_x - qA_x$，$P_y = p_y - qA_y$ とすると，Legendre 変換により�
 \en{The prefactor $-(1+hx)$ comes from $t'$ and the metric factor.}%
 \ja{前因子 $-(1+hx)$ は $t'$ と計量因子に由来する。}
 
-\section{\en{Normalization}\ja{規格化}}
 
 \en{Normalize with the reference momentum $P_0$: $1+\delta = p/P_0$, $p_x \to P_x/P_0$, $p_y \to P_y/P_0$, and
 $a_x = qA_x/P_0$, $a_y = qA_y/P_0$, $a_s = qA_s/P_0$. Dividing \eqref{eq:K} by $P_0$ gives}%
@@ -297,6 +344,8 @@ $\tfrac{1}{2}k\,(x^2 - y^2)$ である。四極項の曲率補正は高次であ
   x'' + (h^2 + k)\,x = h\,\delta, \qquad y'' - k\,y = 0 .
   \label{eq:linear}
 \end{equation}
+\en{These agree with the linearized Euler--Lagrange equations \eqref{eq:el_linear} of Section 3.}%
+\ja{これらは第 3 節の Euler--Lagrange 方程式を線形化した \eqref{eq:el_linear} と一致する。}
 \en{The first equation is the Hill equation with the inhomogeneous term $h\delta$ from the bend. The second has no
 $h^2$ term, as expected for a horizontal bend.}%
 \ja{第 1 式は偏向による非斉次項 $h\delta$ を持つ Hill 方程式である。第 2 式は水平偏向のため $h^2$ 項を持たない。}
