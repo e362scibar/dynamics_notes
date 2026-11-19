@@ -21,6 +21,8 @@ used; `common/python/tests/test_topics_glossary.py` fails when one of them appea
 | `equilibrium_point` | equilibrium point | 平衡点 | — | — |
 | `focusing` | focusing | 集束 | 収束 | 集束 for beam focusing. 収束 is for numerical convergence. |
 | `frenet_serret_frame` | Frenet-Serret frame | Frenet-Serret 座標系 | 標構 | 標構 is a correct translation of moving frame but reads as jargon here. Use 座標系. |
+| `gauge` | gauge | ゲージ | — | — |
+| `gauge_transformation` | gauge transformation | ゲージ変換 | — | — |
 | `gradient` | gradient | 勾配 | — | — |
 | `hamiltonian` | Hamiltonian | ハミルトニアン | — | — |
 | `ideal_orbit` | ideal orbit | 理想軌道 | — | — |
@@ -29,11 +31,15 @@ used; `common/python/tests/test_topics_glossary.py` fails when one of them appea
 | `legendre_transformation` | Legendre transformation | Legendre 変換 | — | — |
 | `line_element` | line element | 線要素 | — | — |
 | `linear_optics` | linear optics | 線形光学 | — | — |
+| `longitudinal` | longitudinal | 縦 | — | Use 縦 for the beam-axis direction, e.g. 縦成分 for the longitudinal component. Do not use 縦方向 as a noun. |
 | `metric` | metric | 計量 | — | — |
 | `normalization` | normalization | 規格化 | 正規化 | 規格化 is the accelerator-physics usage. 正規化 is the statistics usage. |
 | `octupole_magnet` | octupole magnet | 八極磁石 | — | — |
 | `quadrupole_magnet` | quadrupole magnet | 四極磁石 | — | — |
 | `reference_orbit` | reference orbit | 基準軌道 | — | — |
 | `sextupole_magnet` | sextupole magnet | 六極磁石 | — | — |
+| `solenoid` | solenoid | ソレノイド | — | — |
 | `torsion` | torsion | ねじれ | — | Use ねじれ for the geometric property (e.g. zero torsion). Use 捩率 only when a concrete value is given, e.g. 捩率 τ = 0.5 m^-1. |
+| `total_derivative` | total derivative | 全微分 | — | — |
+| `transverse` | transverse | 横 | — | Use 横 for the plane perpendicular to the beam axis, e.g. 横成分, 横平面. 横方向 is acceptable before a noun. |
 | `vector_potential` | vector potential | ベクトルポテンシャル | — | — |

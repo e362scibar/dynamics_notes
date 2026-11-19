@@ -132,3 +132,29 @@ ja = "勾配"
 [terms.linear_optics]
 en = "linear optics"
 ja = "線形光学"
+
+[terms.gauge_transformation]
+en = "gauge transformation"
+ja = "ゲージ変換"
+
+[terms.gauge]
+en = "gauge"
+ja = "ゲージ"
+
+[terms.longitudinal]
+en = "longitudinal"
+ja = "縦"
+note = "Use 縦 for the beam-axis direction, e.g. 縦成分 for the longitudinal component. Do not use 縦方向 as a noun."
+
+[terms.transverse]
+en = "transverse"
+ja = "横"
+note = "Use 横 for the plane perpendicular to the beam axis, e.g. 横成分, 横平面. 横方向 is acceptable before a noun."
+
+[terms.solenoid]
+en = "solenoid"
+ja = "ソレノイド"
+
+[terms.total_derivative]
+en = "total derivative"
+ja = "全微分"

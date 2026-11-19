@@ -167,16 +167,17 @@ $(\mathbf{v}\cdot\nabla)\mathbf{A}$ of the vector potential along the trajectory
 \en{For a static magnetic field $\partial\mathbf{A}/\partial t = 0$, and \eqref{eq:lorentz} is the Lorentz force
 equation $d\mathbf{p}/dt = q\,\mathbf{v}\times\mathbf{B}$ with the mechanical momentum
 $\mathbf{p} = \gamma m\mathbf{v}$. The same Euler-Lagrange procedure applied to $L_s$, with $s$ as the independent
-variable, is given in Section 4. The notebook verifies the Cartesian
+variable, is given in Section~\ref{sec:ls}. The notebook verifies the Cartesian
 identity \eqref{eq:lorentz} with sympy.}%
 \ja{静磁場では $\partial\mathbf{A}/\partial t = 0$ であるから，\eqref{eq:lorentz} は力学的運動量
 $\mathbf{p} = \gamma m\mathbf{v}$ を用いてローレンツ力の運動方程式
 $d\mathbf{p}/dt = q\,\mathbf{v}\times\mathbf{B}$ にほかならない。$s$ を独立変数とする $L_s$ に同じ手続きを
-適用する場合は第 4 節で扱う。デカルト座標での恒等式 \eqref{eq:lorentz} は，
+適用する場合は第~\ref{sec:ls} 節で扱う。デカルト座標での恒等式 \eqref{eq:lorentz} は，
 ノートブックで sympy により検証している。}
 
 \section{\en{Lagrangian with $s$ as the independent variable}%
          \ja{$s$ を独立変数とするラグランジアン}}
+\label{sec:ls}
 
 \en{Before writing $L_s$, the vector potential is decomposed in the local orthonormal frame. Its physical
 components along $\mathbf{T}$, $\mathbf{e}_x$, and $\mathbf{e}_y$ are $A_s$, $A_x$, and $A_y$:}%
@@ -193,10 +194,10 @@ components along $\mathbf{T}$, $\mathbf{e}_x$, and $\mathbf{e}_y$ are $A_s$, $A_
 \en{The factor $1+hx$ in front of $A_s$ is the metric factor of the tangential direction. Multiplying $L$ by
 $t' = dt/ds$, so that $L\,dt = L_s\,ds$, gives the $(1+hx)A_s$ term in $L_s$. The components $A_x$, $A_y$, and $A_s$
 are physical components, so no further metric factor appears. The relation between $A_s$ and $B_y$ is derived in
-Section 7.}%
+Section~\ref{sec:gauge}.}%
 \ja{$A_s$ の前の因子 $1+hx$ は接線方向の計量因子である。$L$ に $t' = dt/ds$ を掛けて $L\,dt = L_s\,ds$ とすると，
 $L_s$ の $(1+hx)A_s$ の項が得られる。$A_x$，$A_y$，$A_s$ は物理成分であるから，これ以上の計量因子は現れない。
-$A_s$ と $B_y$ の関係は第 7 節で導く。}
+$A_s$ と $B_y$ の関係は第~\ref{sec:gauge} 節で導く。}
 
 \en{The action does not depend on the choice of the independent variable, so $L\,dt = L_s\,ds$. With
 $t' = dt/ds$, $x' = dx/ds$, and $y' = dy/ds$, the velocity components satisfy $v_T t' = 1+hx$, $v_x t' = x'$, and
@@ -207,6 +208,7 @@ $s$ を独立変数とするラグランジアンは}
 \begin{equation}
   L_s = -mc^2\sqrt{t'^2 - \frac{(1+hx)^2 + x'^2 + y'^2}{c^2}}
         + q\big[(1+hx)A_s + x'A_x + y'A_y\big] .
+  \label{eq:Ls}
 \end{equation}
 \section{\en{Euler--Lagrange equations for $L_s$}\ja{$L_s$ に対するオイラー・ラグランジュ方程式}}
 
@@ -268,32 +270,343 @@ $\gamma = E/(mc^2)$, a constant of motion. In natural units $m = c = 1$, $\gamma
 \en{For the $x$ equation, the derivatives with $t'$ treated as independent are}%
 \ja{$x$ の方程式では，$t'$ を独立な変数とみなした偏微分は次のとおりである。}
 \begin{align}
-  \frac{\partial L_s}{\partial x'} &= \gamma m v_x + qA_x = p_x , \\
+  \frac{\partial L_s}{\partial x'} &= \gamma m v_x + qA_x = p_x , \label{eq:el_x_momentum} \\
   \frac{\partial L_s}{\partial x} &= \gamma m h\,v_T + q\big[hA_s + (1+hx)\,\partial_x A_s
-    + x'\,\partial_x A_x + y'\,\partial_x A_y\big] .
+    + x'\,\partial_x A_x + y'\,\partial_x A_y\big] . \label{eq:el_x_force}
 \end{align}
-\en{The second line uses $\partial Q/\partial x = -(1+hx)h/(c^2 Q)$ with $Q = t'/\gamma$ and $v_T t' = 1+hx$. Work in
-natural units $m = c = 1$ and take the gauge $A_x = A_y = 0$, as in the notebook. Then $p_x$ and $p_y$ are
-$\sqrt{E^2-1}\,x'/\sqrt{S}$ and $\sqrt{E^2-1}\,y'/\sqrt{S}$, and $\gamma m v_T = \sqrt{E^2-1}\,(1+hx)/\sqrt{S}$,
-where $S = (1+hx)^2 + x'^2 + y'^2$. Substituting these into the $x$ and $y$ equations gives}%
-\ja{第 2 式は，$Q = t'/\gamma$，$v_T t' = 1+hx$ と $\partial Q/\partial x = -(1+hx)h/(c^2 Q)$ を用いて得られる。
-自然単位系（$m = c = 1$）とし，ノートブックと同じゲージ $A_x = A_y = 0$ を用いる。このとき $p_x$，$p_y$，$\gamma m v_T$ は，
-$S = (1+hx)^2 + x'^2 + y'^2$ として，それぞれ $\sqrt{E^2-1}\,x'/\sqrt{S}$，$\sqrt{E^2-1}\,y'/\sqrt{S}$，
-$\sqrt{E^2-1}\,(1+hx)/\sqrt{S}$ となる。これらを $x$ と $y$ の方程式に代入すると，次が得られる。}
+\en{The second line uses $\partial Q/\partial x = -(1+hx)h/(c^2 Q)$ with $Q = t'/\gamma$ and $v_T t' = 1+hx$.}%
+\ja{第 2 式は，$Q = t'/\gamma$，$v_T t' = 1+hx$ と $\partial Q/\partial x = -(1+hx)h/(c^2 Q)$ を用いて得られる。}
+
+\en{The $y$ equation is treated in the same way. With $t'$ independent,}%
+\ja{$y$ の方程式も同様に扱う。$t'$ を独立な変数とみなすと，}
+\begin{align}
+  \frac{\partial L_s}{\partial y'} &= \gamma m v_y + qA_y = p_y , \label{eq:el_y_momentum} \\
+  \frac{\partial L_s}{\partial y} &= q\big[(1+hx)\,\partial_y A_s + x'\,\partial_y A_x
+    + y'\,\partial_y A_y\big] . \label{eq:el_y_force}
+\end{align}
+\en{There is no curvature term in \eqref{eq:el_y_force}, because the metric factor $1+hx$ does not depend on $y$.}%
+\ja{計量因子 $1+hx$ は $y$ に依らないため，\eqref{eq:el_y_force} に曲率の項は現れない。}
+
+\section{\en{Reduction to the Lorentz force equation}\ja{ローレンツ力の方程式への帰着}}
+\label{sec:lorentz_reduction}
+
+\en{Substituting \eqref{eq:el_x_momentum}--\eqref{eq:el_y_force} into \eqref{eq:el_s_x} and \eqref{eq:el_s_y} gives}%
+\ja{\eqref{eq:el_x_momentum}--\eqref{eq:el_y_force} を \eqref{eq:el_s_x} と \eqref{eq:el_s_y} に代入すると}
+\begin{align}
+  \frac{d}{ds}\big(\gamma m v_x + qA_x\big)
+    &= \gamma m h\,v_T + q\big[hA_s + (1+hx)\,\partial_x A_s + x'\,\partial_x A_x + y'\,\partial_x A_y\big] ,
+    \label{eq:el_x_full} \\
+  \frac{d}{ds}\big(\gamma m v_y + qA_y\big)
+    &= q\big[(1+hx)\,\partial_y A_s + x'\,\partial_y A_x + y'\,\partial_y A_y\big] .
+    \label{eq:el_y_full}
+\end{align}
+\en{These are the same equations as \eqref{eq:lorentz}, written with $s$ as the independent variable. To see this,
+convert $d/ds$ to $d/dt$ with $d/ds = t'\,d/dt$ and use $x' = v_x t'$ and $y' = v_y t'$. The total time derivatives of
+the potentials along the trajectory are}%
+\ja{これらは \eqref{eq:lorentz} と同じ方程式を $s$ を独立変数として書いたものである。これを確かめるため，
+$d/ds = t'\,d/dt$ により $d/ds$ を $d/dt$ に直し，$x' = v_x t'$，$y' = v_y t'$ を用いる。軌道に沿った
+ベクトルポテンシャルの全時間微分は}
+\begin{equation}
+  \begin{aligned}
+    \frac{dA_x}{dt} &= \frac{\partial_s A_x}{t'} + v_x\,\partial_x A_x + v_y\,\partial_y A_x , \\
+    \frac{dA_y}{dt} &= \frac{\partial_s A_y}{t'} + v_x\,\partial_x A_y + v_y\,\partial_y A_y .
+  \end{aligned}
+  \label{eq:dA_dt_curv}
+\end{equation}
+\en{The terms with $\partial_x A_x$ and $\partial_y A_y$ cancel between the two sides of \eqref{eq:el_x_full} and
+\eqref{eq:el_y_full}. The mixed terms do not cancel. In the $x$ equation, $dA_x/dt$ contributes
+$-q\,v_y\,\partial_y A_x$ and $\partial L_s/\partial x$ contributes $+q\,v_y\,\partial_x A_y$, so the pair enters as
+$q\,v_y(\partial_x A_y - \partial_y A_x) = -q\,v_y B_s$. In the $y$ equation the same pair enters with the opposite
+sign. Hence}%
+\ja{$\partial_x A_x$ と $\partial_y A_y$ を含む項は \eqref{eq:el_x_full} と \eqref{eq:el_y_full} の両辺で相殺する。
+一方，混ざった項は相殺しない。$x$ の方程式では，$dA_x/dt$ から $-q\,v_y\,\partial_y A_x$ が，
+$\partial L_s/\partial x$ から $+q\,v_y\,\partial_x A_y$ が現れるので，この組は
+$q\,v_y(\partial_x A_y - \partial_y A_x) = -q\,v_y B_s$ として残る。$y$ の方程式では同じ組が逆符号で現れる。
+したがって}
+\begin{equation}
+  \begin{aligned}
+    \frac{d}{dt}\big(\gamma m v_x\big) &= \frac{\gamma m h\,v_T}{t'}
+      + \frac{q}{t'}\big[hA_s + (1+hx)\,\partial_x A_s - \partial_s A_x\big] - q\,v_y B_s , \\
+    \frac{d}{dt}\big(\gamma m v_y\big) &= \frac{q}{t'}\big[(1+hx)\,\partial_y A_s - \partial_s A_y\big]
+      + q\,v_x B_s .
+  \end{aligned}
+  \label{eq:el_dt}
+\end{equation}
+\en{The field components in the local frame are}%
+\ja{局所座標系での磁場の成分は}
+\begin{equation}
+  \begin{aligned}
+    B_s &= -\big(\partial_x A_y - \partial_y A_x\big), \\
+    B_x &= -\frac{(1+hx)\,\partial_y A_s - \partial_s A_y}{1+hx}, \\
+    B_y &= -\frac{\partial_s A_x - \partial_x\big[(1+hx)A_s\big]}{1+hx} ,
+  \end{aligned}
+  \label{eq:B_components}
+\end{equation}
+\en{so the brackets in \eqref{eq:el_dt} are $(1+hx)B_y$ and $-(1+hx)B_x$. With $(1+hx)/t' = v_T$,}%
+\ja{であるから，\eqref{eq:el_dt} の括弧はそれぞれ $(1+hx)B_y$ と $-(1+hx)B_x$ である。$(1+hx)/t' = v_T$ を用いると，}
+\begin{equation}
+  \begin{aligned}
+    \frac{d}{dt}\big(\gamma m v_x\big) &= \frac{\gamma m h\,v_T}{t'} + q\,v_T B_y - q\,v_y B_s , \\
+    \frac{d}{dt}\big(\gamma m v_y\big) &= -q\,v_T B_x + q\,v_x B_s .
+  \end{aligned}
+  \label{eq:el_dt_B}
+\end{equation}
+
+\en{The first term on the right of the $x$ equation is the rotation of the frame. The triad
+$(\mathbf{T},\mathbf{e}_x,\mathbf{e}_y)$ is left-handed, $\mathbf{T}\times\mathbf{e}_x = -\mathbf{e}_y$, and it rotates
+with $d\mathbf{T}/dt = -h\,(ds/dt)\,\mathbf{e}_x$ and $d\mathbf{e}_x/dt = h\,(ds/dt)\,\mathbf{T}$. For
+$\mathbf{p} = p_T\,\mathbf{T} + p_x\,\mathbf{e}_x + p_y\,\mathbf{e}_y$ with $p_T = \gamma m v_T$, the Cartesian time
+derivative is}%
+\ja{$x$ の方程式の右辺第 1 項は座標系の回転による項である。三つ組 $(\mathbf{T},\mathbf{e}_x,\mathbf{e}_y)$ は左手系で
+$\mathbf{T}\times\mathbf{e}_x = -\mathbf{e}_y$ を満たし，$d\mathbf{T}/dt = -h\,(ds/dt)\,\mathbf{e}_x$，
+$d\mathbf{e}_x/dt = h\,(ds/dt)\,\mathbf{T}$ で回転する。$p_T = \gamma m v_T$ として
+$\mathbf{p} = p_T\,\mathbf{T} + p_x\,\mathbf{e}_x + p_y\,\mathbf{e}_y$ とすると，デカルト座標での時間微分は}
+\begin{equation}
+  \frac{d\mathbf{p}}{dt} = \Big[\dot{p}_T + \frac{h}{t'}\,p_x\Big]\mathbf{T}
+    + \Big[\dot{p}_x - \frac{h}{t'}\,p_T\Big]\mathbf{e}_x + \dot{p}_y\,\mathbf{e}_y ,
+  \label{eq:dp_dt_frame}
+\end{equation}
+\en{so the $x$ component of $d\mathbf{p}/dt$ is $d(\gamma m v_x)/dt - h\,\gamma m v_T/t'$. Hence}%
+\ja{であるから，$d\mathbf{p}/dt$ の $x$ 成分は $d(\gamma m v_x)/dt - h\,\gamma m v_T/t'$ である。したがって}
+\begin{equation}
+  \Big(\frac{d\mathbf{p}}{dt}\Big)_x = q\big(v_T B_y - v_y B_s\big) , \qquad
+  \Big(\frac{d\mathbf{p}}{dt}\Big)_y = q\big(v_x B_s - v_T B_x\big) .
+  \label{eq:dp_dt_B}
+\end{equation}
+\en{In the left-handed triad the cross product has exactly these components,}%
+\ja{左手系での外積の成分はちょうどこれらであり，}
+\begin{equation}
+  \begin{aligned}
+    (\mathbf{v}\times\mathbf{B})_s &= v_y B_x - v_x B_y , \\
+    (\mathbf{v}\times\mathbf{B})_x &= v_T B_y - v_y B_s , \\
+    (\mathbf{v}\times\mathbf{B})_y &= v_x B_s - v_T B_x ,
+  \end{aligned}
+  \label{eq:cross_left}
+\end{equation}
+\en{so \eqref{eq:dp_dt_B} is the transverse part of $d\mathbf{p}/dt = q\,\mathbf{v}\times\mathbf{B}$, that is, of
+\eqref{eq:lorentz}, for any field. The tangential component is not independent: for a static magnetic field
+$|\mathbf{p}|$ is constant, so $\mathbf{p}\cdot d\mathbf{p}/dt = 0$. Projecting onto $\mathbf{T}$ and inserting \eqref{eq:dp_dt_B} gives}%
+\ja{よって \eqref{eq:dp_dt_B} は，任意の磁場について $d\mathbf{p}/dt = q\,\mathbf{v}\times\mathbf{B}$，すなわち
+\eqref{eq:lorentz} の横成分にほかならない。接線成分は独立ではない。静磁場では $|\mathbf{p}|$ が一定であるから
+$\mathbf{p}\cdot d\mathbf{p}/dt = 0$ である。$\mathbf{T}$ 方向へ射影して \eqref{eq:dp_dt_B} を代入すると}
+\begin{equation}
+  \begin{aligned}
+    \Big(\frac{d\mathbf{p}}{dt}\Big)_T
+      &= -\frac{p_x}{p_T}\Big(\frac{d\mathbf{p}}{dt}\Big)_x
+         -\frac{p_y}{p_T}\Big(\frac{d\mathbf{p}}{dt}\Big)_y \\
+      &= -q\,\frac{v_x\big(v_T B_y - v_y B_s\big) + v_y\big(v_x B_s - v_T B_x\big)}{v_T} \\
+      &= q\big(v_y B_x - v_x B_y\big) = q\,(\mathbf{v}\times\mathbf{B})_s ,
+  \end{aligned}
+  \label{eq:dp_dt_T}
+\end{equation}
+\en{where the terms in $B_s$ cancel. The Euler--Lagrange equations for $L_s$ therefore reproduce all three
+components of the Lorentz force equation \eqref{eq:lorentz}.}%
+\ja{ここで $B_s$ を含む項は相殺する。以上より，$L_s$ に対するオイラー・ラグランジュ方程式はローレンツ力の
+方程式 \eqref{eq:lorentz} の 3 成分すべてを再現する。}
+
+\section{\en{Gauge choice for dipole and quadrupole fields}%
+         \ja{偏向磁石と四極磁石に対するゲージの選択}}
+\label{sec:gauge}
+
+\en{The vector potential is defined only up to a gauge transformation $\mathbf{A}\to\mathbf{A}+\nabla\chi$. In the
+local frame the gradient of a scalar has the components}%
+\ja{ベクトルポテンシャルはゲージ変換 $\mathbf{A}\to\mathbf{A}+\nabla\chi$ だけ不定である。局所座標系ではスカラーの
+勾配の成分は}
+\begin{equation}
+  \nabla\chi = \frac{\partial_s\chi}{1+hx}\,\mathbf{T} + \partial_x\chi\,\mathbf{e}_x + \partial_y\chi\,\mathbf{e}_y ,
+  \label{eq:grad_chi}
+\end{equation}
+\en{so the physical components change as}%
+\ja{であるから，物理成分は次のように変化する。}
+\begin{equation}
+  A_s \to A_s + \frac{\partial_s\chi}{1+hx}, \qquad
+  A_x \to A_x + \partial_x\chi, \qquad
+  A_y \to A_y + \partial_y\chi .
+  \label{eq:gauge_components}
+\end{equation}
+\en{The metric factor $1+hx$ appears only in the tangential component. Substituting \eqref{eq:gauge_components} into
+$L_s$ changes the Lagrangian by}%
+\ja{計量因子 $1+hx$ が現れるのは接線成分だけである。\eqref{eq:gauge_components} を $L_s$ に代入すると，
+ラグランジアンは}
+\begin{equation}
+  \Delta L_s = q\Big[(1+hx)\,\frac{\partial_s\chi}{1+hx} + x'\,\partial_x\chi + y'\,\partial_y\chi\Big]
+             = q\,\frac{d\chi}{ds} ,
+  \label{eq:gauge_L}
+\end{equation}
+\en{a total derivative with respect to $s$. It therefore leaves the Euler--Lagrange equations \eqref{eq:el_s_x} and
+\eqref{eq:el_s_y} unchanged.}%
+\ja{だけ変化する。これは $s$ に関する全微分であるから，オイラー・ラグランジュ方程式 \eqref{eq:el_s_x} と
+\eqref{eq:el_s_y} は変わらない。}
+
+\en{Setting $A_x = A_y = 0$ requires $\partial_x\chi = -A_x$ and $\partial_y\chi = -A_y$, that is, $\chi$ must be the
+line integral of $-(A_x, A_y)$ in the transverse plane at fixed $s$. Such a $\chi$ exists if and only if the
+transverse part of $\mathbf{A}$ is a gradient,}%
+\ja{$A_x = A_y = 0$ とするには $\partial_x\chi = -A_x$ かつ $\partial_y\chi = -A_y$，すなわち $\chi$ が固定した $s$
+での横平面内の $-(A_x, A_y)$ の線積分であればよい。そのような $\chi$ が存在するための必要十分条件は，
+$\mathbf{A}$ の横成分が勾配であること，つまり}
+\begin{equation}
+  \partial_x A_y - \partial_y A_x = 0 .
+  \label{eq:integrable}
+\end{equation}
+\en{The left-hand side vanishes exactly when the longitudinal component $B_s$ of the field vanishes, because in this
+frame $B_s = -(\partial_x A_y - \partial_y A_x)$. The gauge $A_x = A_y = 0$ is therefore available exactly when the
+field has no longitudinal component.}%
+\ja{この座標系では $B_s = -(\partial_x A_y - \partial_y A_x)$ であるから，左辺がゼロになることと磁場の縦成分
+$B_s$ がゼロになることは等価である。したがって $A_x = A_y = 0$ というゲージは，磁場に縦成分がないときに限り
+取ることができる。}
+
+\en{A dipole field and a quadrupole field are both purely transverse: the dipole has $B_y$ only, and the quadrupole
+has $B_x \propto y$ and $B_y \propto x$, so $B_s = 0$ for both. Hence $B_s = 0$ holds everywhere in a lattice made of
+dipoles and quadrupoles, \eqref{eq:integrable} is satisfied, and the gauge $A_x = A_y = 0$ can be taken. The same
+holds for sextupoles and octupoles. A solenoid, or any element with a longitudinal field, breaks
+\eqref{eq:integrable}, and then $A_x$ and $A_y$ cannot both be removed.}%
+\ja{偏向磁場と四極磁場はいずれも純粋に横方向である。偏向磁石は $B_y$ だけを持ち，四極磁石は $B_x \propto y$，
+$B_y \propto x$ を持つので，いずれも $B_s = 0$ である。したがって偏向磁石と四極磁石だけからなるラティスでは
+$B_s = 0$ が至るところで成り立ち，\eqref{eq:integrable} が満たされるので，ゲージ $A_x = A_y = 0$ を取ることが
+できる。六極磁石と八極磁石についても同様である。ソレノイドや縦磁場を持つ要素は \eqref{eq:integrable} を破るため，
+$A_x$ と $A_y$ を同時に消すことはできない。}
+
+\en{After $A_x = A_y = 0$ is imposed, the remaining freedom is $\chi = \chi(s)$, which shifts only the tangential
+component,}%
+\ja{$A_x = A_y = 0$ を課した後に残る自由度は $\chi = \chi(s)$ であり，接線成分だけを}
+\begin{equation}
+  A_s \to A_s + \frac{\chi'(s)}{1+hx}
+  \label{eq:residual_gauge}
+\end{equation}
+\en{by a function of $s$. This is not a physical change: $B_y \propto \partial_x[(1+hx)A_s]/(1+hx)$ is invariant, and
+the shift of $L_s$ is again the total derivative $q\chi'(s)$. The function $\chi'(s)$ is therefore fixed by a
+convention, not by the equations of motion.}%
+\ja{だけ $s$ の関数でずらす。これは物理的な変化ではない。$B_y \propto \partial_x[(1+hx)A_s]/(1+hx)$ は不変であり，
+$L_s$ の変化もやはり全微分 $q\chi'(s)$ である。したがって $\chi'(s)$ は運動方程式ではなく規約で決まる。}
+
+\en{The convention $A_s = 0$ on the reference orbit fixes $\chi'(s)$ completely and determines $A_s$ for the dipole
+and the quadrupole. With $A_x = A_y = 0$ the vertical field is
+$B_y = \partial_x[(1+hx)A_s]/(1+hx)$. An ideal sector dipole has the uniform field $B_y = B_0 = P_0 h/q$, so}%
+\ja{基準軌道上で $A_s = 0$ とする規約は $\chi'(s)$ を完全に固定し，偏向磁石と四極磁石の $A_s$ を定める。
+$A_x = A_y = 0$ のとき鉛直磁場は $B_y = \partial_x[(1+hx)A_s]/(1+hx)$ である。理想的な扇型偏向磁石は一様な磁場
+$B_y = B_0 = P_0 h/q$ を持つので，}
+\begin{equation}
+  \partial_x\big[(1+hx)A_s\big] = B_0\,(1+hx)
+  \quad\Longrightarrow\quad
+  (1+hx)A_s = B_0\Big(x + \tfrac{1}{2} h x^2\Big) + C(s) .
+  \label{eq:as_dipole_integral}
+\end{equation}
+\en{The convention $A_s = 0$ at $x = 0$ sets $C(s) = 0$. A normal quadrupole with normalized gradient
+$k(s) = qg/P_0$ (focusing in $x$ for $k>0$) and a skew quadrupole with normalized skew gradient
+$k_s(s) = qg_s/P_0$ add the transverse fields $B_x \propto ky + k_s x$ and $B_y \propto kx - k_s y$, that is, the
+potential terms $\tfrac{1}{2}k\,(x^2 - y^2)$ and $k_s\,xy$. With the sign convention of this memo, the potential of a
+dipole, a normal quadrupole, and a skew quadrupole is}%
+\ja{$x = 0$ で $A_s = 0$ とする規約により $C(s) = 0$ となる。規格化された勾配 $k(s) = qg/P_0$（$k>0$ で $x$ 方向に
+集束）を持つノーマル四極磁石と，規格化されたスキュー勾配 $k_s(s) = qg_s/P_0$ を持つスキュー四極磁石は，
+横方向の磁場 $B_x \propto ky + k_s x$，$B_y \propto kx - k_s y$ を加える。これはポテンシャルの項
+$\tfrac{1}{2}k\,(x^2 - y^2)$ と $k_s\,xy$ に対応する。本メモの符号の規約では，偏向磁石，ノーマル四極磁石，
+スキュー四極磁石のポテンシャルは}
+\begin{equation}
+  a_s = \frac{qA_s}{P_0}
+      = -\frac{h\big(x + \tfrac{1}{2} h x^2\big) + \tfrac{1}{2} k\,(x^2 - y^2) + k_s\,xy}{1+hx} ,
+  \label{eq:as_dip}
+\end{equation}
+\en{so that the term entering the equations of motion is exactly}%
+\ja{となる。したがって運動方程式に現れる項は厳密に}
+\begin{equation}
+  -(1+hx)\,a_s = h\big(x + \tfrac{1}{2} h x^2\big) + \tfrac{1}{2} k\,(x^2 - y^2) + k_s\,xy .
+  \label{eq:as_dip_exact}
+\end{equation}
+\en{The overall sign is a convention. It is fixed by requiring the reference orbit $x = y = 0$ to be an equilibrium,
+that is, by the vanishing of the transverse force there. Curvature corrections to the quadrupole terms are higher
+order and are not kept.}%
+\ja{全体の符号は規約である。基準軌道 $x = y = 0$ が平衡点であること，すなわちそこでの横方向の力がゼロになる
+ことを要求して決める。四極項の曲率補正は高次であり，本メモでは扱わない。}
+
+\section{\en{Linearized Euler--Lagrange equations}\ja{線形化されたオイラー・ラグランジュ方程式}}
+\label{sec:el_linear}
+
+\en{Work in natural units $m = c = 1$ and use the gauge $A_x = A_y = 0$ of Section~\ref{sec:gauge}, with the
+convention $A_s = 0$ on the reference orbit. The Lagrangian \eqref{eq:Ls} then reduces to}%
+\ja{自然単位系（$m = c = 1$）とし，第~\ref{sec:gauge} 節のゲージ $A_x = A_y = 0$ を用いる。また基準軌道上で
+$A_s = 0$ とする規約を採る。このときラグランジアン \eqref{eq:Ls} は次のように簡単になる。}
+\begin{equation}
+  L_s = -\sqrt{t'^2 - (1+hx)^2 - x'^2 - y'^2} + q\,(1+hx)\,A_s .
+  \label{eq:Ls_natural}
+\end{equation}
+\en{With $Q = \sqrt{t'^2 - (1+hx)^2 - x'^2 - y'^2}$, the partial derivatives of \eqref{eq:Ls_natural} are}%
+\ja{$Q = \sqrt{t'^2 - (1+hx)^2 - x'^2 - y'^2}$ とおくと，\eqref{eq:Ls_natural} の偏微分は次のとおりである。}
+\begin{equation}
+  \begin{aligned}
+    \frac{\partial L_s}{\partial x'} &= \frac{x'}{Q} , &
+    \frac{\partial L_s}{\partial y'} &= \frac{y'}{Q} , \\
+    \frac{\partial L_s}{\partial x} &= \frac{h(1+hx)}{Q} + q\big[hA_s + (1+hx)\,\partial_x A_s\big] , &
+    \frac{\partial L_s}{\partial y} &= q\,(1+hx)\,\partial_y A_s .
+  \end{aligned}
+  \label{eq:Ls_partials}
+\end{equation}
+\en{The $t$ equation gives the constant of motion $\partial L_s/\partial t' = -E$, that is, $t'/Q = E$. Together with
+$Q^2 = t'^2 - S$, where $S = (1+hx)^2 + x'^2 + y'^2$, this fixes $t' = E\sqrt{S/(E^2-1)}$ and
+$Q = \sqrt{S}/\sqrt{E^2-1}$. The momenta in \eqref{eq:Ls_partials} therefore become
+$\partial L_s/\partial x' = \sqrt{E^2-1}\,x'/\sqrt{S}$,
+$\partial L_s/\partial y' = \sqrt{E^2-1}\,y'/\sqrt{S}$, and
+$\gamma m v_T = \sqrt{E^2-1}\,(1+hx)/\sqrt{S}$. The $x$ and $y$ equations are then second-order equations for
+$x(s)$ and $y(s)$. Substituting these into \eqref{eq:el_s_x} and \eqref{eq:el_s_y} gives}%
+\ja{$t$ の方程式からは保存量 $\partial L_s/\partial t' = -E$，すなわち $t'/Q = E$ が得られる。
+$S = (1+hx)^2 + x'^2 + y'^2$ として $Q^2 = t'^2 - S$ と合わせると，
+$t' = E\sqrt{S/(E^2-1)}$，$Q = \sqrt{S}/\sqrt{E^2-1}$ が定まる。したがって \eqref{eq:Ls_partials} の運動量は
+$\partial L_s/\partial x' = \sqrt{E^2-1}\,x'/\sqrt{S}$ と
+$\partial L_s/\partial y' = \sqrt{E^2-1}\,y'/\sqrt{S}$，そして
+$\gamma m v_T = \sqrt{E^2-1}\,(1+hx)/\sqrt{S}$ となる。
+$x$ と $y$ の方程式は $x(s)$ と $y(s)$ に対する 2 階の方程式になる。これらを \eqref{eq:el_s_x} と
+\eqref{eq:el_s_y} に代入すると，次が得られる。}
 \begin{align}
   \frac{d}{ds}\Big(\frac{\sqrt{E^2-1}\,x'}{\sqrt{S}}\Big)
     &= \frac{\sqrt{E^2-1}\,h(1+hx)}{\sqrt{S}} + q\big[hA_s + (1+hx)\,\partial_x A_s\big], \label{eq:el_x} \\
   \frac{d}{ds}\Big(\frac{\sqrt{E^2-1}\,y'}{\sqrt{S}}\Big)
     &= q\,(1+hx)\,\partial_y A_s . \label{eq:el_y}
 \end{align}
-\en{Linearize \eqref{eq:el_x} and \eqref{eq:el_y} with $\sqrt{E^2-1} = P_0(1+\delta)$, $qA_s = P_0 a_s$, and the
-expansions of Section 7. Keeping first-order terms in $x$, $x'$, $y$, $y'$, and $\delta$, the zeroth-order terms cancel
-because the reference orbit satisfies $\sqrt{E_0^2-1} = P_0$. The result is}%
-\ja{\eqref{eq:el_x} と \eqref{eq:el_y} を，$\sqrt{E^2-1} = P_0(1+\delta)$，$qA_s = P_0 a_s$，第 7 節の展開を用いて線形化する。
-$x$，$x'$，$y$，$y'$，$\delta$ について 1 次の項を残すと，0 次の項は基準軌道が $\sqrt{E_0^2-1} = P_0$ を満たすため
-消える。結果は次のとおりである。}
+\en{Linearize \eqref{eq:el_x} and \eqref{eq:el_y} in $x$, $x'$, $y$, $y'$, and $\delta$. Write
+$\sqrt{E^2-1} = P_0(1+\delta)$ and $qA_s = P_0 a_s$. Since $x'$ and $y'$ are first order,
+$S = (1+hx)^2 + x'^2 + y'^2 = 1 + 2hx + \mathcal{O}(2)$ and $\sqrt{S} = 1 + hx + \mathcal{O}(2)$, so the left-hand
+sides of
+\eqref{eq:el_x} and \eqref{eq:el_y} become}%
+\ja{\eqref{eq:el_x} と \eqref{eq:el_y} を $x$，$x'$，$y$，$y'$，$\delta$ について線形化する。
+$\sqrt{E^2-1} = P_0(1+\delta)$，$qA_s = P_0 a_s$ とおく。$x'$ と $y'$ は 1 次であるから
+$S = (1+hx)^2 + x'^2 + y'^2 = 1 + 2hx + \mathcal{O}(2)$，$\sqrt{S} = 1 + hx + \mathcal{O}(2)$ であり，
+\eqref{eq:el_x} と \eqref{eq:el_y} の左辺は次のようになる。}
 \begin{equation}
-  x'' + (h^2+k)\,x = h\,\delta, \qquad y'' - k\,y = 0 .
+  \frac{d}{ds}\Big(\frac{\sqrt{E^2-1}\,x'}{\sqrt{S}}\Big) = P_0\,x'' + \mathcal{O}(2) , \qquad
+  \frac{d}{ds}\Big(\frac{\sqrt{E^2-1}\,y'}{\sqrt{S}}\Big) = P_0\,y'' + \mathcal{O}(2) .
+  \label{eq:el_linear_lhs}
+\end{equation}
+\en{On the right-hand sides, use the dipole and quadrupole potential \eqref{eq:as_dip} of
+Section~\ref{sec:gauge}, expanded through second order in $x$ and $y$,}%
+\ja{右辺には第~\ref{sec:gauge} 節の偏向磁石と四極磁石のポテンシャル \eqref{eq:as_dip} を $x$ と $y$ の 2 次まで
+展開して用いる。}
+\begin{equation}
+  a_s = -hx + \tfrac{1}{2} h^2 x^2 - \tfrac{1}{2} k\,(x^2 - y^2) - k_s\,xy + \mathcal{O}(3) ,
+  \label{eq:as_expansion}
+\end{equation}
+\en{so its first derivatives are}%
+\ja{その 1 次導関数は}
+\begin{equation}
+  \partial_x a_s = -h + h^2 x - k\,x - k_s\,y + \mathcal{O}(2) , \qquad
+  \partial_y a_s = k\,y - k_s\,x + \mathcal{O}(2) .
+  \label{eq:as_derivatives}
+\end{equation}
+\en{The curvature term of \eqref{eq:el_x} is
+$\sqrt{E^2-1}\,h(1+hx)/\sqrt{S} = P_0\,h\,(1+\delta) + \mathcal{O}(2)$. Collecting the first-order terms of
+\eqref{eq:el_x} and \eqref{eq:el_y},}%
+\ja{\eqref{eq:el_x} の曲率の項は $\sqrt{E^2-1}\,h(1+hx)/\sqrt{S} = P_0\,h\,(1+\delta) + \mathcal{O}(2)$ である。
+\eqref{eq:el_x} と \eqref{eq:el_y} の 1 次の項を集めると，}
+\begin{equation}
+  \begin{aligned}
+    P_0\,x'' &= P_0\,h\,(1+\delta) + P_0\big[h\,a_s + (1+hx)\,\partial_x a_s\big] \\
+             &= P_0\big[h\,\delta - (h^2+k)\,x - k_s\,y\big] , \\
+    P_0\,y'' &= P_0\,(1+hx)\,\partial_y a_s = P_0\big[k\,y - k_s\,x\big] ,
+  \end{aligned}
+  \label{eq:el_linear_terms}
+\end{equation}
+\en{where the zeroth-order terms $P_0 h$ and $-P_0 h$ cancel. Dividing by $P_0$ gives}%
+\ja{0 次の項 $P_0 h$ と $-P_0 h$ は相殺する。$P_0$ で割ると}
+\begin{equation}
+  x'' + (h^2+k)\,x + k_s\,y = h\,\delta, \qquad y'' - k\,y + k_s\,x = 0 .
   \label{eq:el_linear}
 \end{equation}
 \en{The derivation was checked with sympy in the notebook.}%
@@ -336,6 +649,12 @@ on $\tau$, so $\delta$ is a constant of motion.}%
 \ja{時間的変数 $\tau$ は $\delta$ と共役である。$(t,E)$ からの正準変換により得られる
 （\cite{lee2019} と \cite{wiedemann2015} の標準的な選択）。静磁場では $H$ は $\tau$ に依らないため，$\delta$ は運動の定数である。}
 
+\en{The residual gauge freedom $\chi = \chi(s)$ of Section~\ref{sec:gauge} shifts $A_s$ by $\chi'(s)/(1+hx)$ and
+therefore adds $-q\chi'(s)/P_0$ to \eqref{eq:H_general}. This is a function of $s$ only, so it does not change
+Hamilton's equations.}%
+\ja{第~\ref{sec:gauge} 節の残存ゲージ自由度 $\chi = \chi(s)$ は $A_s$ を $\chi'(s)/(1+hx)$ だけずらすので，
+\eqref{eq:H_general} に $-q\chi'(s)/P_0$ を加える。これは $s$ だけの関数であるから，正準方程式を変えない。}
+
 \en{If the energy deviation $\delta_L = \Delta E/(P_0c)$ is used instead, the momentum ratio becomes}%
 \ja{エネルギー偏差 $\delta_L = \Delta E/(P_0c)$ を用いる場合，運動量比は次のとおりである。}
 \begin{equation}
@@ -344,35 +663,17 @@ on $\tau$, so $\delta$ is a constant of motion.}%
 \en{which reduces to $(1+\delta)^2$ at first order.}%
 \ja{これは 1 次の近似で $(1+\delta)^2$ に一致する。}
 
-\section{\en{Vector potentials of the dipole and the quadrupole}%
-         \ja{偏向磁石と四極磁石のベクトルポテンシャル}}
-
-\en{An ideal sector dipole has a uniform vertical field $B_y = B_0$. With $A_x = 0$, the vertical curl in the
-curvilinear frame gives $(1+hx)\,a_s = -h\,(x + \tfrac{1}{2} h x^2)$, that is}%
-\ja{理想的な扇型偏向磁石は一様な鉛直磁場 $B_y = B_0$ を持つ。$A_x = 0$ とすると，曲線座標での鉛直方向の回転から
-$(1+hx)\,a_s = -h\,(x + \tfrac{1}{2} h x^2)$ が得られ，すなわち}
-\begin{equation}
-  a_s = -\frac{h\,(x + \tfrac{1}{2} h x^2)}{1+hx}, \qquad h = \frac{qB_0}{P_0} = \frac{1}{\rho}.
-  \label{eq:as_dip}
-\end{equation}
-\en{The overall sign is a convention. It is fixed by requiring the reference orbit to be an equilibrium of $H$.
-With \eqref{eq:as_dip} the dipole term is exact:}%
-\ja{符号は規約である。基準軌道が $H$ の平衡点であることを要求して決める。\eqref{eq:as_dip} により，偏向磁石の項は厳密に次のとおりである。}
-\begin{equation}
-  -(1+hx)\,a_s = h\,\big(x + \tfrac{1}{2} h x^2\big).
-\end{equation}
-\en{For a straight quadrupole with normalized gradient $k(s) = qg/P_0$ (focusing in $x$ for $k>0$), the potential
-term needed for linear optics is $\tfrac{1}{2}k\,(x^2 - y^2)$. Curvature corrections to the quadrupole term are
-higher order and are not kept.}%
-\ja{規格化された勾配 $k(s) = qg/P_0$ を持つ直線四極磁石（$k>0$ で $x$ 方向に集束）では，線形光学に必要なポテンシャル項は
-$\tfrac{1}{2}k\,(x^2 - y^2)$ である。四極項の曲率補正は高次であり，本メモでは扱わない。}
-
 \section{\en{Full Hamiltonian and exact equations of motion}\ja{完全なハミルトニアンと厳密な運動方程式}}
 
-\en{Collecting the terms, the Hamiltonian is}\ja{項をまとめると，ハミルトニアンは次のとおりである。}
+\en{With the gauge $A_x = A_y = 0$ the potential terms of \eqref{eq:H_general} are $-(1+hx)a_s$, and
+\eqref{eq:as_dip_exact} of Section~\ref{sec:gauge} gives them exactly. Collecting the terms, the Hamiltonian is}%
+\ja{ゲージ $A_x = A_y = 0$ では \eqref{eq:H_general} のポテンシャル項は $-(1+hx)a_s$ であり，
+第~\ref{sec:gauge} 節の \eqref{eq:as_dip_exact} がこれを厳密に与える。項をまとめると，ハミルトニアンは次のとおりである。}
 \begin{equation}
-  H(x,p_x,y,p_y,\delta;s) = -(1+hx)\sqrt{(1+\delta)^2 - p_x^2 - p_y^2}
-    + h\big(x + \tfrac{1}{2} h x^2\big) + \tfrac{1}{2} k\,(x^2 - y^2).
+  \begin{aligned}
+    H(x,p_x,y,p_y,\delta;s) &= -(1+hx)\sqrt{(1+\delta)^2 - p_x^2 - p_y^2} \\
+      &\quad + h\big(x + \tfrac{1}{2} h x^2\big) + \tfrac{1}{2} k\,(x^2 - y^2) + k_s\,xy .
+  \end{aligned}
   \label{eq:H_full}
 \end{equation}
 \en{Hamilton's equations with $s$ as the independent variable are}%
@@ -388,12 +689,13 @@ $\tfrac{1}{2}k\,(x^2 - y^2)$ である。四極項の曲率補正は高次であ
 \ja{基準軌道は $x = p = \delta = 0$ で $\partial H/\partial x = 0$ となるため平衡点である。具体的には，}
 \begin{align}
   x' &= \frac{(1+hx)\,p_x}{\sqrt{(1+\delta)^2 - p_x^2 - p_y^2}}, \\
-  p_x' &= -h(1+hx) + h\sqrt{(1+\delta)^2 - p_x^2 - p_y^2} - kx .
+  p_x' &= -h(1+hx) + h\sqrt{(1+\delta)^2 - p_x^2 - p_y^2} - kx - k_s\,y .
 \end{align}
-\en{and $y' = (1+hx)p_y/\sqrt{\cdots}$, $p_y' = ky$.}%
-\ja{であり，$y' = (1+hx)p_y/\sqrt{\cdots}$，$p_y' = ky$ である。}
+\en{and $y' = (1+hx)p_y/\sqrt{\cdots}$, $p_y' = ky - k_s\,x$.}%
+\ja{であり，$y' = (1+hx)p_y/\sqrt{\cdots}$，$p_y' = ky - k_s\,x$ である。}
 
 \section{\en{Linearized equations of motion}\ja{線形化された運動方程式}}
+\label{sec:linear_eom}
 
 \en{Let $\mathbf{z} = (x, p_x, y, p_y, \delta)^\mathsf{T}$. The Jacobian of the exact EOM at the origin gives}%
 \ja{$\mathbf{z} = (x, p_x, y, p_y, \delta)^\mathsf{T}$ とする。原点での厳密な運動方程式のヤコビアンは}
@@ -401,19 +703,20 @@ $\tfrac{1}{2}k\,(x^2 - y^2)$ である。四極項の曲率補正は高次であ
   \mathbf{z}' = \mathbf{A}\,\mathbf{z}, \qquad
   \mathbf{A} = \begin{pmatrix}
     0 & 1 & 0 & 0 & 0 \\
-    -(h^2+k) & 0 & 0 & 0 & h \\
+    -(h^2+k) & 0 & -k_s & 0 & h \\
     0 & 0 & 0 & 1 & 0 \\
-    0 & 0 & k & 0 & 0 \\
+    -k_s & 0 & k & 0 & 0 \\
     0 & 0 & 0 & 0 & 0
   \end{pmatrix}.
 \end{equation}
 \en{The corresponding equations are}\ja{対応する方程式は次のとおりである。}
 \begin{equation}
-  x'' + (h^2 + k)\,x = h\,\delta, \qquad y'' - k\,y = 0 .
+  x'' + (h^2 + k)\,x + k_s\,y = h\,\delta, \qquad y'' - k\,y + k_s\,x = 0 .
   \label{eq:linear}
 \end{equation}
-\en{These agree with the linearized Euler--Lagrange equations \eqref{eq:el_linear} of Section 5.}%
-\ja{これらは第 5 節の Euler--Lagrange 方程式を線形化した \eqref{eq:el_linear} と一致する。}
+\en{These agree with the linearized Euler--Lagrange equations \eqref{eq:el_linear} of
+Section~\ref{sec:el_linear}.}%
+\ja{これらは第~\ref{sec:el_linear} 節の Euler--Lagrange 方程式を線形化した \eqref{eq:el_linear} と一致する。}
 
 \en{The first equation is the Hill equation with the inhomogeneous term $h\delta$ from the bend. The second has no
 $h^2$ term, as expected for a horizontal bend.}%
@@ -424,8 +727,9 @@ $h^2$ term, as expected for a horizontal bend.}%
   \item \en{For constant $h$ and $k$, the constant $D = h/(h^2+k)$ satisfies $D'' + (h^2+k)D = h$, the uniform
     dispersion of a bending section.}%
     \ja{一定の $h$ と $k$ では，定数 $D = h/(h^2+k)$ が $D'' + (h^2+k)D = h$ を満たす。これは一様な偏向部の分散である。}
-  \item \en{There is no linear coupling in this Hamiltonian, because there are no skew terms.}%
-    \ja{歪み項がないため，このハミルトニアンに線形結合はない。}
+  \item \en{The skew quadrupole term $k_s\,xy$ couples $x$ and $y$ linearly. Setting $k_s = 0$ removes the
+    coupling.}%
+    \ja{スキュー四極項 $k_s\,xy$ は $x$ と $y$ を線形に結合する。$k_s = 0$ とすると結合は消える。}
 \end{itemize}
 
 \section{\en{Summary and open points}\ja{まとめと未解決の点}}
@@ -435,6 +739,13 @@ $h^2$ term, as expected for a horizontal bend.}%
     \ja{計量: $d\ell^2 = (1+hx)^2 ds^2 + dx^2 + dy^2$。}
   \item \en{Hamiltonian: $H = -(1+hx)\sqrt{(1+\delta)^2-(p_x-a_x)^2-(p_y-a_y)^2} - (1+hx)a_s$.}%
     \ja{ハミルトニアン: $H = -(1+hx)\sqrt{(1+\delta)^2-(p_x-a_x)^2-(p_y-a_y)^2} - (1+hx)a_s$。}
+  \item \en{The Euler--Lagrange equations for $L_s$ reduce to the Lorentz force equation \eqref{eq:lorentz} for
+    $B_s = 0$.}%
+    \ja{$L_s$ に対するオイラー・ラグランジュ方程式は，$B_s = 0$ のときローレンツ力の方程式 \eqref{eq:lorentz} に帰着する。}
+  \item \en{Gauge: $A_x = A_y = 0$ is available whenever $B_s = 0$, which holds for dipoles and quadrupoles. The
+    residual freedom $\chi = \chi(s)$ only shifts $A_s$ and is fixed by convention.}%
+    \ja{ゲージ: $B_s = 0$ であれば $A_x = A_y = 0$ を取ることができ，偏向磁石と四極磁石ではこれが成り立つ。
+    残る自由度 $\chi = \chi(s)$ は $A_s$ をずらすだけで，規約で固定される。}
   \item \en{Linear EOM: $x'' + (h^2+k)x = h\delta$ and $y'' - ky = 0$, with $\delta' = 0$ in the absence of RF.}%
     \ja{線形方程式: $x'' + (h^2+k)x = h\delta$，$y'' - ky = 0$。RF がない場合 $\delta' = 0$。}
   \item \en{The RF cavity adds an electric potential, so $\delta$ and $\tau$ are no longer constant. Not covered here.}%
