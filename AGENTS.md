@@ -165,6 +165,18 @@ python common/python/dynamics_common/glossary.py
 
 `common/python/tests/test_topics_glossary.py` runs the same check under `pytest`, so a forbidden form fails the test suite.
 
+## Verification after changes
+
+After every source edit, run the build and the tests before reporting the work as done. Do not skip this for small changes.
+
+1. Activate the `dynamics_notes` conda environment.
+2. Run `python -m pytest -q` from the repository root.
+3. Build the affected topic's LaTeX document in both languages (see LaTeX documents). Also regenerate the slides when the LaTeX content or the slide generator changed.
+4. Sync and, when a notebook changed, execute it (see Jupytext and notebooks).
+5. Report failures together with their output. If a step was not run, say so.
+
+Delete temporary logs you create while building. Do not leave them in the repository.
+
 ## Critical rules
 
 ### Notebooks

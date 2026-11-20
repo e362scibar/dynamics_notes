@@ -28,11 +28,12 @@ used; `common/python/tests/test_topics_glossary.py` fails when one of them appea
 | `ideal_orbit` | ideal orbit | 理想軌道 | — | — |
 | `independent_variable` | independent variable | 独立変数 | — | — |
 | `lagrangian` | Lagrangian | ラグランジアン | — | — |
-| `legendre_transformation` | Legendre transformation | Legendre 変換 | — | — |
+| `legendre_transformation` | Legendre transformation | ルジャンドル変換 | Legendre 変換 | Write the name in katakana in Japanese text. |
 | `line_element` | line element | 線要素 | — | — |
 | `linear_optics` | linear optics | 線形光学 | — | — |
 | `longitudinal` | longitudinal | 縦 | — | Use 縦 for the beam-axis direction, e.g. 縦成分 for the longitudinal component. Do not use 縦方向 as a noun. |
 | `metric` | metric | 計量 | — | — |
+| `momentum_deviation` | momentum deviation | 運動量偏差 | — | p/P0 - 1. Distinct from the energy deviation delta = (E - E0)/(beta0 c P0), which is canonical to z. |
 | `normalization` | normalization | 規格化 | 正規化 | 規格化 is the accelerator-physics usage. 正規化 is the statistics usage. |
 | `octupole_magnet` | octupole magnet | 八極磁石 | — | — |
 | `quadrupole_magnet` | quadrupole magnet | 四極磁石 | — | — |

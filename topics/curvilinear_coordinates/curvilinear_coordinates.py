@@ -27,7 +27,7 @@
 #
 # Scope:
 # - Planar reference orbit (torsion = 0), so the frame is the Frenet-Serret frame of a planar curve.
-# - Static magnetic fields only (no RF, no electric field), so the Hamiltonian does not depend on the time-like variable.
+# - Static magnetic fields only (no RF, no electric field), so the Hamiltonian does not depend on the longitudinal coordinate $z$.
 # - Linear EOM are the main result, including the dispersion equation. Higher-order terms are noted but not expanded.
 #
 # References: [lee2019, Chap. 2]; [wiedemann2015, around p. 93].
@@ -938,70 +938,106 @@ display(sp.Eq(sp.Symbol('K'), K_closed))
 assert sp.simplify(p_t_expr + E_expr) == 0
 
 # %% [markdown]
-# ### Normalization: $\delta$, $p_x$, $p_y$ and the normalized Hamiltonian
+# ### Normalization, the longitudinal pair $(z, \delta)$ and the normalized Hamiltonian
 #
-# Normalize with the reference momentum $P_0$ (constant along the ring):
+# Normalize the transverse momenta and the potentials with the reference momentum $P_0$ (constant along the ring):
 #
 # $$
-# 1 + \delta = \frac{p}{P_0}, \qquad p_x \to \frac{P_x}{P_0}, \qquad p_y \to \frac{P_y}{P_0}, \qquad
+# p_x \to \frac{P_x}{P_0}, \qquad p_y \to \frac{P_y}{P_0}, \qquad
 # a_x = \frac{qA_x}{P_0}, \quad a_y = \frac{qA_y}{P_0}, \quad a_s = \frac{qA_s}{P_0} .
 # $$
 #
-# Dividing $K$ by $P_0$ and writing the transverse momenta in normalized form:
+# Dividing $K$ by $P_0$, with $p_t/P_0 = -E/P_0$ the momentum conjugate to $t$:
 #
 # $$
-# H = -(1+hx)\sqrt{(1+\delta)^2 - (p_x - a_x)^2 - (p_y - a_y)^2} \; - \; (1+hx)\,a_s .
+# \frac{K}{P_0} = -(1+hx)\Big[\sqrt{\Big(\frac{E}{cP_0}\Big)^2 - \Big(\frac{mc}{P_0}\Big)^2
+#     - (p_x - a_x)^2 - (p_y - a_y)^2} + a_s\Big] .
 # $$
 #
-# The time-like variable $\tau$ is conjugate to $\delta$. It is obtained from $(t, E)$ by a canonical transformation
-# (the standard choice in [lee2019] and [wiedemann2015]). For a static magnetic field, $H$ does not depend on $\tau$, so
-# $\delta$ is a constant of motion. The transverse EOM do not depend on $\tau$ either, so $\tau$ is not needed here.
-#
-# **Energy deviation.** Some texts use the energy deviation $\delta_L = \Delta E/(P_0 c)$ instead of $\delta$.
-# With $E = E_0 + \Delta E$ and $E_0 = \gamma_0 mc^2$,
+# The longitudinal coordinate $z$ and the energy deviation $\delta$ are introduced by the canonical transformation
+# $(t, p_t/P_0) \to (z, \delta)$ with the type-2 generating function
 #
 # $$
-# \Big(\frac{p}{P_0}\Big)^2 = 1 + \frac{2\,\delta_L}{\beta_0} + \delta_L^2 ,
+# F_2(t, \delta; s) = -\frac{E_0\,t}{P_0} + (s - \beta_0 c\,t)\,\delta, \qquad E_0 = \frac{cP_0}{\beta_0},
 # $$
 #
-# which reduces to $(1+\delta)^2$ at first order in $\delta_L$. The next cell checks this identity symbolically.
+# where $E_0$ is the reference energy. The old momentum is
+# $p_t/P_0 = \partial F_2/\partial t = -(E_0 + \beta_0 cP_0\,\delta)/P_0$. Comparing it with $-E/P_0$ gives the energy
+# deviation, and the new coordinate is
+#
+# $$
+# \delta = \frac{E - E_0}{\beta_0 c P_0}, \qquad z = \frac{\partial F_2}{\partial\delta} = s - \beta_0 c\,t .
+# $$
+#
+# The reference particle has $t = s/(\beta_0 c)$ and therefore $z = 0$. A particle with $z > 0$ is ahead of the
+# reference particle. With $E/(cP_0) = 1/\beta_0 + \beta_0\delta$ and $(mc/P_0)^2 = 1/(\beta_0^2\gamma_0^2)$ the
+# momentum ratio is exactly
+#
+# $$
+# \Big(\frac{p}{P_0}\Big)^2 = \Big(\frac{E}{cP_0}\Big)^2 - \Big(\frac{mc}{P_0}\Big)^2 = 1 + 2\delta + \beta_0^2\delta^2 .
+# $$
+#
+# Because $F_2$ depends on $s$, the new Hamiltonian is $K/P_0 + \partial F_2/\partial s = K/P_0 + \delta$, that is
+#
+# $$
+# H = -(1+hx)\sqrt{1 + 2\delta + \beta_0^2\delta^2 - (p_x - a_x)^2 - (p_y - a_y)^2} \; - \; (1+hx)\,a_s \; + \; \delta .
+# $$
+#
+# For $\beta_0 \to 1$ the radicand is $(1+\delta)^2 - \cdots$. The momentum deviation $p/P_0 - 1$ equals $\delta$ at
+# first order, so the equations linearized in Section 8 remain valid. For a static magnetic field, $H$ does not depend
+# on $z$, so $\delta$ is a constant of motion. The next cells check these relations symbolically and numerically.
 
 # %%
-dL, beta0, E0, p0c = sp.symbols(r'\delta_{L} \beta_{0} E_{0} p_{0}c', positive=True)
-# With E0 = p0*c^2 / (beta0 * c) = p0c / beta0, and p0c = beta0 * E0 is the standard relation.
-E_ref = p0c / beta0
-dE = dL * p0c
-lhs = ((E_ref + dE) ** 2 - (E_ref**2 - p0c**2)) / p0c**2
-rhs = 1 + 2 * dL / beta0 + dL**2
-display(sp.simplify(lhs - rhs))
-assert sp.simplify(lhs - rhs) == 0
-
-# %%
-# Normalization and the normalized Hamiltonian (blocks above), with m = c = 1 and P_0 > 0.
+# Generating function F2(t, delta; s) and the relations above (c = 1 is not assumed).
+t_s, s_s, c_s = sp.symbols('t s c', positive=True)
+beta0 = sp.Symbol('beta_0', positive=True)
 P0_n = sp.Symbol('P0', positive=True)
-p_n, Px_n, Py_n, Ax_n, Ay_n, As_n, delta_n = sp.symbols('p P_x P_y A_x A_y A_s delta', real=True)
+delta_n = sp.Symbol('delta', real=True)
+gamma0_sq = 1 / (1 - beta0**2)
+E0_ref = c_s * P0_n / beta0
+E_of_dE = E0_ref + beta0 * c_s * P0_n * delta_n
+F2_gen = -E0_ref * t_s / P0_n + (s_s - beta0 * c_s * t_s) * delta_n
+display(sp.Eq(sp.Symbol('F_2'), F2_gen))
+display(sp.Eq(sp.Symbol('z'), sp.diff(F2_gen, delta_n)))
+
+# Old momentum: p_t / P_0 = dF2/dt = -E / P_0.
+assert sp.simplify(sp.diff(F2_gen, t_s) + E_of_dE / P0_n) == 0
+# New coordinate: z = s - beta0 c t.
+assert sp.simplify(sp.diff(F2_gen, delta_n) - (s_s - beta0 * c_s * t_s)) == 0
+# The explicit s dependence adds +delta to the Hamiltonian.
+assert sp.simplify(sp.diff(F2_gen, s_s) - delta_n) == 0
+
+# Momentum ratio: (E/(c P0))^2 - (m c/P0)^2 = 1 + 2 delta + beta0^2 delta^2, with (m c/P0)^2 = 1/(beta0^2 gamma0^2).
+ratio = (E_of_dE / (c_s * P0_n)) ** 2 - 1 / (beta0**2 * gamma0_sq)
+display(sp.Eq(sp.Symbol('(p/P_0)^2'), sp.expand(sp.simplify(ratio))))
+assert sp.simplify(ratio - (1 + 2 * delta_n + beta0**2 * delta_n**2)) == 0
+
+# %%
+# Normalized Hamiltonian with the longitudinal pair (blocks above).
+p_n, Px_n, Py_n, Ax_n, Ay_n, As_n = sp.symbols('p P_x P_y A_x A_y A_s', real=True)
 h_n, x_n, k_n = sp.symbols('h x k', real=True)
 px_n, py_n, ax_n, ay_n, a_s_n = sp.symbols('p_x p_y a_x a_y a_s', real=True)
-display(sp.Eq(1 + delta_n, p_n / P0_n))
 display(sp.Eq(px_n, Px_n / P0_n))
 display(sp.Eq(py_n, Py_n / P0_n))
 display(sp.Eq(ax_n, Ax_n / P0_n))
 display(sp.Eq(ay_n, Ay_n / P0_n))
 display(sp.Eq(a_s_n, As_n / P0_n))
 
-H_norm = -(1 + h_n * x_n) * sp.sqrt((1 + delta_n) ** 2 - (px_n - ax_n) ** 2 - (py_n - ay_n) ** 2) - (1 + h_n * x_n) * a_s_n
+H_norm = (-(1 + h_n * x_n) * sp.sqrt(1 + 2 * delta_n + beta0**2 * delta_n**2 - (px_n - ax_n) ** 2 - (py_n - ay_n) ** 2)
+          - (1 + h_n * x_n) * a_s_n + delta_n)
 display(sp.Eq(sp.Symbol('H'), H_norm))
 
-# Check: K / P_0 with E = sqrt(1 + P_0^2 (1+delta)^2) (m = c = 1) reproduces H.
-E_of_delta = sp.sqrt(1 + P0_n**2 * (1 + delta_n) ** 2)
-K_model = -(1 + h_n * x_n) * (sp.sqrt(E_of_delta**2 - 1 - (P0_n * (px_n - ax_n)) ** 2 - (P0_n * (py_n - ay_n)) ** 2)
+# Check: K / P_0 + delta reproduces H. Natural units m = c = 1: E0 = sqrt(1 + P0^2), beta0 = P0 / E0 and
+# E = E0 + beta0 P0 delta.
+E0_nat = sp.sqrt(1 + P0_n**2)
+beta0_nat = P0_n / E0_nat
+E_nat = E0_nat + beta0_nat * P0_n * delta_n
+K_model = -(1 + h_n * x_n) * (sp.sqrt(E_nat**2 - 1 - (P0_n * (px_n - ax_n)) ** 2 - (P0_n * (py_n - ay_n)) ** 2)
                               + P0_n * a_s_n)
 values_n = {P0_n: 2.0, delta_n: 0.1, px_n: 0.3, py_n: -0.2, ax_n: 0.05, ay_n: 0.02, a_s_n: 0.4, h_n: 0.3, x_n: 0.2}
-assert abs(complex(sp.N((K_model / P0_n - H_norm).subs(values_n)))) < 1e-12
-print("K / P_0 reproduces the normalized Hamiltonian")
-
-# Energy deviation (block above).
-display(sp.Eq(lhs, rhs))
+residual = (K_model / P0_n + delta_n - H_norm.subs(beta0, beta0_nat)).subs(values_n)
+assert abs(complex(sp.N(residual))) < 1e-12
+print("K / P_0 + delta reproduces the normalized Hamiltonian")
 
 # %% [markdown]
 # ## 10. Full Hamiltonian and exact equations of motion
@@ -1010,7 +1046,7 @@ display(sp.Eq(lhs, rhs))
 # exactly. Collecting the terms, with the straight-quadrupole approximation for the quadrupole:
 #
 # $$
-# H(x, p_x, y, p_y, \delta; s) = -(1+hx)\sqrt{(1+\delta)^2 - p_x^2 - p_y^2}
+# H(x, p_x, y, p_y, z, \delta; s) = -(1+hx)\sqrt{1 + 2\delta + \beta_0^2\delta^2 - p_x^2 - p_y^2} + \delta
 #   + h\big(x + \tfrac12 h x^2\big) + \tfrac12 k\,(x^2 - y^2) + k_s\,xy .
 # $$
 #
@@ -1019,28 +1055,65 @@ display(sp.Eq(lhs, rhs))
 # $$
 # x' = \frac{\partial H}{\partial p_x}, \qquad p_x' = -\frac{\partial H}{\partial x}, \qquad
 # y' = \frac{\partial H}{\partial p_y}, \qquad p_y' = -\frac{\partial H}{\partial y}, \qquad
-# \delta' = -\frac{\partial H}{\partial \tau} = 0 .
+# z' = \frac{\partial H}{\partial \delta}, \qquad
+# \delta' = -\frac{\partial H}{\partial z} = 0 .
 # $$
+#
+# With $R = \sqrt{1 + 2\delta + \beta_0^2\delta^2 - p_x^2 - p_y^2}$ the equation of motion of $z$ is
+#
+# $$
+# z' = 1 - \frac{(1+hx)(1+\beta_0^2\delta)}{R} .
+# $$
+#
+# It equals $1 - \beta_0 c\,t'$ with $t' = (1+hx)E/(P_T c^2)$ and $P_T = P_0 R$, is $0$ on the reference orbit, and
+# is $-hx + \delta/\gamma_0^2$ to first order. The transverse equations do not contain $z$.
 #
 # The reference orbit is an equilibrium only if $\partial H/\partial x = 0$ at $x = p = \delta = 0$.
 # The next cell checks this and prints the exact EOM.
 
 # %%
 x_, y_, px, py, d, h, k, k_s = sp.symbols('x y p_x p_y delta h k k_s', real=True)
-H_full = (-(1 + h * x_) * sp.sqrt((1 + d) ** 2 - px**2 - py**2)
+z_s = sp.Symbol('z', real=True)
+H_full = (-(1 + h * x_) * sp.sqrt(1 + 2 * d + beta0**2 * d**2 - px**2 - py**2) + d
           + h * (x_ + h * x_**2 / 2) + k * (x_**2 - y_**2) / 2 + k_s * x_ * y_)
-state = [x_, px, y_, py, d]
+state = [x_, px, y_, py, z_s, d]
 
 # Reference orbit is an equilibrium: dH/dx vanishes at the origin.
 dHdx_ref = sp.simplify(sp.diff(H_full, x_).subs({x_: 0, px: 0, py: 0, y_: 0, d: 0}))
 display(dHdx_ref)
 assert dHdx_ref == 0
 
+# H does not depend on z, so delta' = 0.
+assert not H_full.has(z_s)
+
 # Exact EOM.
-rhs_exact = [sp.diff(H_full, px), -sp.diff(H_full, x_), sp.diff(H_full, py), -sp.diff(H_full, y_), 0]
-for name, eq in zip(["x'", "p_x'", "y'", "p_y'", "delta'"], rhs_exact):
+rhs_exact = [sp.diff(H_full, px), -sp.diff(H_full, x_), sp.diff(H_full, py), -sp.diff(H_full, y_),
+             sp.diff(H_full, d), -sp.diff(H_full, z_s)]
+for name, eq in zip(["x'", "p_x'", "y'", "p_y'", "z'", "delta'"], rhs_exact):
     print(name, "=")
     display(sp.simplify(eq))
+
+# %%
+# Equation of motion of z (blocks above).
+R_ = sp.sqrt(1 + 2 * d + beta0**2 * d**2 - px**2 - py**2)
+z_prime_text = 1 - (1 + h * x_) * (1 + beta0**2 * d) / R_
+display(sp.Eq(sp.Symbol("z'"), z_prime_text))
+assert sp.simplify(rhs_exact[4] - z_prime_text) == 0
+
+# Agreement with z' = 1 - beta0 c t' (natural units m = c = 1, P_T = P0 R, E = E0 + beta0 P0 delta).
+P_T_nat = P0_n * R_
+E_nat_d = E_nat.subs(delta_n, d)
+t_prime = (1 + h * x_) * E_nat_d / P_T_nat
+z_prime_kin = (1 - beta0_nat * t_prime).subs(beta0, beta0_nat)
+z_prime_h = z_prime_text.subs(beta0, beta0_nat)
+for sample in ({P0_n: 2.0, d: 0.1, px: 0.3, py: -0.2, h: 0.3, x_: 0.2}, {P0_n: 5.0, d: -0.05, px: 0.1, py: 0.2, h: 0.1, x_: -0.3}):
+    assert abs(complex(sp.N((z_prime_kin - z_prime_h).subs(sample)))) < 1e-12
+
+# Reference orbit and first order: z' = -h x + delta / gamma0^2.
+assert sp.simplify(z_prime_text.subs({x_: 0, px: 0, py: 0, d: 0})) == 0
+eps = sp.Symbol('epsilon')
+first_order = sp.series(z_prime_text.subs({x_: eps * x_, px: eps * px, py: eps * py, d: eps * d}), eps, 0, 2).removeO()
+assert sp.simplify(first_order.subs(eps, 1) - (-h * x_ + (1 - beta0**2) * d)) == 0
 
 # %%
 # Full Hamiltonian and Hamilton's equations (blocks above).
@@ -1055,38 +1128,46 @@ display(sp.Eq(sp.Symbol(r"\delta'"), 0))
 # ## 11. Linearized equations of motion
 #
 # Linearize around the reference orbit. The Jacobian of the exact EOM at the origin gives the linear matrix
-# $\mathbf{A}$, with $\mathbf{z}' = \mathbf{A}\,\mathbf{z}$ and $\mathbf{z} = (x, p_x, y, p_y, \delta)^\mathsf{T}$.
+# $\mathbf{A}$, with $\mathbf{u}' = \mathbf{A}\,\mathbf{u}$ and $\mathbf{u} = (x, p_x, y, p_y, z, \delta)^\mathsf{T}$.
 # Expected result:
 #
 # $$
 # \mathbf{A} = \begin{pmatrix}
-# 0 & 1 & 0 & 0 & 0 \\
-# -(h^2 + k) & 0 & -k_s & 0 & h \\
-# 0 & 0 & 0 & 1 & 0 \\
-# -k_s & 0 & k & 0 & 0 \\
-# 0 & 0 & 0 & 0 & 0
+# 0 & 1 & 0 & 0 & 0 & 0 \\
+# -(h^2 + k) & 0 & -k_s & 0 & 0 & h \\
+# 0 & 0 & 0 & 1 & 0 & 0 \\
+# -k_s & 0 & k & 0 & 0 & 0 \\
+# -h & 0 & 0 & 0 & 0 & 1/\gamma_0^2 \\
+# 0 & 0 & 0 & 0 & 0 & 0
 # \end{pmatrix}.
 # $$
 #
-# This gives the Hill equations and the inhomogeneous term $h\delta$ from the bend:
+# This gives the Hill equations, the inhomogeneous term $h\delta$ from the bend, and the equation of $z$:
 #
 # $$
-# x'' + (h^2 + k)\,x + k_s\,y = h\,\delta, \qquad y'' - k\,y + k_s\,x = 0 .
+# x'' + (h^2 + k)\,x + k_s\,y = h\,\delta, \qquad y'' - k\,y + k_s\,x = 0, \qquad
+# z' = -h\,x + \frac{\delta}{\gamma_0^2}, \qquad \delta' = 0 .
 # $$
+#
+# Inserting the dispersion orbit $x = D\delta$ gives $z' = -(hD - 1/\gamma_0^2)\,\delta$. Its ring average is
+# $-\eta\,\delta$ with the slip factor $\eta = \alpha_c - 1/\gamma_0^2$ and the momentum compaction
+# $\alpha_c = \langle hD\rangle$.
 
 # %%
-state_zero = {x_: 0, px: 0, y_: 0, py: 0, d: 0}
+state_zero = {x_: 0, px: 0, y_: 0, py: 0, z_s: 0, d: 0}
 A_mat = sp.Matrix(rhs_exact).jacobian(state)
 A_mat = sp.simplify(A_mat.subs(state_zero))
 display(A_mat)
+inv_gamma0_sq = 1 - beta0**2
 A_expected = sp.Matrix([
-    [0, 1, 0, 0, 0],
-    [-(h**2 + k), 0, -k_s, 0, h],
-    [0, 0, 0, 1, 0],
-    [-k_s, 0, k, 0, 0],
-    [0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0],
+    [-(h**2 + k), 0, -k_s, 0, 0, h],
+    [0, 0, 0, 1, 0, 0],
+    [-k_s, 0, k, 0, 0, 0],
+    [-h, 0, 0, 0, 0, inv_gamma0_sq],
+    [0, 0, 0, 0, 0, 0],
 ])
-assert sp.simplify(A_mat - A_expected) == sp.zeros(5, 5)
+assert sp.simplify(A_mat - A_expected) == sp.zeros(6, 6)
 
 # %%
 # Linear system and linear equations (blocks above).
@@ -1095,42 +1176,72 @@ display(A_expected)
 Xf, Yf = sp.Function('x')(s), sp.Function('y')(s)
 display(sp.Eq(Xf.diff(s, 2) + (h**2 + k) * Xf + k_s * Yf, h * d))
 display(sp.Eq(Yf.diff(s, 2) - k * Yf + k_s * Xf, 0))
+display(sp.Eq(sp.Symbol("z'"), -h * x_ + inv_gamma0_sq * d))
 
 # %% [markdown]
 # ### Checks against known results
 #
-# - Dispersion: with constant $h$ and $k$, a constant solution $D = h/(h^2 + k)$ satisfies
-#   $D'' + (h^2 + k)D = h$. This is the closed-orbit (periodic) dispersion of a uniform bending section.
+# - Dispersion: the dispersion $D(s)$ is defined by the dispersion orbit $x = D(s)\,\delta$ and satisfies
+#   $D'' + (h^2 + k)D = h$. In a section with constant $h$ and $k$ this equation has the $s$-independent particular
+#   solution $D_0 = h/(h^2 + k)$, because $D_0'' = 0$. The general solution adds the betatron oscillation terms, which
+#   solve the homogeneous equation. For $K^2 = h^2 + k > 0$ and the initial condition $D(0) = D'(0) = 0$ at the
+#   entrance of the section, the solution is
+#   $D(s) = \frac{h}{K^2}\big(1 - \cos Ks\big)$ and $D'(s) = \frac{h}{K}\sin Ks$.
+#   For a pure bend ($k = 0$, $K = h$) it is $D = \rho\,(1 - \cos hs)$ and $D' = \sin hs$ with $\rho = 1/h$.
+#   For small $Ks$ it grows as $D \approx hs^2/2$ and $D' \approx hs$, and then oscillates around $D_0$.
 # - Vertical plane: no $h^2$ term, as expected for a bend in the horizontal plane.
 # - Linear coupling: the skew quadrupole term $k_s\,xy$ couples $x$ and $y$ linearly; setting $k_s = 0$ removes it.
 
 # %%
-D_const = h / (h**2 + k)
-# For constant h and k the second derivative in s of D_const is zero, so the check is algebraic.
-assert sp.simplify((h**2 + k) * D_const - h) == 0
+D_0 = h / (h**2 + k)
+# For constant h and k the second derivative in s of D_0 is zero, so the check is algebraic.
+assert sp.diff(D_0, s) == 0
+assert sp.simplify(sp.diff(D_0, s, 2) + (h**2 + k) * D_0 - h) == 0
+
+# Solution with D(0) = D'(0) = 0: D = h/K^2 (1 - cos K s), with K^2 = h^2 + k > 0.
+K_pos = sp.Symbol('K', positive=True)
+h_pos = sp.Symbol('h', positive=True)
+D_ent = h_pos / K_pos**2 * (1 - sp.cos(K_pos * s))
+display(sp.Eq(sp.Symbol('D'), D_ent))
+display(sp.Eq(sp.Symbol("D'"), sp.diff(D_ent, s)))
+assert sp.simplify(sp.diff(D_ent, s, 2) + K_pos**2 * D_ent - h_pos) == 0  # D'' + (h^2 + k) D = h
+assert D_ent.subs(s, 0) == 0
+assert sp.diff(D_ent, s).subs(s, 0) == 0
+assert sp.simplify(sp.diff(D_ent, s) - h_pos / K_pos * sp.sin(K_pos * s)) == 0
+
+# Pure bend (k = 0, K = h): D = rho (1 - cos hs) and D' = sin hs with rho = 1/h.
+D_bend = D_ent.subs(K_pos, h_pos)
+assert sp.simplify(D_bend - (1 - sp.cos(h_pos * s)) / h_pos) == 0
+assert sp.simplify(sp.diff(D_bend, s) - sp.sin(h_pos * s)) == 0
+
+# Small Ks: D ~ h s^2 / 2 and D' ~ h s.
+assert sp.simplify(sp.series(D_ent, s, 0, 3).removeO() - h_pos * s**2 / 2) == 0
+assert sp.simplify(sp.series(sp.diff(D_ent, s), s, 0, 2).removeO() - h_pos * s) == 0
 
 # %% [markdown]
 # ## 12. Summary
 #
 # 1. Metric in Frenet-Serret coordinates: $d\ell^2 = (1+hx)^2 ds^2 + dx^2 + dy^2$.
-# 2. Hamiltonian with $s$ as the independent variable:
-#    $H = -(1+hx)\sqrt{(1+\delta)^2 - (p_x-a_x)^2 - (p_y-a_y)^2} - (1+hx)\,a_s$.
+# 2. Hamiltonian with $s$ as the independent variable and the longitudinal pair $z = s - \beta_0 c\,t$,
+#    $\delta = (E - E_0)/(\beta_0 cP_0)$:
+#    $H = -(1+hx)\sqrt{1 + 2\delta + \beta_0^2\delta^2 - (p_x-a_x)^2 - (p_y-a_y)^2} - (1+hx)\,a_s + \delta$.
 # 3. Ideal dipole: $-(1+hx)\,a_s = h(x + \tfrac12 h x^2)$, so the bend adds the term $h x$ (cancelled by the
 #    $-(1+hx)$ term at equilibrium) and the $\tfrac12 h^2 x^2$ term, which produces the $h^2$ focusing.
 # 4. The Euler-Lagrange equations for $L_s$ reduce to the Lorentz force equation for $B_s = 0$.
 # 5. Gauge: $A_x = A_y = 0$ is available whenever $B_s = 0$, which holds for dipoles and quadrupoles. The residual
 #    freedom $\chi = \chi(s)$ only shifts $A_s$ and is fixed by convention.
-# 6. Linear EOM: $x'' + (h^2+k)x = h\delta$ and $y'' - ky = 0$ (no RF, so $\delta' = 0$).
+# 6. Linear EOM: $x'' + (h^2+k)x = h\delta$, $y'' - ky = 0$ and $z' = -hx + \delta/\gamma_0^2$ (no RF, so
+#    $\delta' = 0$).
 #
 # ## Open points
 #
-# - The RF cavity adds an electric potential, so $\delta$ and $\tau$ are no longer constant. Not covered here.
+# - The RF cavity adds an electric potential, so $\delta$ is no longer constant. The Hamiltonian is ready for it,
+#   because $z$ and $\delta$ are canonical, but the RF term is not covered here.
 # - Quadrupole curvature corrections and sextupole/octupole terms are not included. They are needed for
 #   nonlinear dynamics (see the notebook on dynamic aperture).
 # - Nonplanar reference orbits (non-zero torsion) add a term to the frame. Not needed for SPring-8-II dipoles.
-# - Whether the $\tau$-canonical transformation gives exactly the form above, with no additional
-#   $\delta$-dependent metric factor, should be checked against [lee2019, Chap. 2] before using $H$ beyond
-#   the linear level.
+# - Longitudinal conventions of this memo: $z = s - \beta_0 c\,t$, so $z > 0$ means ahead of the reference particle,
+#   and $\delta = (E - E_0)/(\beta_0 cP_0)$. The canonical transformation $(t, p_t/P_0) \to (z, \delta)$ is exact.
 
 # %% [markdown]
 # ## License

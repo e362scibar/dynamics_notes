@@ -31,13 +31,14 @@
 
 \slidetitle{\en{Hamiltonian with s as the independent variable}\ja{s を独立変数とするハミルトニアン}}
 \slidepoint{\en{Legendre transform of the Lagrangian with s as the independent variable}%
-            \ja{s を独立変数とするラグランジアンの Legendre 変換}}
+            \ja{s を独立変数とするラグランジアンのルジャンドル変換}}
 \slidemath{K = -(1+hx)\Big[\sqrt{\tfrac{E^2}{c^2} - m^2c^2 - P_x^2 - P_y^2} + qA_s\Big]}
 
 \slidetitle{\en{Normalized Hamiltonian}\ja{規格化されたハミルトニアン}}
-\slidepoint{\en{Normalized with P0; delta is a constant of motion for a static B-field}%
-            \ja{P0 で規格化。静磁場では delta は運動の定数}}
-\slidemath{H = -(1+hx)\sqrt{(1+\delta)^2 - (p_x-a_x)^2 - (p_y-a_y)^2} - (1+hx)\,a_s}
+\slidepoint{\en{Normalized with P0; longitudinal pair z = s - beta0 c t (ahead of the reference if positive) and energy deviation delta}%
+            \ja{P0 で規格化。縦方向の組は z = s - beta0 c t（正なら基準粒子より前）とエネルギー偏差 delta}}
+\slidepoint{\en{delta is a constant of motion for a static B-field}\ja{静磁場では delta は運動の定数}}
+\slidemath{H = -(1+hx)\sqrt{1 + 2\delta + \beta_0^2\delta^2 - (p_x-a_x)^2 - (p_y-a_y)^2} - (1+hx)\,a_s + \delta}
 
 \slidetitle{\en{Ideal dipole potential}\ja{理想的な偏向磁石のポテンシャル}}
 \slidepoint{\en{Uniform vertical field B0; the sign is fixed by the reference-orbit equilibrium}%
@@ -45,22 +46,26 @@
 \slidemath{-(1+hx)\,a_s = h\big(x + \tfrac{1}{2} h x^2\big)}
 
 \slidetitle{\en{Equations of motion}\ja{運動方程式}}
-\slidemath{x' = \frac{(1+hx)\,p_x}{\sqrt{(1+\delta)^2 - p_x^2 - p_y^2}}}
-\slidemath{p_x' = -h(1+hx) + h\sqrt{(1+\delta)^2 - p_x^2 - p_y^2} - kx}
+\slidemath{x' = \frac{(1+hx)\,p_x}{R}, \qquad R = \sqrt{1 + 2\delta + \beta_0^2\delta^2 - p_x^2 - p_y^2}}
+\slidemath{p_x' = -h(1+hx) + hR - kx}
+\slidemath{z' = 1 - \frac{(1+hx)(1+\beta_0^2\delta)}{R}}
 \slidenote{\en{Hamilton's equations with s as the independent variable.}%
            \ja{s を独立変数とする正準方程式である。}}
 
 \slidetitle{\en{Linearized equations of motion}\ja{線形化された運動方程式}}
 \slidemath{x'' + (h^2 + k)\,x = h\,\delta}
 \slidemath{y'' - k\,y = 0}
+\slidemath{z' = -h\,x + \delta/\gamma_0^2}
 \slidepoint{\en{The bend adds the inhomogeneous term h delta, which generates the dispersion}%
             \ja{偏向により非斉次項 h delta が加わり，分散が生じる}}
+\slidepoint{\en{z is driven by -hx (path length) and delta/gamma0^2 (speed difference)}%
+            \ja{z は -hx（経路長）と delta/gamma0^2（速さの差）で駆動される}}
 
 \slidetitle{\en{Checks and open points}\ja{確認事項と未解決の点}}
 \slidepoint{\en{Derivations checked with sympy in the notebook}\ja{導出はノートブックで sympy により検証済み}}
 \slidepoint{\en{RF and quadrupole curvature corrections are not included}\ja{RF と四極磁石の曲率補正は含まない}}
-\slidepoint{\en{Check the tau canonical transformation against [lee2019, Chap. 2]}%
-            \ja{tau の正準変換は [lee2019, 第 2 章] で確認が必要}}
+\slidepoint{\en{Conventions: z > 0 is ahead of the reference particle; delta = (E - E0)/(beta0 c P0)}%
+            \ja{規約: z > 0 は基準粒子より前，delta = (E - E0)/(beta0 c P0)}}
 
 \section{\en{Scope and conventions}\ja{対象と記号の規約}}
 
@@ -77,11 +82,12 @@ re-checked against this memo.}%
 \en{Conventions. $s$ is the arc length along the reference orbit and the independent variable. $x$ is the
 horizontal coordinate, positive outward. $y$ is the vertical coordinate. $h(s)=1/\rho(s)$ is the curvature of the
 reference orbit, with $h>0$ when the center of curvature lies inside. $q$ and $m$ are the charge and the mass. $P_0$
-and $\beta_0$ are the reference momentum and the reference velocity factor. Some texts use other signs for $x$ and
+and $\beta_0$ are the reference momentum and the reference velocity factor, and $\gamma_0 = 1/\sqrt{1-\beta_0^2}$ is
+the reference Lorentz factor. Some texts use other signs for $x$ and
 $h$; check the sign convention before comparing formulas.}%
 \ja{記号の規約。$s$ は基準軌道に沿った弧長で，独立変数である。$x$ は外向きを正とする水平座標，$y$ は鉛直座標である。
 $h(s)=1/\rho(s)$ は基準軌道の曲率で，曲率中心が内側にあるとき $h>0$ とする。$q$ と $m$ は電荷と質量，$P_0$ と $\beta_0$ は
-基準運動量と基準速度係数である。文献によって $x$ と $h$ の符号規約が異なるため，式を比較する際は符号規約を確認すること。}
+基準運動量と基準速度係数，$\gamma_0 = 1/\sqrt{1-\beta_0^2}$ は基準ローレンツ因子である。文献によって $x$ と $h$ の符号規約が異なるため，式を比較する際は符号規約を確認すること。}
 
 \section{\en{Frenet-Serret frame and metric}\ja{Frenet-Serret 座標系と計量}}
 
@@ -626,7 +632,7 @@ $\sqrt{E^2-1}\,h(1+hx)/\sqrt{S} = P_0\,h\,(1+\delta) + \mathcal{O}(2)$. Collecti
 \en{The Hamiltonian with $s$ as the time-like variable is $K = p_x x' + p_y y' + p_t t' - L_s$. Writing the mechanical
 transverse momenta as $P_x = p_x - qA_x$ and $P_y = p_y - qA_y$, the Legendre transform gives}%
 \ja{$s$ を時間的変数とするハミルトニアンは $K = p_x x' + p_y y' + p_t t' - L_s$ である。力学的な横方向運動量を
-$P_x = p_x - qA_x$，$P_y = p_y - qA_y$ とすると，Legendre 変換により次の式が得られる。}
+$P_x = p_x - qA_x$，$P_y = p_y - qA_y$ とすると，ルジャンドル変換により次の式が得られる。}
 \begin{equation}
   K = -(1+hx)\Big[\sqrt{\frac{E^2}{c^2} - m^2c^2 - P_x^2 - P_y^2} + qA_s\Big].
   \label{eq:K}
@@ -635,33 +641,64 @@ $P_x = p_x - qA_x$，$P_y = p_y - qA_y$ とすると，Legendre 変換により�
 \ja{前因子 $-(1+hx)$ は $t'$ と計量因子に由来する。}
 
 
-\en{Normalize with the reference momentum $P_0$: $1+\delta = p/P_0$, $p_x \to P_x/P_0$, $p_y \to P_y/P_0$, and
+\en{Normalize with the reference momentum $P_0$: $p_x \to P_x/P_0$, $p_y \to P_y/P_0$, and
 $a_x = qA_x/P_0$, $a_y = qA_y/P_0$, $a_s = qA_s/P_0$. Dividing \eqref{eq:K} by $P_0$ gives}%
-\ja{基準運動量 $P_0$ で規格化する。すなわち $1+\delta = p/P_0$，$p_x \to P_x/P_0$，$p_y \to P_y/P_0$，
+\ja{基準運動量 $P_0$ で規格化する。すなわち $p_x \to P_x/P_0$，$p_y \to P_y/P_0$，
 $a_x = qA_x/P_0$，$a_y = qA_y/P_0$，$a_s = qA_s/P_0$ とする。\eqref{eq:K} を $P_0$ で割ると}
 \begin{equation}
-  H = -(1+hx)\sqrt{(1+\delta)^2 - (p_x - a_x)^2 - (p_y - a_y)^2} \;-\; (1+hx)\,a_s .
+  \frac{K}{P_0} = -(1+hx)\Big[\sqrt{\Big(\frac{E}{cP_0}\Big)^2 - \Big(\frac{mc}{P_0}\Big)^2
+      - (p_x - a_x)^2 - (p_y - a_y)^2} + a_s\Big] ,
+  \label{eq:K_norm}
+\end{equation}
+\en{where $p_t/P_0 = -E/P_0$ is the momentum conjugate to $t$. The longitudinal coordinate $z$ and the energy deviation
+$\delta$ are introduced by the canonical transformation $(t, p_t/P_0) \to (z, \delta)$ with the type-2 generating
+function}%
+\ja{ここで $p_t/P_0 = -E/P_0$ は $t$ と共役な運動量である。縦方向の座標 $z$ とエネルギー偏差 $\delta$ は，
+第 2 種母関数}
+\begin{equation}
+  F_2(t,\delta;s) = -\frac{E_0\,t}{P_0} + (s - \beta_0 c\,t)\,\delta, \qquad E_0 = \frac{cP_0}{\beta_0},
+  \label{eq:F2_z}
+\end{equation}
+\en{where $E_0$ is the reference energy. The old momentum is $p_t/P_0 = \partial F_2/\partial t = -(E_0 + \beta_0 cP_0\,\delta)/P_0$.
+Comparing it with $-E/P_0$ gives the energy deviation, and the new coordinate is}%
+\ja{による正準変換 $(t, p_t/P_0) \to (z, \delta)$ で導入する。$E_0$ は基準エネルギーである。古い運動量は
+$p_t/P_0 = \partial F_2/\partial t = -(E_0 + \beta_0 cP_0\,\delta)/P_0$ であり，これを $-E/P_0$ と比べるとエネルギー偏差が得られる。
+新しい座標は}
+\begin{equation}
+  \delta = \frac{E - E_0}{\beta_0 c P_0}, \qquad
+  z = \frac{\partial F_2}{\partial\delta} = s - \beta_0 c\,t .
+  \label{eq:z_def}
+\end{equation}
+\en{The reference particle has $t = s/(\beta_0 c)$ and therefore $z = 0$. A particle with $z > 0$ is ahead of
+the reference particle, that is, it reaches the position $s$ earlier. Since $E/(cP_0) = 1/\beta_0 + \beta_0\delta$ and
+$(mc/P_0)^2 = 1/(\beta_0^2\gamma_0^2)$, the momentum ratio is exactly}%
+\ja{基準粒子は $t = s/(\beta_0 c)$ であるから $z = 0$ である。$z > 0$ の粒子は基準粒子より前にいる，
+すなわち位置 $s$ に早く到達する。
+$E/(cP_0) = 1/\beta_0 + \beta_0\delta$ と $(mc/P_0)^2 = 1/(\beta_0^2\gamma_0^2)$ を用いると，運動量比は厳密に}
+\begin{equation}
+  \Big(\frac{p}{P_0}\Big)^2 = \Big(\frac{E}{cP_0}\Big)^2 - \Big(\frac{mc}{P_0}\Big)^2 = 1 + 2\delta + \beta_0^2\delta^2 .
+  \label{eq:p_ratio}
+\end{equation}
+\en{Because $F_2$ depends on $s$, the new Hamiltonian is $K/P_0 + \partial F_2/\partial s = K/P_0 + \delta$.
+Using \eqref{eq:p_ratio} in \eqref{eq:K_norm} gives}%
+\ja{となる。$F_2$ は $s$ に依存するので，新しいハミルトニアンは $K/P_0 + \partial F_2/\partial s = K/P_0 + \delta$ である。
+\eqref{eq:K_norm} に \eqref{eq:p_ratio} を用いると}
+\begin{equation}
+  H = -(1+hx)\sqrt{1 + 2\delta + \beta_0^2\delta^2 - (p_x - a_x)^2 - (p_y - a_y)^2} \;-\; (1+hx)\,a_s \;+\; \delta .
   \label{eq:H_general}
 \end{equation}
-\en{The time-like variable $\tau$ is conjugate to $\delta$. It comes from $(t,E)$ by a canonical transformation
-(the standard choice in \cite{lee2019} and \cite{wiedemann2015}). For a static magnetic field $H$ does not depend
-on $\tau$, so $\delta$ is a constant of motion.}%
-\ja{時間的変数 $\tau$ は $\delta$ と共役である。$(t,E)$ からの正準変換により得られる
-（\cite{lee2019} と \cite{wiedemann2015} の標準的な選択）。静磁場では $H$ は $\tau$ に依らないため，$\delta$ は運動の定数である。}
+\en{For $\beta_0 \to 1$ the radicand is $(1+\delta)^2 - \cdots$. The momentum deviation $p/P_0 - 1$ used in
+Section~\ref{sec:el_linear} equals $\delta$ at first order, so the equations linearized there remain valid. For a static
+magnetic field $H$ does not depend on $z$, so $\delta$ is a constant of motion.}%
+\ja{$\beta_0 \to 1$ では根号の中身は $(1+\delta)^2 - \cdots$ となる。第~\ref{sec:el_linear} 節で用いた運動量偏差
+$p/P_0 - 1$ は 1 次の範囲で $\delta$ に等しいので，そこで線形化した方程式はそのまま成り立つ。
+静磁場では $H$ は $z$ に依らないため，$\delta$ は運動の定数である。}
 
 \en{The residual gauge freedom $\chi = \chi(s)$ of Section~\ref{sec:gauge} shifts $A_s$ by $\chi'(s)/(1+hx)$ and
 therefore adds $-q\chi'(s)/P_0$ to \eqref{eq:H_general}. This is a function of $s$ only, so it does not change
 Hamilton's equations.}%
 \ja{第~\ref{sec:gauge} 節の残存ゲージ自由度 $\chi = \chi(s)$ は $A_s$ を $\chi'(s)/(1+hx)$ だけずらすので，
 \eqref{eq:H_general} に $-q\chi'(s)/P_0$ を加える。これは $s$ だけの関数であるから，正準方程式を変えない。}
-
-\en{If the energy deviation $\delta_L = \Delta E/(P_0c)$ is used instead, the momentum ratio becomes}%
-\ja{エネルギー偏差 $\delta_L = \Delta E/(P_0c)$ を用いる場合，運動量比は次のとおりである。}
-\begin{equation}
-  \Big(\frac{p}{P_0}\Big)^2 = 1 + \frac{2\,\delta_L}{\beta_0} + \delta_L^2 ,
-\end{equation}
-\en{which reduces to $(1+\delta)^2$ at first order.}%
-\ja{これは 1 次の近似で $(1+\delta)^2$ に一致する。}
 
 \section{\en{Full Hamiltonian and exact equations of motion}\ja{完全なハミルトニアンと厳密な運動方程式}}
 
@@ -671,7 +708,7 @@ Hamilton's equations.}%
 第~\ref{sec:gauge} 節の \eqref{eq:as_dip_exact} がこれを厳密に与える。項をまとめると，ハミルトニアンは次のとおりである。}
 \begin{equation}
   \begin{aligned}
-    H(x,p_x,y,p_y,\delta;s) &= -(1+hx)\sqrt{(1+\delta)^2 - p_x^2 - p_y^2} \\
+    H(x,p_x,y,p_y,z,\delta;s) &= -(1+hx)\sqrt{1 + 2\delta + \beta_0^2\delta^2 - p_x^2 - p_y^2} + \delta \\
       &\quad + h\big(x + \tfrac{1}{2} h x^2\big) + \tfrac{1}{2} k\,(x^2 - y^2) + k_s\,xy .
   \end{aligned}
   \label{eq:H_full}
@@ -679,44 +716,78 @@ Hamilton's equations.}%
 \en{Hamilton's equations with $s$ as the independent variable are}%
 \ja{$s$ を独立変数とする正準方程式は次のとおりである。}
 \begin{equation}
-  x' = \frac{\partial H}{\partial p_x}, \quad
-  p_x' = -\frac{\partial H}{\partial x}, \quad
-  y' = \frac{\partial H}{\partial p_y}, \quad
-  p_y' = -\frac{\partial H}{\partial y}, \quad
-  \delta' = 0 .
+  \begin{aligned}
+    x' &= \frac{\partial H}{\partial p_x}, & \quad
+    p_x' &= -\frac{\partial H}{\partial x}, & \quad
+    y' &= \frac{\partial H}{\partial p_y}, & \quad
+    p_y' &= -\frac{\partial H}{\partial y}, \\
+    z' &= \frac{\partial H}{\partial \delta}, & \quad
+    \delta' &= -\frac{\partial H}{\partial z} = 0 .
+  \end{aligned}
 \end{equation}
-\en{The reference orbit is an equilibrium because $\partial H/\partial x = 0$ at $x = p = \delta = 0$. Explicitly,}%
-\ja{基準軌道は $x = p = \delta = 0$ で $\partial H/\partial x = 0$ となるため平衡点である。具体的には，}
+\en{Write $R = \sqrt{1 + 2\delta + \beta_0^2\delta^2 - p_x^2 - p_y^2}$. The reference orbit is an equilibrium because
+$\partial H/\partial x = 0$ at $x = p = \delta = 0$. Explicitly,}%
+\ja{$R = \sqrt{1 + 2\delta + \beta_0^2\delta^2 - p_x^2 - p_y^2}$ とおく。基準軌道は $x = p = \delta = 0$ で
+$\partial H/\partial x = 0$ となるため平衡点である。具体的には，}
 \begin{align}
-  x' &= \frac{(1+hx)\,p_x}{\sqrt{(1+\delta)^2 - p_x^2 - p_y^2}}, \\
-  p_x' &= -h(1+hx) + h\sqrt{(1+\delta)^2 - p_x^2 - p_y^2} - kx - k_s\,y .
+  x' &= \frac{(1+hx)\,p_x}{R}, \\
+  p_x' &= -h(1+hx) + hR - kx - k_s\,y .
 \end{align}
-\en{and $y' = (1+hx)p_y/\sqrt{\cdots}$, $p_y' = ky - k_s\,x$.}%
-\ja{であり，$y' = (1+hx)p_y/\sqrt{\cdots}$，$p_y' = ky - k_s\,x$ である。}
+\en{and $y' = (1+hx)p_y/R$, $p_y' = ky - k_s\,x$. The potential terms of \eqref{eq:H_full} do not depend
+on $\delta$, so the equation of motion of $z$ comes from the square root and the term $\delta$:}%
+\ja{であり，$y' = (1+hx)p_y/R$，$p_y' = ky - k_s\,x$ である。\eqref{eq:H_full} のポテンシャル項は
+$\delta$ に依らないため，$z$ の運動方程式は平方根の項と $\delta$ の項から決まり，}
+\begin{equation}
+  z' = \frac{\partial H}{\partial\delta}
+        = 1 - \frac{(1+hx)(1+\beta_0^2\delta)}{R} .
+  \label{eq:z_eom}
+\end{equation}
+\en{This agrees with $z' = 1 - \beta_0 c\,t'$ from \eqref{eq:z_def}. Here
+$t' = (1+hx)E/(P_T c^2)$ and $P_T = P_0R$. On the reference orbit $z' = 0$, and to first order in the
+deviations it is $z' = -hx + \delta/\gamma_0^2$. The first term is the path-length change of an orbit
+displaced in a bend, and the second is the slip due to the speed difference, which vanishes for $\beta_0 \to 1$. The
+other equations do not contain $z$, so $z$ is obtained by integrating
+\eqref{eq:z_eom} after the transverse motion is known.}%
+\ja{これは \eqref{eq:z_def} から得られる $z' = 1 - \beta_0 c\,t'$（$t' = (1+hx)E/(P_T c^2)$，$P_T = P_0R$）と一致する。
+基準軌道上では $z' = 0$ であり，偏差の 1 次までは $z' = -hx + \delta/\gamma_0^2$ である。
+第 1 項は偏向部で変位した軌道の経路長の変化であり，第 2 項は速さの差によるスリップで，$\beta_0 \to 1$ で消える。
+ほかの方程式は $z$ を含まないので，横方向の運動を求めてから \eqref{eq:z_eom} を積分して
+$z$ が得られる。}
 
 \section{\en{Linearized equations of motion}\ja{線形化された運動方程式}}
 \label{sec:linear_eom}
 
-\en{Let $\mathbf{z} = (x, p_x, y, p_y, \delta)^\mathsf{T}$. The Jacobian of the exact EOM at the origin gives}%
-\ja{$\mathbf{z} = (x, p_x, y, p_y, \delta)^\mathsf{T}$ とする。原点での厳密な運動方程式のヤコビアンは}
+\en{Let $\mathbf{u} = (x, p_x, y, p_y, z, \delta)^\mathsf{T}$. The Jacobian of the exact EOM at the origin gives}%
+\ja{$\mathbf{u} = (x, p_x, y, p_y, z, \delta)^\mathsf{T}$ とする。原点での厳密な運動方程式のヤコビアンは}
 \begin{equation}
-  \mathbf{z}' = \mathbf{A}\,\mathbf{z}, \qquad
+  \mathbf{u}' = \mathbf{A}\,\mathbf{u}, \qquad
   \mathbf{A} = \begin{pmatrix}
-    0 & 1 & 0 & 0 & 0 \\
-    -(h^2+k) & 0 & -k_s & 0 & h \\
-    0 & 0 & 0 & 1 & 0 \\
-    -k_s & 0 & k & 0 & 0 \\
-    0 & 0 & 0 & 0 & 0
+    0 & 1 & 0 & 0 & 0 & 0 \\
+    -(h^2+k) & 0 & -k_s & 0 & 0 & h \\
+    0 & 0 & 0 & 1 & 0 & 0 \\
+    -k_s & 0 & k & 0 & 0 & 0 \\
+    -h & 0 & 0 & 0 & 0 & 1/\gamma_0^2 \\
+    0 & 0 & 0 & 0 & 0 & 0
   \end{pmatrix}.
 \end{equation}
 \en{The corresponding equations are}\ja{対応する方程式は次のとおりである。}
 \begin{equation}
-  x'' + (h^2 + k)\,x + k_s\,y = h\,\delta, \qquad y'' - k\,y + k_s\,x = 0 .
+  \begin{aligned}
+    x'' + (h^2 + k)\,x + k_s\,y &= h\,\delta, & \qquad y'' - k\,y + k_s\,x &= 0, \\
+    z' &= -h\,x + \frac{\delta}{\gamma_0^2}, & \qquad \delta' &= 0 .
+  \end{aligned}
   \label{eq:linear}
 \end{equation}
-\en{These agree with the linearized Euler--Lagrange equations \eqref{eq:el_linear} of
-Section~\ref{sec:el_linear}.}%
-\ja{これらは第~\ref{sec:el_linear} 節の Euler--Lagrange 方程式を線形化した \eqref{eq:el_linear} と一致する。}
+\en{The first two agree with the linearized Euler--Lagrange equations \eqref{eq:el_linear} of
+Section~\ref{sec:el_linear}. The third is new: $z$ is driven by the horizontal displacement through $h$ and by
+the energy deviation through $1/\gamma_0^2$. Inserting the dispersion orbit $x = D\delta$ gives
+$z' = -(hD - 1/\gamma_0^2)\,\delta$. Its average over the ring is $-\eta\,\delta$ with the slip factor
+$\eta = \alpha_c - 1/\gamma_0^2$ and the momentum compaction $\alpha_c = \langle hD\rangle$.}%
+\ja{最初の 2 式は第~\ref{sec:el_linear} 節の Euler--Lagrange 方程式を線形化した \eqref{eq:el_linear} と一致する。
+3 番目の式は新しいものである。$z$ は，水平変位から $h$ を通して，エネルギー偏差から $1/\gamma_0^2$ を通して駆動される。
+分散軌道 $x = D\delta$ を代入すると $z' = -(hD - 1/\gamma_0^2)\,\delta$ となる。
+リング 1 周の平均は，スリップ因子 $\eta = \alpha_c - 1/\gamma_0^2$ とモーメンタムコンパクション $\alpha_c = \langle hD\rangle$
+を用いて $-\eta\,\delta$ である。}
 
 \en{The first equation is the Hill equation with the inhomogeneous term $h\delta$ from the bend. The second has no
 $h^2$ term, as expected for a horizontal bend.}%
@@ -724,9 +795,25 @@ $h^2$ term, as expected for a horizontal bend.}%
 
 \en{Checks.}\ja{確認。}
 \begin{itemize}
-  \item \en{For constant $h$ and $k$, the constant $D = h/(h^2+k)$ satisfies $D'' + (h^2+k)D = h$, the uniform
-    dispersion of a bending section.}%
-    \ja{一定の $h$ と $k$ では，定数 $D = h/(h^2+k)$ が $D'' + (h^2+k)D = h$ を満たす。これは一様な偏向部の分散である。}
+  \item \en{The dispersion $D(s)$ is defined by the dispersion orbit $x = D(s)\,\delta$ and satisfies
+    $D'' + (h^2+k)D = h$. In a section with constant $h$ and $k$ this equation has the $s$-independent particular
+    solution $D_0 = h/(h^2+k)$, because $D_0'' = 0$. The general solution adds the betatron oscillation terms, which
+    solve the homogeneous equation. For $K^2 = h^2+k > 0$ and the initial condition $D(0) = D'(0) = 0$ at the
+    entrance of the section, the solution is
+    \begin{equation*}
+      D(s) = \frac{h}{K^2}\big(1 - \cos Ks\big), \qquad D'(s) = \frac{h}{K}\sin Ks .
+    \end{equation*}
+    For a pure bend ($k = 0$, $K = h$) it is $D = \rho\,(1 - \cos hs)$ and $D' = \sin hs$ with $\rho = 1/h$. For small
+    $Ks$ it grows as $D \approx hs^2/2$ and $D' \approx hs$, and then oscillates around $D_0$.}%
+    \ja{分散 $D(s)$ は分散軌道 $x = D(s)\,\delta$ で定義され，$D'' + (h^2+k)D = h$ を満たす。
+    $h$ と $k$ が一定の区間では，この方程式は $s$ に依らない特解 $D_0 = h/(h^2+k)$ を持つ（$D_0'' = 0$ であるため）。
+    一般解にはこれに斉次方程式の解であるベータトロン振動の項が加わる。
+    $K^2 = h^2+k > 0$ とし，区間の入口で $D(0) = D'(0) = 0$ とすると，解は
+    \begin{equation*}
+      D(s) = \frac{h}{K^2}\big(1 - \cos Ks\big), \qquad D'(s) = \frac{h}{K}\sin Ks
+    \end{equation*}
+    である。純粋な偏向（$k = 0$，$K = h$）では $\rho = 1/h$ として $D = \rho\,(1 - \cos hs)$，$D' = \sin hs$ となる。
+    $Ks$ が小さいうちは $D \approx hs^2/2$，$D' \approx hs$ と増加し，その後 $D_0$ のまわりを振動する。}
   \item \en{The skew quadrupole term $k_s\,xy$ couples $x$ and $y$ linearly. Setting $k_s = 0$ removes the
     coupling.}%
     \ja{スキュー四極項 $k_s\,xy$ は $x$ と $y$ を線形に結合する。$k_s = 0$ とすると結合は消える。}
@@ -737,8 +824,21 @@ $h^2$ term, as expected for a horizontal bend.}%
 \begin{enumerate}
   \item \en{Metric: $d\ell^2 = (1+hx)^2 ds^2 + dx^2 + dy^2$.}%
     \ja{計量: $d\ell^2 = (1+hx)^2 ds^2 + dx^2 + dy^2$。}
-  \item \en{Hamiltonian: $H = -(1+hx)\sqrt{(1+\delta)^2-(p_x-a_x)^2-(p_y-a_y)^2} - (1+hx)a_s$.}%
-    \ja{ハミルトニアン: $H = -(1+hx)\sqrt{(1+\delta)^2-(p_x-a_x)^2-(p_y-a_y)^2} - (1+hx)a_s$。}
+  \item \en{Hamiltonian with the longitudinal pair $(z, \delta)$, $z = s - \beta_0 c\,t$ and
+    $\delta = (E-E_0)/(\beta_0 cP_0)$:
+    \begin{equation*}
+      \begin{aligned}
+        H &= -(1+hx)\sqrt{1+2\delta+\beta_0^2\delta^2-(p_x-a_x)^2-(p_y-a_y)^2} \\
+          &\quad - (1+hx)a_s + \delta .
+      \end{aligned}
+    \end{equation*}}%
+    \ja{縦方向の組 $(z, \delta)$，$z = s - \beta_0 c\,t$，$\delta = (E-E_0)/(\beta_0 cP_0)$ に対するハミルトニアン:
+    \begin{equation*}
+      \begin{aligned}
+        H &= -(1+hx)\sqrt{1+2\delta+\beta_0^2\delta^2-(p_x-a_x)^2-(p_y-a_y)^2} \\
+          &\quad - (1+hx)a_s + \delta .
+      \end{aligned}
+    \end{equation*}}
   \item \en{The Euler--Lagrange equations for $L_s$ reduce to the Lorentz force equation \eqref{eq:lorentz} for
     $B_s = 0$.}%
     \ja{$L_s$ に対するオイラー・ラグランジュ方程式は，$B_s = 0$ のときローレンツ力の方程式 \eqref{eq:lorentz} に帰着する。}
@@ -746,16 +846,20 @@ $h^2$ term, as expected for a horizontal bend.}%
     residual freedom $\chi = \chi(s)$ only shifts $A_s$ and is fixed by convention.}%
     \ja{ゲージ: $B_s = 0$ であれば $A_x = A_y = 0$ を取ることができ，偏向磁石と四極磁石ではこれが成り立つ。
     残る自由度 $\chi = \chi(s)$ は $A_s$ をずらすだけで，規約で固定される。}
-  \item \en{Linear EOM: $x'' + (h^2+k)x = h\delta$ and $y'' - ky = 0$, with $\delta' = 0$ in the absence of RF.}%
-    \ja{線形方程式: $x'' + (h^2+k)x = h\delta$，$y'' - ky = 0$。RF がない場合 $\delta' = 0$。}
-  \item \en{The RF cavity adds an electric potential, so $\delta$ and $\tau$ are no longer constant. Not covered here.}%
-    \ja{RF 空洞は電位を加えるため，$\delta$ と $\tau$ は定数ではなくなる。本メモでは扱わない。}
+  \item \en{Linear EOM: $x'' + (h^2+k)x = h\delta$, $y'' - ky = 0$, and $z' = -hx + \delta/\gamma_0^2$, with
+    $\delta' = 0$ in the absence of RF.}%
+    \ja{線形方程式: $x'' + (h^2+k)x = h\delta$，$y'' - ky = 0$，$z' = -hx + \delta/\gamma_0^2$。RF がない場合 $\delta' = 0$。}
+  \item \en{The RF cavity adds an electric potential, so $\delta$ is no longer constant. The Hamiltonian is ready for it,
+    because $z$ and $\delta$ are canonical, but the RF term is not covered here.}%
+    \ja{RF 空洞は電位を加えるため，$\delta$ は定数ではなくなる。$z$ と $\delta$ は正準変数なので
+    ハミルトニアンは RF を加える形になっているが，RF の項は本メモでは扱わない。}
   \item \en{Quadrupole curvature corrections and sextupole and octupole terms are not included.}%
     \ja{四極磁石の曲率補正，六極・八極の項は含めていない。}
-  \item \en{Whether the $\tau$-canonical transformation gives exactly the form above should be checked against
-    \cite[Chap.~2]{lee2019} before using $H$ beyond the linear level.}%
-    \ja{$H$ を線形の範囲を超えて用いる前に，$\tau$ の正準変換により上記の形が厳密に得られるかを
-    \cite[第 2 章]{lee2019} で確認すること。}
+  \item \en{Longitudinal conventions of this memo: $z = s - \beta_0 c\,t$, so $z > 0$ means ahead of the reference
+    particle, and $\delta = (E-E_0)/(\beta_0 cP_0)$. The canonical transformation $(t, p_t/P_0) \to (z, \delta)$ is
+    exact.}%
+    \ja{本メモの縦方向の規約: $z = s - \beta_0 c\,t$（$z > 0$ は基準粒子より前），$\delta = (E-E_0)/(\beta_0 cP_0)$。
+    正準変換 $(t, p_t/P_0) \to (z, \delta)$ は厳密である。}
 \end{enumerate}
 
 \printbibliography[title={\en{References}\ja{参考文献}}]
