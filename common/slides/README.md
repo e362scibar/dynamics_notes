@@ -11,11 +11,11 @@ python common/slides/build_slides.py --topic <topic> --lang en
 python common/slides/build_slides.py --topic <topic> --lang ja
 ```
 
-Outputs go to `build/<topic>/slides-<lang>.pptx`, which is not tracked.
+Outputs go to `build/<topic>/<number>-slides-<lang>.pptx`, which is not tracked. `<number>` is the document number of the topic in `common/documents.toml`, and every slide shows `Memo <number>` in its footer. Build the LaTeX document of the same language first.
 
 ## Design
 
-- The topic's LaTeX document is the single source of content. The slide-marker macros in `common/tex/slides.tex` write one `kind:payload` line per entry to `build/<topic>/main-<lang>.slides` during compilation. The kinds are `title`, `point`, `math`, `figure`, and `note`. The builder reads that file with `dynamics_common.read_slide_aux`. The format is line based instead of JSON because TeX cannot escape JSON strings reliably.
+- The topic's LaTeX document is the single source of content. The slide-marker macros in `common/tex/slides.tex` write one `kind:payload` line per entry to `build/<topic>/<number>-<lang>.slides` during compilation. The kinds are `title`, `point`, `math`, `figure`, and `note`. The builder reads that file with `dynamics_common.read_slide_aux`. The format is line based instead of JSON because TeX cannot escape JSON strings reliably.
 - Equations: LaTeX math string → MathML (`latex2mathml`) → OMML (`mathml2omml.convert` from `mathml2omml-as`) → inserted into the slide XML with `lxml`, using `dynamics_common.latex_to_omml`. The result is native, editable PowerPoint equations.
 - Before the first build, install the shared package with `pip install -e common/python` (already listed in `environment.yml`).
 - Each slide has a short title and a few points. Longer explanation goes into speaker notes.

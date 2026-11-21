@@ -1,0 +1,24 @@
+# common/documents.toml
+# Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center)
+# SPDX-License-Identifier: CC-BY-4.0
+#
+# Single source of truth for the document numbers of the topics.
+# Read by dynamics_common.documents. The BibTeX database common/documents.bib is generated from this file,
+# so a document is cited with \cite{<number>} in LaTeX and [<number>] in notebooks.
+#
+# Number format: YYYY-NNN. YYYY is the year in which the number was first assigned, and NNN is a serial number
+# that restarts at 001 every year. A number is never changed and never reused, even when the document is
+# withdrawn or its directory is renamed. Allocate the next number with
+#   python common/python/dynamics_common/documents.py --next
+#
+# Fields per document (the table name is the number):
+#   slug    Directory name under topics/. Required for an active document.
+#   title   English title, used as the BibTeX title.
+#   status  "active" or "withdrawn". A withdrawn document keeps its number and must not be cited by new documents.
+#   author  BibTeX author. Optional; the default is "Maesaka, Hirokazu".
+#   note    Free text. Optional.
+
+[documents."2026-001"]
+slug = "curvilinear_coordinates"
+title = "Canonical equations of motion in curvilinear (Frenet-Serret) coordinates for beamlines with bending magnets"
+status = "active"

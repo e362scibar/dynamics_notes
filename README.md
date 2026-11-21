@@ -13,12 +13,13 @@ Math and figures are shared between the two languages; only prose and labels dif
 | Path | Contents |
 |---|---|
 | `topics/<topic>/` | One directory per topic: `<topic>.py` (notebook), `main.tex` (LaTeX), `figures/` |
+| `common/documents.toml` | Document numbers `YYYY-NNN` of the topics. `common/documents.bib` is generated from it |
 | `topics/README.md` | Topic index and conventions |
 | `common/tex/` | Shared LaTeX preamble and bilingual macros |
 | `common/slides/` | Shared `python-pptx` generator, run once per topic and language |
 | `common/python/` | Shared Python package `dynamics_common` (sympy helpers, utilities) |
 | `common/references/` | Reference index (`README.md`) and BibTeX database (`references.bib`). PDFs are local only, not committed |
-| `build/<topic>/` | Generated PDFs and slide decks (not tracked) |
+| `build/<topic>/` | Generated PDFs and slide decks, named by document number, for example `2026-001-en.pdf` (not tracked) |
 | `environment.yml` | Conda environment `dynamics_notes` (Python 3.14) |
 | `AGENTS.md` | Working rules for AI coding agents |
 
@@ -39,7 +40,7 @@ nbstripout --install
 
 ## Workflow
 
-Replace `<topic>` with the topic directory name, for example `twiss_optics`. Run commands from the repository root.
+Replace `<topic>` with the topic directory name, for example `twiss_optics`. Run commands from the repository root. Every topic has a document number `YYYY-NNN` (see [common/documents.toml](common/documents.toml)); it is used to cite the topic from other documents and in the output file names.
 
 ### Notebooks
 
@@ -52,14 +53,16 @@ Symbolic work uses sympy.
 ### LaTeX document
 
 ```bash
+NUM=$(python common/python/dynamics_common/documents.py --number <topic>)
+
 # English
-latexmk -lualatex -pretex='\def\memolang{en}' -usepretex -jobname=main-en -outdir=build/<topic> topics/<topic>/main.tex
+latexmk -lualatex -pretex='\def\memolang{en}' -usepretex -jobname=$NUM-en -outdir=build/<topic> topics/<topic>/main.tex
 
 # Japanese
-latexmk -lualatex -pretex='\def\memolang{ja}' -usepretex -jobname=main-ja -outdir=build/<topic> topics/<topic>/main.tex
+latexmk -lualatex -pretex='\def\memolang{ja}' -usepretex -jobname=$NUM-ja -outdir=build/<topic> topics/<topic>/main.tex
 ```
 
-PDFs are written to `build/<topic>/`.
+PDFs are written to `build/<topic>/$NUM-en.pdf` and `build/<topic>/$NUM-ja.pdf`.
 
 ### Slides
 
@@ -68,7 +71,7 @@ python common/slides/build_slides.py --topic <topic> --lang en
 python common/slides/build_slides.py --topic <topic> --lang ja
 ```
 
-Decks are written to `build/<topic>/`. Slide content comes from the topic's LaTeX document, so update the document first. Equations are inserted as native PowerPoint equations.
+Decks are written to `build/<topic>/$NUM-slides-en.pptx` and `build/<topic>/$NUM-slides-ja.pptx`. Slide content comes from the topic's LaTeX document, so update the document first. Equations are inserted as native PowerPoint equations.
 
 ## Topics
 
@@ -91,7 +94,8 @@ The index is in [topics/README.md](topics/README.md). Planned topics are placeho
 - 共通の Python コード: `common/python/` の `dynamics_common` パッケージにまとめ、トピックから import する。
 - 参考文献: 索引は `common/references/README.md`、BibTeX は `common/references/references.bib` にある。PDF は手元にのみ置き、git には含めない。文書では `\cite{key}` や `[key]` で引用する。
 - 日本語の文章は だ・である調で書く。です・ます調は使わない（詳細は [AGENTS.md](AGENTS.md)）。
-- 生成物は `build/<topic>/` に出力され、git 管理しない。
+- 文書番号: 各トピックに `YYYY-NNN`（例: `2026-001`）の文書番号を付ける。年が変わると連番は `001` から振り直す。番号は変更も再利用もしない。台帳は `common/documents.toml` で、他の文書からは LaTeX で `\cite{2026-001}`、ノートブックで `[2026-001]` と引用する。
+- 生成物は `build/<topic>/` に出力され、git 管理しない。ファイル名には文書番号を含める（例: `2026-001-ja.pdf`）。
 - 環境: conda 環境 `dynamics_notes`（Python 3.14）。定義は `environment.yml` である。
 - コミットは明示的に依頼された場合にのみ行う。
 

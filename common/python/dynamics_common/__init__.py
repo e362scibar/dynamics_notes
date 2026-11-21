@@ -5,6 +5,19 @@
 
 """Shared helpers for the dynamics_notes repository."""
 
+from dynamics_common.documents import (
+    DOCUMENTS_BIB_PATH,
+    DOCUMENTS_PATH,
+    Document,
+    check_repository,
+    find_latex_citations,
+    find_notebook_citations,
+    format_number,
+    load_documents,
+    next_number,
+    number_for_topic,
+    render_bibtex,
+)
 from dynamics_common.glossary import (
     GLOSSARY_MARKDOWN_PATH,
     GLOSSARY_PATH,
@@ -20,20 +33,31 @@ from dynamics_common.slide_aux import Block, BlockKind, Slide, parse_slide_aux, 
 from dynamics_common.slide_geometry import WIDESCREEN_HEIGHT_IN, WIDESCREEN_WIDTH_IN, set_widescreen_size
 
 __all__ = [
+    "DOCUMENTS_BIB_PATH",
+    "DOCUMENTS_PATH",
     "GLOSSARY_MARKDOWN_PATH",
     "GLOSSARY_PATH",
     "WIDESCREEN_HEIGHT_IN",
     "WIDESCREEN_WIDTH_IN",
     "Block",
     "BlockKind",
+    "Document",
     "GlossaryTerm",
     "Slide",
     "Violation",
+    "check_repository",
     "find_forbidden_terms",
+    "find_latex_citations",
+    "find_notebook_citations",
+    "format_number",
     "latex_to_omml",
+    "load_documents",
     "load_glossary",
+    "next_number",
+    "number_for_topic",
     "parse_slide_aux",
     "read_slide_aux",
+    "render_bibtex",
     "render_markdown",
     "scan_latex_file",
     "set_widescreen_size",

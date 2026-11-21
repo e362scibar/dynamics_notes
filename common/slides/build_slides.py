@@ -5,8 +5,10 @@
 
 """Build the English or Japanese PowerPoint deck of one topic from its LaTeX slide markers.
 
-The LaTeX build of ``topics/<topic>/main.tex`` writes ``build/<topic>/main-<lang>.slides``. This script reads that file
-and writes ``build/<topic>/slides-<lang>.pptx``. Equations are inserted as native PowerPoint equations (OMML).
+The LaTeX build of ``topics/<topic>/main.tex`` writes ``build/<topic>/<number>-<lang>.slides``, where ``<number>`` is the
+document number of the topic in ``common/documents.toml`` (for example ``2026-001``). This script reads that file and
+writes ``build/<topic>/<number>-slides-<lang>.pptx``. Equations are inserted as native PowerPoint equations (OMML).
+Each slide carries the document number in its footer.
 
 Usage (from the repository root)::
 
@@ -28,6 +30,8 @@ from dynamics_common import (
     BlockKind,
     Slide,
     latex_to_omml,
+    load_documents,
+    number_for_topic,
     read_slide_aux,
     set_widescreen_size,
 )
@@ -61,6 +65,10 @@ MATH_HEIGHT_IN = 1.0
 FIGURE_HEIGHT_IN = 3.6
 BLOCK_GAP_IN = 0.2
 POINT_FONT_SIZE_PT = 20
+FOOTER_BOTTOM_MARGIN_IN = 0.55
+FOOTER_HEIGHT_IN = 0.35
+FOOTER_FONT_SIZE_PT = 12
+FOOTER_LABEL = "Memo"
 JAPANESE_EAST_ASIAN_FONT = "Hiragino Sans"
 BULLET_PREFIX = "• "
 
@@ -77,11 +85,13 @@ class DeckPaths:
         topic_dir: Directory ``topics/<topic>/``, used to resolve figure paths.
         aux: Slide auxiliary file written by the LaTeX build.
         output: Output ``.pptx`` path.
+        number: Document number of the topic, for example ``2026-001``.
     """
 
     topic_dir: Path
     aux: Path
     output: Path
+    number: str
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -101,12 +111,13 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def deck_paths(topic: str, lang: str, repo_root: Path = REPO_ROOT) -> DeckPaths:
+def deck_paths(topic: str, lang: str, number: str, repo_root: Path = REPO_ROOT) -> DeckPaths:
     """Return the input and output paths for one topic and language.
 
     Args:
         topic: Topic directory name.
         lang: Deck language, ``en`` or ``ja``.
+        number: Document number of the topic, for example ``2026-001``.
         repo_root: Repository root directory.
 
     Returns:
@@ -115,8 +126,9 @@ def deck_paths(topic: str, lang: str, repo_root: Path = REPO_ROOT) -> DeckPaths:
     build_dir = repo_root / BUILD_DIR_NAME / topic
     return DeckPaths(
         topic_dir=repo_root / TOPICS_DIR_NAME / topic,
-        aux=build_dir / f"main-{lang}.slides",
-        output=build_dir / f"slides-{lang}.pptx",
+        aux=build_dir / f"{number}-{lang}.slides",
+        output=build_dir / f"{number}-slides-{lang}.pptx",
+        number=number,
     )
 
 
@@ -247,14 +259,31 @@ def _add_block(shapes: SlideShapes, block: Block, lang: str, topic_dir: Path, to
     return _add_figure(shapes, block.text, topic_dir, top)
 
 
-def _add_slide(presentation: Presentation, slide: Slide, lang: str, topic_dir: Path) -> None:
-    """Add one slide with its title, blocks, and speaker notes.
+def _add_footer(shapes: SlideShapes, number: str, lang: str) -> None:
+    """Add the document number to the bottom of a slide.
+
+    Args:
+        shapes: Shape collection of the slide.
+        number: Document number, for example ``2026-001``.
+        lang: Deck language, used for the font.
+    """
+    top = SLIDE_HEIGHT_IN - FOOTER_BOTTOM_MARGIN_IN
+    box = shapes.add_textbox(Inches(MARGIN_LEFT_IN), Inches(top), Inches(BODY_WIDTH_IN), Inches(FOOTER_HEIGHT_IN))
+    run = box.text_frame.paragraphs[0].add_run()
+    run.text = f"{FOOTER_LABEL} {number}"
+    run.font.size = Pt(FOOTER_FONT_SIZE_PT)
+    _style_run(run, lang)
+
+
+def _add_slide(presentation: Presentation, slide: Slide, lang: str, topic_dir: Path, number: str) -> None:
+    """Add one slide with its title, blocks, footer, and speaker notes.
 
     Args:
         presentation: Presentation to add the slide to.
         slide: Slide content read from the auxiliary file.
         lang: Deck language.
         topic_dir: Topic directory, used for figures.
+        number: Document number shown in the footer.
     """
     layout = presentation.slide_layouts[TITLE_ONLY_LAYOUT_INDEX]
     pptx_slide: PptxSlide = presentation.slides.add_slide(layout)
@@ -270,17 +299,19 @@ def _add_slide(presentation: Presentation, slide: Slide, lang: str, topic_dir: P
     top = BODY_TOP_IN
     for block in slide.blocks:
         top = _add_block(pptx_slide.shapes, block, lang, topic_dir, top)
+    _add_footer(pptx_slide.shapes, number, lang)
     if slide.notes:
         pptx_slide.notes_slide.notes_text_frame.text = "\n".join(slide.notes)
 
 
-def build_deck(slides: Sequence[Slide], lang: str, topic_dir: Path) -> Presentation:
+def build_deck(slides: Sequence[Slide], lang: str, topic_dir: Path, number: str) -> Presentation:
     """Build a presentation from the slides of one topic.
 
     Args:
         slides: Slides in document order.
         lang: Deck language, ``en`` or ``ja``.
         topic_dir: Topic directory, used to resolve figure paths.
+        number: Document number shown in the footer of every slide.
 
     Returns:
         The built presentation. The caller saves it.
@@ -288,7 +319,7 @@ def build_deck(slides: Sequence[Slide], lang: str, topic_dir: Path) -> Presentat
     presentation = Presentation()
     set_widescreen_size(presentation)
     for slide in slides:
-        _add_slide(presentation, slide, lang, topic_dir)
+        _add_slide(presentation, slide, lang, topic_dir, number)
     return presentation
 
 
@@ -299,11 +330,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         argv: Argument list without the program name. ``None`` reads ``sys.argv``.
 
     Returns:
-        Process exit code: 0 on success, 1 on a missing input or a malformed slide file.
+        Process exit code: 0 on success, 1 on a missing input, an unregistered topic, or a malformed slide file.
     """
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     args = parse_args(argv)
-    paths = deck_paths(args.topic, args.lang)
+    try:
+        number = number_for_topic(args.topic, load_documents())
+    except (KeyError, OSError, ValueError) as exc:
+        logger.error("Cannot find the document number: topic=%s error=%s", args.topic, exc)
+        return 1
+    paths = deck_paths(args.topic, args.lang, number)
     if not paths.topic_dir.is_dir():
         logger.error("Topic directory not found: topic=%s path=%s", args.topic, paths.topic_dir)
         return 1
@@ -313,13 +349,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         logger.error("Cannot read slide entries: aux=%s error=%s", paths.aux, exc)
         return 1
     try:
-        presentation = build_deck(slides, args.lang, paths.topic_dir)
+        presentation = build_deck(slides, args.lang, paths.topic_dir, paths.number)
     except (FileNotFoundError, ValueError) as exc:
         logger.error("Cannot build deck: topic=%s lang=%s error=%s", args.topic, args.lang, exc)
         return 1
     paths.output.parent.mkdir(parents=True, exist_ok=True)
     presentation.save(paths.output)
-    logger.info("Deck saved: topic=%s lang=%s slides=%d output=%s", args.topic, args.lang, len(slides), paths.output)
+    logger.info(
+        "Deck saved: topic=%s number=%s lang=%s slides=%d output=%s",
+        args.topic,
+        paths.number,
+        args.lang,
+        len(slides),
+        paths.output,
+    )
     return 0
 
 

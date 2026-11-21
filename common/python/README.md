@@ -25,8 +25,11 @@ common/python/
 | `slide_aux.py` | Read the `kind:payload` slide markers written by the LaTeX build |
 | `slide_geometry.py` | Set the 16:9 slide size and rescale the template geometry |
 | `glossary.py` | Load `common/glossary.toml`, check topic sources, render `common/glossary.md` |
+| `documents.py` | Load `common/documents.toml`, allocate the next document number, render `common/documents.bib`, check topics and citations |
 
 The glossary is the single source of truth for Japanese technical terms. See [common/glossary.md](../glossary.md) for the current index and [AGENTS.md](../../AGENTS.md) for the workflow.
+
+`common/documents.toml` is the single source of truth for the document numbers (`YYYY-NNN`) of the topics. `documents.py --number <topic>` prints the number of a topic, `--next` prints the next free number, `--write` regenerates `common/documents.bib`, and a run without options checks the repository. See the "Document numbers" section of [AGENTS.md](../../AGENTS.md).
 
 ## Installation
 

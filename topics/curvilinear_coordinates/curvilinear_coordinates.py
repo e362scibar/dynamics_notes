@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.6
 #   kernelspec:
 #     display_name: dynamics_notes
 #     language: python
@@ -21,6 +21,8 @@
 
 # %% [markdown]
 # # Canonical equations of motion in curvilinear (Frenet-Serret) coordinates for beamlines with bending magnets
+#
+# Memo 2026-001
 #
 # Memo on the transverse and longitudinal Hamiltonian in a curvilinear frame that follows the ideal (reference) orbit
 # through a planar bending magnet. The goal is the equations of motion (EOM) for a particle around the reference orbit.

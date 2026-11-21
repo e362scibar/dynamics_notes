@@ -29,7 +29,7 @@ For LaTeX sources, use `%` comments and `SPDX-License-Identifier: CC-BY-4.0`. Us
 
 ## Documents, slides, and figures
 
-Documents are licensed under CC BY 4.0. Each Markdown file ends with a `License` section that states this. LaTeX sources carry a CC BY 4.0 header. Generated slide decks and PDFs are covered by CC BY 4.0. Figures that are generated from code carry CC BY 4.0 because they are images. The code that produces them remains GPL-3.0-or-later.
+Documents are licensed under CC BY 4.0. This includes the document registry `common/documents.toml` and the BibTeX database `common/documents.bib` generated from it. Each Markdown file ends with a `License` section that states this. LaTeX sources carry a CC BY 4.0 header. Generated slide decks and PDFs are covered by CC BY 4.0. Figures that are generated from code carry CC BY 4.0 because they are images. The code that produces them remains GPL-3.0-or-later.
 
 Code snippets that appear inside documents are provided under GPL-3.0-or-later.
 
