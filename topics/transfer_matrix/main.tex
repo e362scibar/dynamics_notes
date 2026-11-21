@@ -92,11 +92,33 @@ focusing in $x$. The following assumptions hold throughout.}%
 \ja{ノートブックでは，この行列を原点での厳密な運動方程式のヤコビアンとして再構成している。}
 
 \en{The transfer matrix $\mathbf{M}(s)$ of an element maps the entrance vector to the vector at the distance $s$
-from the entrance, $\mathbf{u}(s) = \mathbf{M}(s)\,\mathbf{u}(0)$. Since $\mathbf{u}' = \mathbf{A}\mathbf{u}$ holds for
-every $\mathbf{u}(0)$,}%
-\ja{要素の転送行列 $\mathbf{M}(s)$ は，入口のベクトルを入口から距離 $s$ の位置のベクトルに写す。
-すなわち $\mathbf{u}(s) = \mathbf{M}(s)\,\mathbf{u}(0)$ である。$\mathbf{u}' = \mathbf{A}\mathbf{u}$ は任意の
-$\mathbf{u}(0)$ について成り立つので，}
+from the entrance:}%
+\ja{要素の転送行列 $\mathbf{M}(s)$ は，入口のベクトルを入口から距離 $s$ の位置のベクトルに写す。すなわち}
+\begin{equation}
+  \mathbf{u}(s) = \mathbf{M}(s)\,\mathbf{u}(0) .
+  \label{eq:u_M}
+\end{equation}
+\en{The equation for $\mathbf{M}$ follows from differentiating \eqref{eq:u_M} with respect to $s$ in two ways. The
+entrance vector $\mathbf{u}(0)$ is a constant vector, so the derivative of \eqref{eq:u_M} is
+$\mathbf{u}'(s) = \mathbf{M}'(s)\,\mathbf{u}(0)$. On the other hand, the EOM \eqref{eq:linear_eom} give
+$\mathbf{u}'(s) = \mathbf{A}\,\mathbf{u}(s)$, and inserting \eqref{eq:u_M} into the right-hand side gives
+$\mathbf{A}\,\mathbf{M}(s)\,\mathbf{u}(0)$. Equating the two results,}%
+\ja{$\mathbf{M}$ の方程式は，\eqref{eq:u_M} を $s$ で微分し，二通りに表すことで得られる。入口のベクトル $\mathbf{u}(0)$ は
+定数ベクトルなので，\eqref{eq:u_M} の微分は $\mathbf{u}'(s) = \mathbf{M}'(s)\,\mathbf{u}(0)$ である。
+一方，運動方程式 \eqref{eq:linear_eom} から $\mathbf{u}'(s) = \mathbf{A}\,\mathbf{u}(s)$ であり，右辺に \eqref{eq:u_M} を
+代入すると $\mathbf{A}\,\mathbf{M}(s)\,\mathbf{u}(0)$ となる。二つの結果を等しいとおくと，}
+\begin{equation}
+  \mathbf{u}'(s) = \mathbf{M}'(s)\,\mathbf{u}(0) = \mathbf{A}\,\mathbf{u}(s) = \mathbf{A}\,\mathbf{M}(s)\,\mathbf{u}(0)
+  \;\Longrightarrow\;
+  \big(\mathbf{M}'(s) - \mathbf{A}\,\mathbf{M}(s)\big)\,\mathbf{u}(0) = 0 .
+  \label{eq:u_dM}
+\end{equation}
+\en{This holds for every entrance vector $\mathbf{u}(0)$, so the matrix in the parentheses is zero. At $s = 0$ the
+relation \eqref{eq:u_M} reads $\mathbf{u}(0) = \mathbf{M}(0)\,\mathbf{u}(0)$ for every $\mathbf{u}(0)$, so
+$\mathbf{M}(0)$ is the unit matrix. Hence}%
+\ja{これは任意の入口のベクトル $\mathbf{u}(0)$ について成り立つので，括弧内の行列はゼロである。また $s = 0$ では
+\eqref{eq:u_M} は任意の $\mathbf{u}(0)$ について $\mathbf{u}(0) = \mathbf{M}(0)\,\mathbf{u}(0)$ となるので，
+$\mathbf{M}(0)$ は単位行列である。したがって}
 \begin{equation}
   \mathbf{M}' = \mathbf{A}\,\mathbf{M}, \qquad \mathbf{M}(0) = \mathbf{I} .
   \label{eq:M_ode}
@@ -146,6 +168,13 @@ $-h\,x + \delta/\gamma_0^2$ を積分して得られる。}
 \slidemath{\mathbf{M}(s) = \exp(\mathbf{A}\,s) \quad (\text{constant } h, k)}
 \slidepoint{\en{A chain of elements: M_tot = M_n ... M_2 M_1}%
             \ja{要素の列: M_tot = M_n ... M_2 M_1（最初が右端）}}
+
+\slidetitle{\en{Derivation of M' = AM}\ja{M' = AM の導出}}
+\slidemath{\mathbf{u}(s) = \mathbf{M}(s)\,\mathbf{u}(0) \;\Longrightarrow\; \mathbf{u}'(s) = \mathbf{M}'(s)\,\mathbf{u}(0)}
+\slidemath{\mathbf{u}'(s) = \mathbf{A}\,\mathbf{u}(s) = \mathbf{A}\,\mathbf{M}(s)\,\mathbf{u}(0)}
+\slidemath{\big(\mathbf{M}' - \mathbf{A}\,\mathbf{M}\big)\,\mathbf{u}(0) = 0 \;\Longrightarrow\; \mathbf{M}' = \mathbf{A}\,\mathbf{M}}
+\slidepoint{\en{Holds for every u(0); u(0) = M(0) u(0) gives M(0) = I}%
+            \ja{任意の u(0) で成立。u(0) = M(0) u(0) から M(0) = I}}
 
 \slidetitle{\en{Symplectic condition}\ja{シンプレクティック条件}}
 \slidemath{\mathbf{A}^\mathsf{T}\mathbf{J} + \mathbf{J}\mathbf{A} = 0}

@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.6
 #   kernelspec:
 #     display_name: dynamics_notes
 #     language: python
@@ -118,8 +118,21 @@ assert sp.simplify(A_gen - A_expected) == sp.zeros(6, 6)
 
 # %% [markdown]
 # The transfer matrix $\mathbf{M}(s)$ of an element maps the entrance vector to the vector at distance $s$:
-# $\mathbf{u}(s) = \mathbf{M}(s)\,\mathbf{u}(0)$. Since $\mathbf{u}' = \mathbf{A}\mathbf{u}$ holds for every
-# $\mathbf{u}(0)$,
+#
+# $$
+# \mathbf{u}(s) = \mathbf{M}(s)\,\mathbf{u}(0).
+# $$
+#
+# The equation for $\mathbf{M}$ follows from differentiating this relation with respect to $s$ in two ways. The
+# entrance vector $\mathbf{u}(0)$ is constant, so $\mathbf{u}'(s) = \mathbf{M}'(s)\,\mathbf{u}(0)$. On the other hand,
+# the EOM give $\mathbf{u}'(s) = \mathbf{A}\,\mathbf{u}(s) = \mathbf{A}\,\mathbf{M}(s)\,\mathbf{u}(0)$. Equating,
+#
+# $$
+# \big(\mathbf{M}'(s) - \mathbf{A}\,\mathbf{M}(s)\big)\,\mathbf{u}(0) = 0 .
+# $$
+#
+# This holds for every $\mathbf{u}(0)$, so the matrix in the parentheses is zero. At $s = 0$ the first relation gives
+# $\mathbf{M}(0) = \mathbf{I}$. Hence
 #
 # $$
 # \mathbf{M}' = \mathbf{A}\,\mathbf{M}, \qquad \mathbf{M}(0) = \mathbf{I}.
@@ -152,6 +165,11 @@ assert sp.simplify(A_gen - A_expected) == sp.zeros(6, 6)
 
 # %%
 M_sym, A_sym = sp.Symbol("M"), sp.Symbol("A")
+u_s, u_0 = sp.Symbol("u(s)"), sp.Symbol("u(0)")
+display(sp.Eq(u_s, M_sym * u_0))
+display(sp.Eq(sp.Symbol("u'(s)"), sp.Symbol("M'") * u_0))
+display(sp.Eq(sp.Symbol("u'(s)"), A_sym * M_sym * u_0))
+display(sp.Eq((sp.Symbol("M'") - A_sym * M_sym) * u_0, 0))
 display(sp.Eq(sp.Symbol("M'"), A_sym * M_sym))
 display(sp.Eq(M_sym, sp.exp(A_sym * sp.Symbol("s"))))
 
