@@ -1,0 +1,230 @@
+% topics/second_order_eom/main.tex
+% Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center)
+% SPDX-License-Identifier: CC-BY-4.0
+%
+% Bilingual memo. Build with the commands in AGENTS.md (English: \memolang=en, Japanese: \memolang=ja).
+
+\input{common/tex/preamble.tex}
+\setmemonumber{2026-003}
+
+\title{\en{Canonical equations of motion expanded to second order in curvilinear coordinates}%
+       \ja{曲線座標における正準運動方程式の 2 次までの展開}}
+\author{Hirokazu Maesaka}
+\date{Memo~\memonumber, 2026}
+
+\begin{document}
+\maketitle
+
+% Title slide. The slides of each section are written at the end of that section (see AGENTS.md).
+\slidetitle{\en{Canonical equations of motion expanded to second order in curvilinear coordinates}%
+            \ja{曲線座標における正準運動方程式の 2 次までの展開}}
+\slidepoint{\en{Expand the exact Hamiltonian to third order in the deviations}%
+            \ja{厳密なハミルトニアンを偏差の 3 次まで展開する}}
+\slidenote{\en{Starts from Memo 2026-001. The linear part reproduces Memo 2026-001 and Memo 2026-002.}%
+           \ja{メモ 2026-001 から出発する。線形部分はメモ 2026-001 とメモ 2026-002 を再現する。}}
+
+\section{\en{Scope and conventions}\ja{対象と記号の規約}}
+
+\en{This memo expands the exact Hamiltonian of \cite[Sec.~10]{2026-001} to third order in the deviations
+$(x, p_x, y, p_y, \delta)$. The canonical equations of motion (EOM) derived from it are then exact through second
+order. The linear part reproduces \cite[Sec.~11]{2026-001} and \cite{2026-002}. The second-order part is the
+starting point for second-order transfer maps, which are not covered here. Every result is verified with sympy in
+the companion notebook \texttt{second\_order\_eom.py}, and numerically against the exact EOM.}%
+\ja{本メモでは，\cite[第 10 節]{2026-001} の厳密なハミルトニアンを，偏差 $(x, p_x, y, p_y, \delta)$ の 3 次まで展開する。
+そこから得られる正準運動方程式は 2 次まで厳密である。線形部分は \cite[第 11 節]{2026-001} と \cite{2026-002}
+を再現する。2 次の部分は 2 次の転送写像の出発点となるが，転送写像は本メモでは扱わない。すべての結果は，付随する
+ノートブック \texttt{second\_order\_eom.py} で sympy により検証し，さらに厳密な運動方程式に対して数値的にも
+確認している。}
+
+\en{Conventions follow \cite{2026-001}: $z = s - \beta_0 c\,t$ and $\delta = (E - E_0)/(\beta_0 cP_0)$; $h > 0$ when
+the center of curvature lies inside; $k > 0$ focuses in $x$. The assumptions are the following.}%
+\ja{記号の規約は \cite{2026-001} に従う。$z = s - \beta_0 c\,t$，$\delta = (E - E_0)/(\beta_0 cP_0)$ であり，
+曲率中心が内側のとき $h > 0$，$k > 0$ は $x$ 方向に集束する。仮定は次のとおりである。}
+\begin{itemize}
+  \item \en{Static magnetic field only (no RF), so $\delta' = 0$.}%
+        \ja{静磁場のみ（RF なし）であり，$\delta' = 0$ である。}
+  \item \en{Dipole and quadrupole fields with $k_s = 0$ and the gauge $A_x = A_y = 0$. Their potential terms are
+    exactly quadratic in $x$ and $y$ \cite[Sec.~10]{2026-001}, so they give no third-order terms.}%
+        \ja{$k_s = 0$ の偏向磁場と四極磁場で，ゲージは $A_x = A_y = 0$ とする。これらのポテンシャル項は
+        $x$ と $y$ について厳密に 2 次式である \cite[第 10 節]{2026-001} ので，3 次の項を与えない。}
+\end{itemize}
+
+% Slides for this section.
+\slidetitle{\en{Scope and conventions}\ja{対象と記号の規約}}
+\slidepoint{\en{Hamilton's equations from H expanded to third order are exact through second order}%
+            \ja{3 次まで展開した H から得る運動方程式は 2 次まで厳密}}
+\slidepoint{\en{Static field, k_s = 0, gauge A_x = A_y = 0, no RF}%
+            \ja{静磁場，k_s = 0，ゲージ A_x = A_y = 0，RF なし}}
+\slidepoint{\en{Conventions of Memo 2026-001}\ja{記号の規約はメモ 2026-001 に従う}}
+
+\section{\en{Expansion of the Hamiltonian}\ja{ハミルトニアンの展開}}
+\label{sec:expansion}
+
+\en{The exact Hamiltonian of \cite[Sec.~10]{2026-001} with $k_s = 0$ is}%
+\ja{$k_s = 0$ のときの \cite[第 10 節]{2026-001} の厳密なハミルトニアンは}
+\begin{equation}
+  \begin{aligned}
+    H &= -(1+hx)\,R + \delta + h\Big(x + \tfrac{1}{2} h x^2\Big) + \tfrac{1}{2} k\,(x^2 - y^2), \\
+    R &= \sqrt{1 + 2\delta + \beta_0^2\delta^2 - p_x^2 - p_y^2} .
+  \end{aligned}
+  \label{eq:H_exact}
+\end{equation}
+\en{Scale every deviation, $(x, p_x, y, p_y, \delta) \to \epsilon\,(x, p_x, y, p_y, \delta)$, and expand in the
+bookkeeping parameter $\epsilon$: the order of a term is its power of $\epsilon$. With $1 - \beta_0^2 = 1/\gamma_0^2$
+the square root is, through third order,}%
+\ja{すべての偏差を $(x, p_x, y, p_y, \delta) \to \epsilon\,(x, p_x, y, p_y, \delta)$ と置き換え，パラメータ
+$\epsilon$ で展開する。項の次数は $\epsilon$ の冪で数える。$1 - \beta_0^2 = 1/\gamma_0^2$ を用いると，
+平方根は 3 次まで}
+\begin{equation}
+  R = 1 + \delta - \frac{p_x^2 + p_y^2}{2} - \frac{\delta^2}{2\gamma_0^2}
+      + \frac{\delta\,(p_x^2 + p_y^2)}{2} + \frac{\delta^3}{2\gamma_0^2} + O(4) .
+  \label{eq:R_series}
+\end{equation}
+\en{Substituting this into \eqref{eq:H_exact} gives $H = H_0 + H_1 + H_2 + H_3 + \cdots$, where $H_n$ is
+homogeneous of degree $n$ in the deviations. The constant $H_0 = -1$ does not enter the EOM. The linear part
+vanishes, $H_1 = 0$, because the reference orbit is an equilibrium. The quadratic and cubic parts are}%
+\ja{となる。これを \eqref{eq:H_exact} に代入すると $H = H_0 + H_1 + H_2 + H_3 + \cdots$ が得られる。ここで $H_n$ は
+偏差について $n$ 次の斉次式である。定数 $H_0 = -1$ は運動方程式に寄与しない。基準軌道が平衡点であるため
+1 次の部分は消え，$H_1 = 0$ である。2 次と 3 次の部分は}
+\begin{align}
+  H_2 &= \frac{p_x^2 + p_y^2}{2} + \frac{(h^2 + k)\,x^2}{2} - \frac{k\,y^2}{2} - h\,x\,\delta
+         + \frac{\delta^2}{2\gamma_0^2} ,
+  \label{eq:H2} \\
+  H_3 &= (hx - \delta)\,\frac{p_x^2 + p_y^2}{2} + (hx - \delta)\,\frac{\delta^2}{2\gamma_0^2} .
+  \label{eq:H3}
+\end{align}
+\en{There is no cubic term in $x$ and $y$ alone, because the dipole and quadrupole potential terms in
+\eqref{eq:H_exact} are exactly quadratic. The third-order terms come only from the product of the curvature factor
+$1 + hx$ with the second-order part of $R$, and from the third-order part of $R$.}%
+\ja{$x$ と $y$ だけの 3 次の項はない。\eqref{eq:H_exact} の偏向磁場と四極磁場のポテンシャル項が厳密に 2 次式だからである。
+3 次の項は，曲率因子 $1 + hx$ と $R$ の 2 次の部分との積，および $R$ の 3 次の部分だけから生じる。}
+
+% Slides for this section.
+\slidetitle{\en{Expansion of the square root}\ja{平方根の展開}}
+\slidemath{R = \sqrt{1 + 2\delta + \beta_0^2\delta^2 - p_x^2 - p_y^2}}
+\slidemath{R = 1 + \delta - \frac{p_x^2 + p_y^2}{2} - \frac{\delta^2}{2\gamma_0^2}}
+\slidemath{\qquad + \frac{\delta\,(p_x^2 + p_y^2)}{2} + \frac{\delta^3}{2\gamma_0^2} + O(4)}
+
+\slidetitle{\en{Quadratic and cubic Hamiltonians}\ja{2 次と 3 次のハミルトニアン}}
+\slidepoint{\en{H = H_0 + H_1 + H_2 + H_3 + ...; H_0 is a constant and H_1 = 0}%
+            \ja{H = H_0 + H_1 + H_2 + H_3 + ...，H_0 は定数，H_1 = 0}}
+\slidemath{H_2 = \frac{p_x^2 + p_y^2}{2} + \frac{(h^2 + k)\,x^2}{2} - \frac{k\,y^2}{2}}
+\slidemath{\qquad - h\,x\,\delta + \frac{\delta^2}{2\gamma_0^2}}
+\slidemath{H_3 = (hx - \delta)\,\frac{p_x^2 + p_y^2}{2} + (hx - \delta)\,\frac{\delta^2}{2\gamma_0^2}}
+\slidepoint{\en{No cubic term in x and y alone}\ja{x と y だけの 3 次の項はない}}
+
+\section{\en{Equations of motion through second order}\ja{2 次までの運動方程式}}
+\label{sec:eom2}
+
+\en{Hamilton's equations with $H_2 + H_3$ give the EOM through second order. The $H_2$ part is the linear EOM of
+\cite[Sec.~11]{2026-001} with $k_s = 0$, and the $H_3$ part is the second-order correction:}%
+\ja{$H_2 + H_3$ に対する正準方程式が，2 次までの運動方程式を与える。$H_2$ から得られるのは $k_s = 0$ とした
+\cite[第 11 節]{2026-001} の線形運動方程式であり，$H_3$ から得られるのが 2 次の補正である。}
+\begin{equation}
+  \begin{aligned}
+    x' &= p_x + (hx - \delta)\,p_x , \\
+    p_x' &= -(h^2 + k)\,x + h\,\delta - \frac{h\,(p_x^2 + p_y^2)}{2} - \frac{h\,\delta^2}{2\gamma_0^2} , \\
+    y' &= p_y + (hx - \delta)\,p_y , \\
+    p_y' &= k\,y , \\
+    z' &= -h\,x + \frac{\delta}{\gamma_0^2} - \frac{p_x^2 + p_y^2}{2}
+          + \frac{2hx\,\delta - 3\delta^2}{2\gamma_0^2} , \\
+    \delta' &= 0 .
+  \end{aligned}
+  \label{eq:eom2}
+\end{equation}
+\en{Reading of the second-order terms.}\ja{2 次の項の意味は次のとおりである。}
+\begin{itemize}
+  \item \en{$x' = p_x(1 + hx - \delta)$. The factor $1 + hx$ is the metric factor of the curved frame, and $-\delta$
+    comes from dividing by the longitudinal momentum $p/P_0 = 1 + \delta + \cdots$. The same holds for $y'$.}%
+        \ja{$x' = p_x(1 + hx - \delta)$。因子 $1 + hx$ は曲線座標系の計量因子であり，$-\delta$ は縦方向の運動量
+        $p/P_0 = 1 + \delta + \cdots$ で割ることから生じる。$y'$ も同様である。}
+  \item \en{$p_x'$ contains $-h\,p_\perp^2/2$ with $p_\perp^2 = p_x^2 + p_y^2$. It is the sagitta of the curved
+    reference orbit: a particle with a transverse slope covers a longer arc in the bend.}%
+        \ja{$p_x'$ は $p_\perp^2 = p_x^2 + p_y^2$ として $-h\,p_\perp^2/2$ を含む。これは曲線の基準軌道の矢高に
+        よる項であり，横方向に傾いた粒子は偏向部でより長い弧を通る。}
+  \item \en{$z'$ contains $-p_\perp^2/2$, the increase of the path length caused by the betatron slope, and terms
+    with $1/\gamma_0^2$ that describe the speed difference.}%
+        \ja{$z'$ は，ベータトロン傾きによる経路長の増加 $-p_\perp^2/2$ と，速さの差を表す $1/\gamma_0^2$ の項を含む。}
+  \item \en{$p_y' = ky$ has no second-order term, and $\delta' = 0$.}%
+        \ja{$p_y' = ky$ に 2 次の項はなく，$\delta' = 0$ である。}
+\end{itemize}
+
+% Slides for this section.
+\slidetitle{\en{Equations of motion through second order: x plane}\ja{2 次までの運動方程式: x 面}}
+\slidemath{x' = p_x + (hx - \delta)\,p_x}
+\slidemath{p_x' = -(h^2 + k)\,x + h\,\delta}
+\slidemath{\qquad - \frac{h\,(p_x^2 + p_y^2)}{2} - \frac{h\,\delta^2}{2\gamma_0^2}}
+\slidepoint{\en{Sagitta term -h p_perp^2 / 2 of the curved reference orbit}%
+            \ja{曲線の基準軌道の矢高による項 -h p_⊥^2 / 2}}
+
+\slidetitle{\en{Equations of motion through second order: y plane and z}\ja{2 次までの運動方程式: y 面と z}}
+\slidemath{y' = p_y + (hx - \delta)\,p_y, \qquad p_y' = k\,y}
+\slidemath{z' = -h\,x + \frac{\delta}{\gamma_0^2} - \frac{p_x^2 + p_y^2}{2}}
+\slidemath{\qquad + \frac{2hx\,\delta - 3\delta^2}{2\gamma_0^2}}
+\slidepoint{\en{z' gets the path-length term -p_perp^2 / 2; delta' = 0}%
+            \ja{z' に経路長の項 -p_⊥^2 / 2 が加わる。δ' = 0}}
+
+\section{\en{Checks}\ja{確認}}
+
+\en{The notebook performs two checks.}\ja{ノートブックでは次の二つの確認を行っている。}
+\begin{enumerate}
+  \item \en{Symbolic: the series of the exact right-hand sides of Hamilton's equations in $\epsilon$ agrees with
+    $\epsilon\,(\text{linear part}) + \epsilon^2\,(\text{second-order part})$ through $\epsilon^2$. The linear part is
+    the matrix $\mathbf{A}$ of \cite[Sec.~2]{2026-002}.}%
+        \ja{記号的な確認: 厳密な正準方程式の右辺を $\epsilon$ で展開した級数は，$\epsilon^2$ まで
+        $\epsilon\,(\text{線形部分}) + \epsilon^2\,(\text{2 次の部分})$ と一致する。線形部分は
+        \cite[第 2 節]{2026-002} の行列 $\mathbf{A}$ である。}
+  \item \en{Numerical: the exact EOM, the linear EOM, and the second-order EOM are integrated over a magnet with
+    $h = 0.2~\mathrm{m^{-1}}$, $k = 0.5~\mathrm{m^{-2}}$, and $L = 1~\mathrm{m}$ for the amplitude $a$ and for $a/2$.
+    The error of the linear EOM scales as $a^2$ and that of the second-order EOM as $a^3$; the measured ratios
+    between $a$ and $a/2$ are 3.99 and 7.99, against the expected 4 and 8.}%
+        \ja{数値的な確認: 厳密な運動方程式，線形運動方程式，2 次の運動方程式を，$h = 0.2~\mathrm{m^{-1}}$，
+        $k = 0.5~\mathrm{m^{-2}}$，$L = 1~\mathrm{m}$ の磁石について，振幅 $a$ と $a/2$ で積分する。
+        線形運動方程式の誤差は $a^2$，2 次の運動方程式の誤差は $a^3$ に比例する。$a$ と $a/2$ の誤差の比は
+        3.99 と 7.99 であり，期待値 4 と 8 に一致する。}
+\end{enumerate}
+
+% Slides for this section.
+\slidetitle{\en{Checks}\ja{確認}}
+\slidepoint{\en{Series of the exact EOM in epsilon agrees through epsilon^2}%
+            \ja{厳密な運動方程式の ε 展開が ε^2 まで一致}}
+\slidepoint{\en{Linear part is the matrix A of Memo 2026-002}%
+            \ja{線形部分はメモ 2026-002 の行列 A}}
+\slidepoint{\en{Error scaling a^2 (linear) and a^3 (second order): ratios 3.99 and 7.99}%
+            \ja{誤差は線形で a^2，2 次で a^3: 比は 3.99 と 7.99}}
+
+\section{\en{Summary and open points}\ja{まとめと未解決の点}}
+
+\begin{enumerate}
+  \item \en{$H = H_2 + H_3 + \cdots$, where $H_2$ gives the linear EOM and
+    $H_3 = (hx - \delta)\,\big[(p_x^2 + p_y^2)/2 + \delta^2/(2\gamma_0^2)\big]$.}%
+        \ja{$H = H_2 + H_3 + \cdots$ であり，$H_2$ が線形運動方程式を与え，
+        $H_3 = (hx - \delta)\,\big[(p_x^2 + p_y^2)/2 + \delta^2/(2\gamma_0^2)\big]$ である。}
+  \item \en{The EOM through second order are \eqref{eq:eom2}. The second-order terms come only from the square root
+    $R$ and the curvature factor $1 + hx$; the dipole and quadrupole potentials add none.}%
+        \ja{2 次までの運動方程式は \eqref{eq:eom2} である。2 次の項は平方根 $R$ と曲率因子 $1 + hx$ だけから生じ，
+        偏向磁場と四極磁場のポテンシャルは寄与しない。}
+  \item \en{Open points, not covered here: the second-order transfer maps (the tensor $T_{ijk}$) of the drift
+    space, the sector dipole magnet, and the quadrupole magnet and the chromaticity that follows; quadrupole
+    curvature corrections, which are neglected in \cite{2026-001}, and sextupole and octupole terms; the skew
+    quadrupole and RF.}%
+        \ja{本メモで扱わない点: ドリフトスペース，扇型偏向磁石，四極磁石の 2 次の転送写像（テンソル $T_{ijk}$）と
+        それから得られるクロマティシティ，\cite{2026-001} で無視した四極磁石の曲率補正，六極磁石と八極磁石の項，
+        スキュー四極磁石と RF。}
+\end{enumerate}
+
+% Slides for this section.
+\slidetitle{\en{Summary}\ja{まとめ}}
+\slidemath{H_3 = (hx - \delta)\,\Big[\frac{p_x^2 + p_y^2}{2} + \frac{\delta^2}{2\gamma_0^2}\Big]}
+\slidepoint{\en{Second-order terms come from R and the factor 1 + hx only}%
+            \ja{2 次の項は R と因子 1 + hx だけから生じる}}
+\slidepoint{\en{Not covered: second-order maps T_ijk, chromaticity, sextupoles, RF}%
+            \ja{未対応: 2 次の写像 T_ijk，クロマティシティ，六極磁石，RF}}
+
+\printbibliography[title={\en{References}\ja{参考文献}}]
+
+\section*{\en{License}\ja{ライセンス}}
+\en{This document is licensed under CC BY 4.0. Code snippets are GPL-3.0-or-later. See \texttt{LICENSING.md}.}%
+\ja{本文書は CC BY 4.0 で提供する。コードの断片は GPL-3.0-or-later である。詳細は \texttt{LICENSING.md} を参照すること。}
+
+\end{document}

@@ -20,6 +20,7 @@ used; `common/python/tests/test_topics_glossary.py` fails when one of them appea
 | `energy_deviation` | energy deviation | エネルギー偏差 | — | — |
 | `equation_of_motion` | equation of motion | 運動方程式 | — | — |
 | `equilibrium_point` | equilibrium point | 平衡点 | — | — |
+| `expansion` | expansion | 展開 | — | Taylor or series expansion. Write 2 次まで展開 for expansion to second order. |
 | `focal_length` | focal length | 焦点距離 | — | — |
 | `focusing` | focusing | 集束 | 収束 | 集束 for beam focusing. 収束 is for numerical convergence. |
 | `frenet_serret_frame` | Frenet-Serret frame | Frenet-Serret 座標系 | 標構 | 標構 is a correct translation of moving frame but reads as jargon here. Use 座標系. |
@@ -39,6 +40,7 @@ used; `common/python/tests/test_topics_glossary.py` fails when one of them appea
 | `momentum_deviation` | momentum deviation | 運動量偏差 | — | p/P0 - 1. Distinct from the energy deviation delta = (E - E0)/(beta0 c P0), which is canonical to z. |
 | `normalization` | normalization | 規格化 | 正規化 | 規格化 is the accelerator-physics usage. 正規化 is the statistics usage. |
 | `octupole_magnet` | octupole magnet | 八極磁石 | — | — |
+| `path_length` | path length | 経路長 | — | — |
 | `quadrupole_magnet` | quadrupole magnet | 四極磁石 | — | — |
 | `reference_orbit` | reference orbit | 基準軌道 | — | — |
 | `sector_dipole_magnet` | sector dipole magnet | 扇型偏向磁石 | セクター偏向磁石, セクター型偏向磁石 | A dipole magnet whose end faces are perpendicular to the reference orbit, so there is no edge focusing. |

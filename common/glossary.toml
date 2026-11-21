@@ -199,3 +199,12 @@ forbidden_ja = ["薄いレンズ近似", "薄レンズ近似"]
 [terms.focal_length]
 en = "focal length"
 ja = "焦点距離"
+
+[terms.expansion]
+en = "expansion"
+ja = "展開"
+note = "Taylor or series expansion. Write 2 次まで展開 for expansion to second order."
+
+[terms.path_length]
+en = "path length"
+ja = "経路長"

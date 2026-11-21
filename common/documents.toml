@@ -27,3 +27,8 @@ status = "active"
 slug = "transfer_matrix"
 title = "Linear transfer matrices of a drift space, a sector dipole magnet, and a quadrupole magnet"
 status = "active"
+
+[documents."2026-003"]
+slug = "second_order_eom"
+title = "Canonical equations of motion expanded to second order in curvilinear coordinates"
+status = "active"
