@@ -152,13 +152,13 @@ def tensor_elements(w: sp.Matrix) -> dict:
 
 # %%
 def M_drift(l):
-    """Drift space, [2026-002, Sec. 3]."""
+    """Drift space, [2026-002, Sec. 4]."""
     return sp.Matrix([[1, l, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0], [0, 0, 1, l, 0, 0], [0, 0, 0, 1, 0, 0],
                       [0, 0, 0, 0, 1, l / gamma0**2], [0, 0, 0, 0, 0, 1]])
 
 
 def M_bend(l):
-    """Sector dipole magnet (k = 0), [2026-002, Sec. 4]."""
+    """Sector dipole magnet (k = 0), [2026-002, Sec. 5]."""
     th, rho = h * l, 1 / h
     return sp.Matrix([
         [sp.cos(th), rho * sp.sin(th), 0, 0, 0, rho * (1 - sp.cos(th))],
@@ -171,7 +171,7 @@ def M_bend(l):
 
 
 def M_quad_focusing(l):
-    """Quadrupole with k = g^2 > 0, [2026-002, Sec. 5]."""
+    """Quadrupole with k = g^2 > 0, [2026-002, Sec. 6]."""
     x_block = sp.Matrix([[sp.cos(g * l), sp.sin(g * l) / g], [-g * sp.sin(g * l), sp.cos(g * l)]])
     y_block = sp.Matrix([[sp.cosh(g * l), sp.sinh(g * l) / g], [g * sp.sinh(g * l), sp.cosh(g * l)]])
     return sp.diag(x_block, y_block, sp.Matrix([[1, l / gamma0**2], [0, 1]]))

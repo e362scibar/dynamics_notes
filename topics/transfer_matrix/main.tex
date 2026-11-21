@@ -65,7 +65,7 @@ focusing in $x$. The following assumptions hold throughout.}%
 \slidepoint{\en{Conventions of Memo 2026-001: z = s - beta0 c t, delta = (E-E0)/(beta0 c P0)}%
             \ja{メモ 2026-001 の規約: z = s - β0 c t，δ = (E-E0)/(β0 c P0)}}
 
-\section{\en{Transfer matrix and its properties}\ja{転送行列とその性質}}
+\section{\en{Transfer matrix}\ja{転送行列}}
 \label{sec:properties}
 
 \en{With $k_s = 0$ the linearized EOM of \cite[Sec.~11]{2026-001} are}%
@@ -136,30 +136,10 @@ element on the right.}%
 \ja{したがって $\mathbf{M}(s_1 + s_2) = \mathbf{M}(s_2)\,\mathbf{M}(s_1)$ である。複数の要素を並べた系の行列は逆順の積
 $\mathbf{M}_\mathrm{tot} = \mathbf{M}_n \cdots \mathbf{M}_2\mathbf{M}_1$ であり，最初の要素が右端に来る。}
 
-\en{The EOM are Hamiltonian, $\mathbf{u}' = \mathbf{J}\nabla H_2$ with the quadratic part $H_2$ of the Hamiltonian
-\cite[Sec.~10]{2026-001}. Hence $\mathbf{A} = \mathbf{J}\mathbf{W}$ with the symmetric Hessian $\mathbf{W}$ of $H_2$ and
-$\mathbf{J} = \mathrm{diag}(\mathbf{J}_2, \mathbf{J}_2, \mathbf{J}_2)$,
-$\mathbf{J}_2 = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}$. Using $\mathbf{J}^\mathsf{T}\mathbf{J} = \mathbf{I}$ and
-$\mathbf{J}^2 = -\mathbf{I}$,}%
-\ja{運動方程式はハミルトニアン形式であり，ハミルトニアン \cite[第 10 節]{2026-001} の 2 次の部分 $H_2$ を用いて
-$\mathbf{u}' = \mathbf{J}\nabla H_2$ と書ける。したがって，$H_2$ の対称なヘッセ行列 $\mathbf{W}$ と
-$\mathbf{J} = \mathrm{diag}(\mathbf{J}_2, \mathbf{J}_2, \mathbf{J}_2)$，
-$\mathbf{J}_2 = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}$ により $\mathbf{A} = \mathbf{J}\mathbf{W}$ である。
-$\mathbf{J}^\mathsf{T}\mathbf{J} = \mathbf{I}$ と $\mathbf{J}^2 = -\mathbf{I}$ を用いると，}
-\begin{equation}
-  \mathbf{A}^\mathsf{T}\mathbf{J} + \mathbf{J}\mathbf{A} = 0
-  \;\Longrightarrow\;
-  \frac{d}{ds}\big(\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M}\big) = 0
-  \;\Longrightarrow\;
-  \mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M} = \mathbf{J} .
-  \label{eq:symplectic}
-\end{equation}
-\en{So $\mathbf{M}$ is symplectic, and $\det\mathbf{M} = 1$. Because $\delta' = 0$ and $z$ does not feed back, $\mathbf{M}$
-is block triangular: the vertical plane decouples, and $z$ is obtained by integrating $-h\,x + \delta/\gamma_0^2$ after
-$x$ is known.}%
-\ja{すなわち $\mathbf{M}$ はシンプレクティックであり，$\det\mathbf{M} = 1$ である。$\delta' = 0$ であり，$z$ は他の変数に
-影響しないので，$\mathbf{M}$ はブロック三角行列になる。鉛直面は分離し，$z$ は $x$ が求まった後に
-$-h\,x + \delta/\gamma_0^2$ を積分して得られる。}
+\en{Because $\delta' = 0$ and $z$ does not feed back into the other variables, $\mathbf{M}$ is block triangular:
+the vertical plane decouples, and $z$ is obtained by integrating $-h\,x + \delta/\gamma_0^2$ after $x$ is known.}%
+\ja{$\delta' = 0$ であり，$z$ は他の変数に影響しないので，$\mathbf{M}$ はブロック三角行列になる。鉛直面は分離し，
+$z$ は $x$ が求まった後に $-h\,x + \delta/\gamma_0^2$ を積分して得られる。}
 
 % Slides for this section.
 \slidetitle{\en{Transfer matrix}\ja{転送行列}}
@@ -168,6 +148,8 @@ $-h\,x + \delta/\gamma_0^2$ を積分して得られる。}
 \slidemath{\mathbf{M}(s) = \exp(\mathbf{A}\,s) \quad (\text{constant } h, k)}
 \slidepoint{\en{A chain of elements: M_tot = M_n ... M_2 M_1}%
             \ja{要素の列: M_tot = M_n ... M_2 M_1（最初が右端）}}
+\slidenote{\en{M is block triangular: the vertical plane decouples, and z follows from x by integration.}%
+           \ja{M はブロック三角行列である。鉛直面は分離し，z は x から積分で得られる。}}
 
 \slidetitle{\en{Derivation of M' = AM}\ja{M' = AM の導出}}
 \slidemath{\mathbf{u}(s) = \mathbf{M}(s)\,\mathbf{u}(0) \;\Longrightarrow\; \mathbf{u}'(s) = \mathbf{M}'(s)\,\mathbf{u}(0)}
@@ -176,11 +158,89 @@ $-h\,x + \delta/\gamma_0^2$ を積分して得られる。}
 \slidepoint{\en{Holds for every u(0); u(0) = M(0) u(0) gives M(0) = I}%
             \ja{任意の u(0) で成立。u(0) = M(0) u(0) から M(0) = I}}
 
+\section{\en{Symplectic property}\ja{シンプレクティック性}}
+\label{sec:symplectic}
+
+\en{Expand the exact Hamiltonian of \cite[Sec.~10]{2026-001} with $k_s = 0$ in the deviations
+$(x, p_x, y, p_y, \delta)$: $H = H_0 + H_1 + H_2 + \cdots$, where $H_n$ is homogeneous of degree $n$ in the deviations
+(the expansion is carried to third order in \cite[Sec.~2]{2026-003}). The first terms are}%
+\ja{\cite[第 10 節]{2026-001} の厳密なハミルトニアンで $k_s = 0$ とし，偏差 $(x, p_x, y, p_y, \delta)$ について展開する。
+$H = H_0 + H_1 + H_2 + \cdots$ であり，$H_n$ は偏差について $n$ 次の斉次式である（3 次までの展開は
+\cite[第 2 節]{2026-003} で行っている）。最初の項は}
+\begin{equation}
+  \begin{aligned}
+    H_0 &= -1, \qquad H_1 = 0, \\
+    H_2 &= \frac{p_x^2 + p_y^2}{2} + \frac{(h^2 + k)\,x^2}{2} - \frac{k\,y^2}{2} - h\,x\,\delta
+           + \frac{\delta^2}{2\gamma_0^2} .
+  \end{aligned}
+  \label{eq:H012}
+\end{equation}
+\en{The constant $H_0$ does not enter the EOM. The linear part vanishes, $H_1 = 0$, because the reference orbit is
+an equilibrium. The quadratic part $H_2$ gives the linearized EOM, which are therefore Hamiltonian,
+$\mathbf{u}' = \mathbf{J}\nabla H_2$. Hence $\mathbf{A} = \mathbf{J}\mathbf{W}$ with the symmetric Hessian
+$\mathbf{W}$ of $H_2$ and $\mathbf{J} = \mathrm{diag}(\mathbf{J}_2, \mathbf{J}_2, \mathbf{J}_2)$,
+$\mathbf{J}_2 = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}$. With the ordering
+$\mathbf{u} = (x, p_x, y, p_y, z, \delta)^\mathsf{T}$ the Hessian
+$W_{ij} = \partial^2 H_2/\partial u_i\partial u_j$ is}%
+\ja{定数 $H_0$ は運動方程式に寄与しない。基準軌道が平衡点であるため 1 次の部分は消え，$H_1 = 0$ である。
+2 次の部分 $H_2$ が線形化された運動方程式を与えるので，これはハミルトニアン形式であり，
+$\mathbf{u}' = \mathbf{J}\nabla H_2$ と書ける。したがって，$H_2$ の対称なヘッセ行列 $\mathbf{W}$ と
+$\mathbf{J} = \mathrm{diag}(\mathbf{J}_2, \mathbf{J}_2, \mathbf{J}_2)$，
+$\mathbf{J}_2 = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}$ により $\mathbf{A} = \mathbf{J}\mathbf{W}$ である。
+$\mathbf{u} = (x, p_x, y, p_y, z, \delta)^\mathsf{T}$ の順序では，ヘッセ行列
+$W_{ij} = \partial^2 H_2/\partial u_i\partial u_j$ は}
+\begin{equation}
+  \mathbf{W} = \begin{pmatrix}
+    h^2 + k & 0 & 0 & 0 & 0 & -h \\
+    0 & 1 & 0 & 0 & 0 & 0 \\
+    0 & 0 & -k & 0 & 0 & 0 \\
+    0 & 0 & 0 & 1 & 0 & 0 \\
+    0 & 0 & 0 & 0 & 0 & 0 \\
+    -h & 0 & 0 & 0 & 0 & 1/\gamma_0^2
+  \end{pmatrix}.
+  \label{eq:W}
+\end{equation}
+\en{It is symmetric by construction, and $\mathbf{J}\mathbf{W}$ reproduces the matrix $\mathbf{A}$ of \eqref{eq:A}: for
+example, the first row of $\mathbf{J}\mathbf{W}$ is the second row of $\mathbf{W}$, $(0, 1, 0, 0, 0, 0)$, and the second
+row of $\mathbf{J}\mathbf{W}$ is minus the first row of $\mathbf{W}$, $(-(h^2 + k), 0, 0, 0, 0, h)$. Using
+$\mathbf{J}^\mathsf{T}\mathbf{J} = \mathbf{I}$ and $\mathbf{J}^2 = -\mathbf{I}$ and the symmetry of $\mathbf{W}$,}%
+\ja{$\mathbf{W}$ は構成から対称であり，$\mathbf{J}\mathbf{W}$ は \eqref{eq:A} の行列 $\mathbf{A}$ を再現する。
+たとえば $\mathbf{J}\mathbf{W}$ の第 1 行は $\mathbf{W}$ の第 2 行 $(0, 1, 0, 0, 0, 0)$ であり，第 2 行は
+$\mathbf{W}$ の第 1 行の符号を変えた $(-(h^2 + k), 0, 0, 0, 0, h)$ である。
+$\mathbf{J}^\mathsf{T}\mathbf{J} = \mathbf{I}$，$\mathbf{J}^2 = -\mathbf{I}$ と $\mathbf{W}$ の対称性を用いると，}
+\begin{equation}
+  \mathbf{A}^\mathsf{T}\mathbf{J} + \mathbf{J}\mathbf{A} = 0
+  \;\Longrightarrow\;
+  \frac{d}{ds}\big(\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M}\big) = 0
+  \;\Longrightarrow\;
+  \mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M} = \mathbf{J} .
+  \label{eq:symplectic}
+\end{equation}
+\en{So $\mathbf{M}$ is symplectic. A symplectic matrix has $\det\mathbf{M} = \pm 1$, and $\det\mathbf{M}$ is continuous in
+$s$ with $\det\mathbf{M}(0) = 1$, so $\det\mathbf{M} = 1$.}%
+\ja{すなわち $\mathbf{M}$ はシンプレクティックである。シンプレクティック行列は $\det\mathbf{M} = \pm 1$ を満たし，
+$\det\mathbf{M}$ は $s$ について連続で $\det\mathbf{M}(0) = 1$ なので，$\det\mathbf{M} = 1$ である。}
+
+% Slides for this section.
+\slidetitle{\en{Quadratic Hamiltonian}\ja{2 次のハミルトニアン}}
+\slidepoint{\en{H = H_0 + H_1 + H_2 + ...; H_n has degree n in the deviations}%
+            \ja{H = H_0 + H_1 + H_2 + ...，H_n は偏差の n 次の斉次式}}
+\slidemath{H_0 = -1, \qquad H_1 = 0}
+\slidemath{H_2 = \frac{p_x^2 + p_y^2}{2} + \frac{(h^2 + k)\,x^2}{2} - \frac{k\,y^2}{2}}
+\slidemath{\qquad - h\,x\,\delta + \frac{\delta^2}{2\gamma_0^2}}
+
+\slidetitle{\en{Hessian of H_2}\ja{H_2 のヘッセ行列}}
+\slidemath{\mathbf{W} = \begin{pmatrix}
+  h^2 + k & 0 & 0 & 0 & 0 & -h \\ 0 & 1 & 0 & 0 & 0 & 0 \\ 0 & 0 & -k & 0 & 0 & 0 \\
+  0 & 0 & 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 0 \\ -h & 0 & 0 & 0 & 0 & 1/\gamma_0^2
+\end{pmatrix}}
+\slidemath{\mathbf{A} = \mathbf{J}\mathbf{W}, \qquad W_{ij} = \frac{\partial^2 H_2}{\partial u_i\,\partial u_j}}
+
 \slidetitle{\en{Symplectic condition}\ja{シンプレクティック条件}}
+\slidepoint{\en{u' = J grad H_2 and the symmetry of W give the condition}%
+            \ja{u' = J ∇H_2 と W の対称性から条件が得られる}}
 \slidemath{\mathbf{A}^\mathsf{T}\mathbf{J} + \mathbf{J}\mathbf{A} = 0}
 \slidemath{\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M} = \mathbf{J}, \qquad \det\mathbf{M} = 1}
-\slidepoint{\en{The vertical plane decouples; z follows from x by integration}%
-            \ja{鉛直面は分離し，z は x から積分で得られる}}
 
 \section{\en{Drift space}\ja{ドリフトスペース}}
 \label{sec:drift}

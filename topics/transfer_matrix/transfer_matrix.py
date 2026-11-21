@@ -69,7 +69,7 @@ ODE_ATOL = 1.0e-15
 ENTRANCE_DIRECTION = np.array([1.0, -0.7, 0.5, 0.3, 0.2, 0.8])  # generic direction of the entrance vector
 
 # %% [markdown]
-# ## 2. Transfer matrix and its properties
+# ## 2. Transfer matrix
 #
 # The linearized EOM of [2026-001, Sec. 11] with $k_s = 0$ are
 #
@@ -148,20 +148,8 @@ assert sp.simplify(A_gen - A_expected) == sp.zeros(6, 6)
 # The matrix of a chain of elements is the product in reverse order, $\mathbf{M}_\mathrm{tot} = \mathbf{M}_n \cdots
 # \mathbf{M}_2 \mathbf{M}_1$ with the first element on the right.
 #
-# The EOM are Hamiltonian, $\mathbf{u}' = \mathbf{J}\,\nabla H_2$ with the quadratic part $H_2$ of $H$, so
-# $\mathbf{A} = \mathbf{J}\,\mathbf{W}$ with the symmetric Hessian $\mathbf{W}$ of $H_2$ and
-# $\mathbf{J} = \mathrm{diag}(\mathbf{J}_2, \mathbf{J}_2, \mathbf{J}_2)$, $\mathbf{J}_2 = \begin{pmatrix} 0 & 1 \\ -1 &
-# 0 \end{pmatrix}$. Because $\mathbf{J}^\mathsf{T}\mathbf{J} = \mathbf{I}$ and $\mathbf{J}^2 = -\mathbf{I}$,
-#
-# $$
-# \mathbf{A}^\mathsf{T}\mathbf{J} + \mathbf{J}\mathbf{A} = 0
-# \quad\Longrightarrow\quad
-# \frac{d}{ds}\big(\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M}\big) = 0
-# \quad\Longrightarrow\quad
-# \mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M} = \mathbf{J},
-# $$
-#
-# that is, $\mathbf{M}$ is symplectic and $\det\mathbf{M} = 1$.
+# Because $\delta' = 0$ and $z$ does not feed back into the other variables, $\mathbf{M}$ is block triangular: the
+# vertical plane decouples, and $z$ is obtained by integrating $-h\,x + \delta/\gamma_0^2$ after $x$ is known.
 
 # %%
 M_sym, A_sym = sp.Symbol("M"), sp.Symbol("A")
@@ -173,14 +161,84 @@ display(sp.Eq((sp.Symbol("M'") - A_sym * M_sym) * u_0, 0))
 display(sp.Eq(sp.Symbol("M'"), A_sym * M_sym))
 display(sp.Eq(M_sym, sp.exp(A_sym * sp.Symbol("s"))))
 
+# %% [markdown]
+# ## 3. Symplectic property
+#
+# Expand the exact Hamiltonian of [2026-001, Sec. 10] with $k_s = 0$ in the deviations $(x, p_x, y, p_y, \delta)$:
+# $H = H_0 + H_1 + H_2 + \cdots$, where $H_n$ is homogeneous of degree $n$ (the expansion is carried to third order in
+# [2026-003, Sec. 2]). The first terms are
+#
+# $$
+# H_0 = -1, \qquad H_1 = 0, \qquad
+# H_2 = \frac{p_x^2 + p_y^2}{2} + \frac{(h^2 + k)\,x^2}{2} - \frac{k\,y^2}{2} - h\,x\,\delta
+#       + \frac{\delta^2}{2\gamma_0^2}.
+# $$
+#
+# The constant $H_0$ does not enter the EOM, and $H_1 = 0$ because the reference orbit is an equilibrium. The
+# quadratic part $H_2$ gives the linearized EOM, which are therefore Hamiltonian, $\mathbf{u}' = \mathbf{J}\,\nabla H_2$,
+# so $\mathbf{A} = \mathbf{J}\,\mathbf{W}$ with the symmetric Hessian $\mathbf{W}$ of $H_2$ and
+# $\mathbf{J} = \mathrm{diag}(\mathbf{J}_2, \mathbf{J}_2, \mathbf{J}_2)$, $\mathbf{J}_2 = \begin{pmatrix} 0 & 1 \\ -1 &
+# 0 \end{pmatrix}$. With the ordering $\mathbf{u} = (x, p_x, y, p_y, z, \delta)^\mathsf{T}$ the Hessian
+# $W_{ij} = \partial^2 H_2/\partial u_i\partial u_j$ is
+#
+# $$
+# \mathbf{W} = \begin{pmatrix}
+# h^2 + k & 0 & 0 & 0 & 0 & -h \\
+# 0 & 1 & 0 & 0 & 0 & 0 \\
+# 0 & 0 & -k & 0 & 0 & 0 \\
+# 0 & 0 & 0 & 1 & 0 & 0 \\
+# 0 & 0 & 0 & 0 & 0 & 0 \\
+# -h & 0 & 0 & 0 & 0 & 1/\gamma_0^2
+# \end{pmatrix}.
+# $$
+#
+# It is symmetric by construction, and $\mathbf{J}\mathbf{W}$ reproduces the matrix $\mathbf{A}$. Using
+# $\mathbf{J}^\mathsf{T}\mathbf{J} = \mathbf{I}$ and $\mathbf{J}^2 = -\mathbf{I}$ and the symmetry of $\mathbf{W}$,
+#
+# $$
+# \mathbf{A}^\mathsf{T}\mathbf{J} + \mathbf{J}\mathbf{A} = 0
+# \quad\Longrightarrow\quad
+# \frac{d}{ds}\big(\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M}\big) = 0
+# \quad\Longrightarrow\quad
+# \mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M} = \mathbf{J},
+# $$
+#
+# that is, $\mathbf{M}$ is symplectic. A symplectic matrix has $\det\mathbf{M} = \pm 1$, and $\det\mathbf{M}$ is
+# continuous in $s$ with $\det\mathbf{M}(0) = 1$, so $\det\mathbf{M} = 1$.
+
+# %%
+# Expansion of the exact Hamiltonian in the bookkeeping parameter epsilon (deviations scaled by epsilon).
+eps = sp.Symbol("epsilon", positive=True)
+H_scaled = H_full.subs(beta0, beta0_of_gamma0).subs({x_: eps * x_, px: eps * px, y_: eps * y_, py: eps * py, d: eps * d})
+H_series = sp.expand(sp.series(H_scaled, eps, 0, 3).removeO())
+H0, H1, H2 = (H_series.coeff(eps, order) for order in range(3))
+H2_text = ((px**2 + py**2) / 2 + (h**2 + k) * x_**2 / 2 - k * y_**2 / 2 - h * x_ * d + d**2 / (2 * gamma0**2))
+display(sp.Eq(sp.Symbol("H_0"), H0))
+display(sp.Eq(sp.Symbol("H_1"), H1))
+display(sp.Eq(sp.Symbol("H_2"), H2_text))
+assert H0 == -1
+assert H1 == 0
+assert sp.simplify(H2 - H2_text) == 0
+
 J2 = sp.Matrix([[0, 1], [-1, 0]])
 J_sym = sp.diag(J2, J2, J2)
-# A = J W with a symmetric W (Hessian of the quadratic Hamiltonian).
-W_hess = sp.simplify(-J_sym * A_expected)  # J^{-1} = -J
+# A = J W with the symmetric Hessian W of H_2 (u' = J grad H_2).
+W_hess = sp.hessian(H2_text, state)
 assert W_hess == W_hess.T
+W_expected = sp.Matrix([
+    [h**2 + k, 0, 0, 0, 0, -h],
+    [0, 1, 0, 0, 0, 0],
+    [0, 0, -k, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [-h, 0, 0, 0, 0, 1 / gamma0**2],
+])
+display(sp.Eq(sp.Symbol("W"), W_hess))
+assert W_hess == W_expected
 assert sp.simplify(J_sym * W_hess - A_expected) == sp.zeros(6, 6)
 display(sp.Eq(sp.Symbol("A^T J + J A"), A_expected.T * J_sym + J_sym * A_expected))
 assert A_expected.T * J_sym + J_sym * A_expected == sp.zeros(6, 6)
+display(sp.Eq(sp.Symbol("M^T J M"), sp.Symbol("J")))
 
 
 # %%
@@ -199,7 +257,7 @@ def element_matrix_numeric(A_el: sp.Matrix, length: float, params: dict) -> np.n
 
 
 # %% [markdown]
-# ## 3. Drift space
+# ## 4. Drift space
 #
 # A drift space has $h = 0$ and $k = 0$. Then $\mathbf{A}$ is nilpotent, $\mathbf{A}^2 = 0$, so the series of the
 # matrix exponential stops after the linear term:
@@ -239,7 +297,7 @@ assert sp.simplify(M_drift - (A_drift * L).exp()) == sp.zeros(6, 6)
 check_transfer_matrix(M_drift_expected, A_drift)
 
 # %% [markdown]
-# ## 4. Sector dipole magnet
+# ## 5. Sector dipole magnet
 #
 # A sector dipole magnet has $h \neq 0$ and $k = 0$ (uniform field, perpendicular end faces). The horizontal equation
 # $x'' + h^2 x = h\delta$ has the constant particular solution $x = \delta/h$ (because $x'' = 0$ and $h^2\,\delta/h =
@@ -318,7 +376,7 @@ A_bend = A_gen.subs(k, 0)
 check_transfer_matrix(M_bend_expected, A_bend)
 
 # %% [markdown]
-# ## 5. Quadrupole magnet
+# ## 6. Quadrupole magnet
 #
 # A quadrupole magnet has $h = 0$ and $k \neq 0$; $k > 0$ focuses in $x$ and defocuses in $y$. The equations
 # decouple completely, $x'' + k x = 0$, $y'' - k y = 0$, $z' = \delta_0/\gamma_0^2$, and $\delta$ does not enter the
@@ -395,7 +453,7 @@ assert M_thin_x == sp.Matrix([[1, 0], [-q, 1]])
 assert M_thin_y == sp.Matrix([[1, 0], [q, 1]])
 
 # %% [markdown]
-# ## 6. Checks
+# ## 7. Checks
 #
 # 1. Each closed form satisfies $\mathbf{M}' = \mathbf{A}\mathbf{M}$, $\mathbf{M}(0) = \mathbf{I}$, is symplectic, and has
 #    $\det\mathbf{M} = 1$ (the function `check_transfer_matrix` above).
@@ -488,7 +546,7 @@ assert sp.simplify(M_bend_expected[4, 0] + M_bend_expected[1, 5]) == 0
 assert sp.simplify(M_bend_expected[4, 1] + M_bend_expected[0, 5]) == 0
 
 # %% [markdown]
-# ## 7. Summary and open points
+# ## 8. Summary and open points
 #
 # 1. $\mathbf{M}' = \mathbf{A}\mathbf{M}$, $\mathbf{M}(0) = \mathbf{I}$; for constant $h$ and $k$,
 #    $\mathbf{M} = \exp(\mathbf{A}L)$. The matrices are symplectic and $\det\mathbf{M} = 1$.
