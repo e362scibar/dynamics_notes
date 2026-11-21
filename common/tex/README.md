@@ -26,6 +26,10 @@ PDFs are written to `build/<topic>/<number>-en.pdf` and `build/<topic>/<number>-
 
 Write the Japanese text inside `\ja{...}` in the plain form (だ・である調). Do not use the polite form (です・ます調). For example, write 「求める。」「得られる。」「確認すること。」 and not 「求めます。」「得られます。」「確認してください。」. Keep the English text in `\en{...}` as it is.
 
+## Slide markers
+
+The slide markers (`\slidetitle`, `\slidepoint`, `\slidemath`, `\slidefigure`, `\slidenote`, defined in `slides.tex`) print nothing in the PDF. Write them at the end of each numbered section of `main.tex`, under a `% Slides for this section.` comment, and write only the title slide at the top. A section without slides needs a `% no slide: <reason>` line. See "Slides" in [AGENTS.md](../../AGENTS.md) and [common/slides/README.md](../slides/README.md).
+
 ## Document number
 
 Each `main.tex` declares its document number with `\setmemonumber{YYYY-NNN}` right after the `\input` of the preamble. The preamble shows `Memo YYYY-NNN` in the page header, and `\memonumber` gives the number to the title (`\date{Memo~\memonumber, YYYY}`). The numbers are registered in `common/documents.toml`; see [AGENTS.md](../../AGENTS.md).

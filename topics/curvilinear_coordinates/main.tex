@@ -15,58 +15,13 @@
 \begin{document}
 \maketitle
 
-% Slide deck source. These markers print nothing in the PDF; common/slides/build_slides.py builds the deck from them.
+% Title slide. The slides of each section are written at the end of that section (see AGENTS.md).
 \slidetitle{\en{Canonical equations of motion in curvilinear (Frenet-Serret) coordinates for beamlines with bending magnets}%
             \ja{偏向磁石を含むビームラインの曲線座標における正準運動方程式}}
 \slidepoint{\en{Frenet-Serret frame, s as the independent variable}%
             \ja{Frenet-Serret 座標系と，s を独立変数とする定式化}}
 \slidenote{\en{Derivation follows [lee2019, Chap. 2] and [wiedemann2015, p. 93].}%
            \ja{導出は [lee2019, 第 2 章] と [wiedemann2015, p. 93] に従う。}}
-
-\slidetitle{\en{Frenet-Serret frame and metric}\ja{Frenet-Serret 座標系と計量}}
-\slidepoint{\en{Curvature h = 1/ρ; x outward, y vertical}%
-            \ja{曲率 h = 1/ρ。x は外向き，y は鉛直}}
-\slidemath{\mathrm{d}\ell^2 = (1+hx)^2\,\mathrm{d}s^2 + \mathrm{d}x^2 + \mathrm{d}y^2}
-\slidenote{\en{The factor 1+hx is the only non-trivial metric coefficient.}%
-           \ja{非自明な計量係数は 1+hx だけである。}}
-
-\slidetitle{\en{Hamiltonian with s as the independent variable}\ja{s を独立変数とするハミルトニアン}}
-\slidepoint{\en{Legendre transform of the Lagrangian with s as the independent variable}%
-            \ja{s を独立変数とするラグランジアンのルジャンドル変換}}
-\slidemath{K = -(1+hx)\Big[\sqrt{\tfrac{E^2}{c^2} - m^2c^2 - P_x^2 - P_y^2} + qA_s\Big]}
-
-\slidetitle{\en{Normalized Hamiltonian}\ja{規格化されたハミルトニアン}}
-\slidepoint{\en{Normalized with P0; longitudinal pair z = s - beta0 c t (ahead of the reference if positive) and energy deviation delta}%
-            \ja{P0 で規格化。縦方向の組は z = s - beta0 c t（正なら基準粒子より前）とエネルギー偏差 delta}}
-\slidepoint{\en{delta is a constant of motion for a static B-field}\ja{静磁場では delta は運動の定数}}
-\slidemath{H = -(1+hx)\sqrt{1 + 2\delta + \beta_0^2\delta^2 - (p_x-a_x)^2 - (p_y-a_y)^2} - (1+hx)\,a_s + \delta}
-
-\slidetitle{\en{Ideal dipole potential}\ja{理想的な偏向磁石のポテンシャル}}
-\slidepoint{\en{Uniform vertical field B0; the sign is fixed by the reference-orbit equilibrium}%
-            \ja{一様な鉛直磁場 B0。符号は基準軌道の平衡条件で決まる}}
-\slidemath{-(1+hx)\,a_s = h\big(x + \tfrac{1}{2} h x^2\big)}
-
-\slidetitle{\en{Equations of motion}\ja{運動方程式}}
-\slidemath{x' = \frac{(1+hx)\,p_x}{R}, \qquad R = \sqrt{1 + 2\delta + \beta_0^2\delta^2 - p_x^2 - p_y^2}}
-\slidemath{p_x' = -h(1+hx) + hR - kx}
-\slidemath{z' = 1 - \frac{(1+hx)(1+\beta_0^2\delta)}{R}}
-\slidenote{\en{Hamilton's equations with s as the independent variable.}%
-           \ja{s を独立変数とする正準方程式である。}}
-
-\slidetitle{\en{Linearized equations of motion}\ja{線形化された運動方程式}}
-\slidemath{x'' + (h^2 + k)\,x = h\,\delta}
-\slidemath{y'' - k\,y = 0}
-\slidemath{z' = -h\,x + \delta/\gamma_0^2}
-\slidepoint{\en{The bend adds the inhomogeneous term h delta, which generates the dispersion}%
-            \ja{偏向により非斉次項 h delta が加わり，分散が生じる}}
-\slidepoint{\en{z is driven by -hx (path length) and delta/gamma0^2 (speed difference)}%
-            \ja{z は -hx（経路長）と delta/gamma0^2（速さの差）で駆動される}}
-
-\slidetitle{\en{Checks and open points}\ja{確認事項と未解決の点}}
-\slidepoint{\en{Derivations checked with sympy in the notebook}\ja{導出はノートブックで sympy により検証済み}}
-\slidepoint{\en{RF and quadrupole curvature corrections are not included}\ja{RF と四極磁石の曲率補正は含まない}}
-\slidepoint{\en{Conventions: z > 0 is ahead of the reference particle; delta = (E - E0)/(beta0 c P0)}%
-            \ja{規約: z > 0 は基準粒子より前，delta = (E - E0)/(beta0 c P0)}}
 
 \section{\en{Scope and conventions}\ja{対象と記号の規約}}
 
@@ -89,6 +44,18 @@ $h$; check the sign convention before comparing formulas.}%
 \ja{記号の規約。$s$ は基準軌道に沿った弧長で，独立変数である。$x$ は外向きを正とする水平座標，$y$ は鉛直座標である。
 $h(s)=1/\rho(s)$ は基準軌道の曲率で，曲率中心が内側にあるとき $h>0$ とする。$q$ と $m$ は電荷と質量，$P_0$ と $\beta_0$ は
 基準運動量と基準速度係数，$\gamma_0 = 1/\sqrt{1-\beta_0^2}$ は基準ローレンツ因子である。文献によって $x$ と $h$ の符号規約が異なるため，式を比較する際は符号規約を確認すること。}
+
+% Slides for this section.
+\slidetitle{\en{Scope and conventions}\ja{対象と記号の規約}}
+\slidepoint{\en{Hamiltonian and EOM around the reference orbit of a planar bend}%
+            \ja{平面偏向の基準軌道まわりのハミルトニアンと運動方程式}}
+\slidepoint{\en{s: arc length, the independent variable; x outward, y vertical}%
+            \ja{s は弧長（独立変数），x は外向き，y は鉛直}}
+\slidepoint{\en{h = 1/rho is positive when the center of curvature lies inside}%
+            \ja{h = 1/ρ は曲率中心が内側のとき正}}
+\slidemath{\gamma_0 = \frac{1}{\sqrt{1-\beta_0^2}}}
+\slidenote{\en{P0, beta0, and gamma0 are the reference momentum, velocity factor, and Lorentz factor. Results are checked with sympy in the notebook.}%
+           \ja{P0，beta0，gamma0 は基準運動量，基準速度係数，基準ローレンツ因子である。結果はノートブックで sympy により検証している。}}
 
 \section{\en{Frenet-Serret frame and metric}\ja{Frenet-Serret 座標系と計量}}
 
@@ -127,6 +94,21 @@ $\partial_y\mathbf{r}$ より，}
 \en{Its tangential component is therefore $v_T = (1+hx)\,\dot{s}$. This is the origin of the metric factor in
 \eqref{eq:metric}.}%
 \ja{したがって接線成分は $v_T = (1+hx)\,\dot{s}$ である。これが \eqref{eq:metric} の計量因子の起源である。}
+
+% Slides for this section.
+\slidetitle{\en{Frenet-Serret frame and metric}\ja{Frenet-Serret 座標系と計量}}
+\slidepoint{\en{Planar curve with curvature h = 1/rho and zero torsion}%
+            \ja{曲率 h = 1/ρ，ねじれゼロの平面曲線}}
+\slidemath{\frac{\mathrm{d}\mathbf{T}}{\mathrm{d}s} = -h\,\mathbf{e}_x, \qquad \frac{\mathrm{d}\mathbf{e}_x}{\mathrm{d}s} = h\,\mathbf{T}}
+\slidemath{\mathbf{r}(s,x,y) = \mathbf{R}(s) + x\,\mathbf{e}_x + y\,\mathbf{e}_y}
+
+\slidetitle{\en{Line element and velocity}\ja{線要素と速度}}
+\slidemath{\mathrm{d}\ell^2 = (1+hx)^2\,\mathrm{d}s^2 + \mathrm{d}x^2 + \mathrm{d}y^2}
+\slidemath{\mathbf{v} = (1+hx)\,\dot{s}\,\mathbf{T} + \dot{x}\,\mathbf{e}_x + \dot{y}\,\mathbf{e}_y}
+\slidepoint{\en{1+hx is the only non-trivial metric coefficient}%
+            \ja{非自明な計量係数は 1+hx だけ}}
+\slidenote{\en{The Hamiltonian is therefore not a Cartesian one.}%
+           \ja{したがってハミルトニアンはデカルト座標の形にはならない。}}
 
 \section{\en{Lagrangian and equations of motion}\ja{ラグランジアンと運動方程式}}
 
@@ -182,6 +164,14 @@ $d\mathbf{p}/dt = q\,\mathbf{v}\times\mathbf{B}$ にほかならない。$s$ を
 適用する場合は第~\ref{sec:ls} 節で扱う。デカルト座標での恒等式 \eqref{eq:lorentz} は，
 ノートブックで sympy により検証している。}
 
+% Slides for this section.
+\slidetitle{\en{Lagrangian and the Lorentz force}\ja{ラグランジアンとローレンツ力}}
+\slidemath{L = -mc^2\sqrt{1 - \frac{v^2}{c^2}} + q\,\mathbf{v}\cdot\mathbf{A}}
+\slidemath{\frac{\mathrm{d}}{\mathrm{d}t}\frac{\partial L}{\partial \mathbf{v}} - \frac{\partial L}{\partial \mathbf{r}} = 0}
+\slidemath{\frac{\mathrm{d}}{\mathrm{d}t}(\gamma m\,\mathbf{v}) = q\,\mathbf{v}\times\mathbf{B}}
+\slidepoint{\en{(v·∇)A cancels; a static field gives the Lorentz force}%
+            \ja{(v·∇)A が相殺し，静磁場ではローレンツ力になる}}
+
 \section{\en{Lagrangian with $s$ as the independent variable}%
          \ja{$s$ を独立変数とするラグランジアン}}
 \label{sec:ls}
@@ -217,6 +207,16 @@ $s$ を独立変数とするラグランジアンは}
         + q\big[(1+hx)A_s + x'A_x + y'A_y\big] .
   \label{eq:Ls}
 \end{equation}
+
+% Slides for this section.
+\slidetitle{\en{Lagrangian with s as the independent variable}\ja{s を独立変数とするラグランジアン}}
+\slidepoint{\en{L dt = L_s ds with t' = dt/ds}\ja{L dt = L_s ds，t' = dt/ds}}
+\slidemath{\mathbf{A} = A_s\,\mathbf{T} + A_x\,\mathbf{e}_x + A_y\,\mathbf{e}_y}
+\slidemath{L_s = -mc^2\sqrt{t'^2 - \frac{(1+hx)^2 + x'^2 + y'^2}{c^2}}}
+\slidemath{\qquad + q\big[(1+hx)A_s + x'A_x + y'A_y\big]}
+\slidenote{\en{A_s, A_x, and A_y are physical components, so no further metric factor appears.}%
+           \ja{A_s，A_x，A_y は物理成分であるから，これ以上の計量因子は現れない。}}
+
 \section{\en{Euler--Lagrange equations for $L_s$}\ja{$L_s$ に対するオイラー・ラグランジュ方程式}}
 
 \en{Euler--Lagrange equations for $L_s$. Take $t$, $x$, and $y$ as generalized coordinates and $s$ as the
@@ -293,6 +293,22 @@ $\gamma = E/(mc^2)$, a constant of motion. In natural units $m = c = 1$, $\gamma
 \end{align}
 \en{There is no curvature term in \eqref{eq:el_y_force}, because the metric factor $1+hx$ does not depend on $y$.}%
 \ja{計量因子 $1+hx$ は $y$ に依らないため，\eqref{eq:el_y_force} に曲率の項は現れない。}
+
+% Slides for this section.
+\slidetitle{\en{Euler-Lagrange equations for L_s}\ja{L_s に対するオイラー・ラグランジュ方程式}}
+\slidepoint{\en{t is cyclic: p_t = -E is a constant of motion}%
+            \ja{t は循環座標で，p_t = -E は運動の定数}}
+\slidemath{\frac{\partial L_s}{\partial t'} = -\gamma m c^2 = -E}
+\slidemath{t' = \frac{(1+hx)\,E}{P_T c^2}, \qquad P_T = \sqrt{\frac{E^2}{c^2} - m^2c^2 - P_x^2 - P_y^2}}
+\slidepoint{\en{t' is eliminated from the x and y equations}%
+            \ja{x と y の方程式から t' が消去される}}
+
+\slidetitle{\en{Transverse equations}\ja{横方向の方程式}}
+\slidemath{\frac{\partial L_s}{\partial x'} = \gamma m v_x + qA_x, \qquad \frac{\partial L_s}{\partial y'} = \gamma m v_y + qA_y}
+\slidemath{\frac{\partial L_s}{\partial x} = \gamma m h\,v_T + q\big[hA_s + (1+hx)\,\partial_x A_s + \cdots\big]}
+\slidepoint{\en{The curvature term enters the x equation only}%
+            \ja{曲率の項は x の方程式にだけ現れる}}
+\slidepoint{\en{1+hx does not depend on y}\ja{1+hx は y に依らない}}
 
 \section{\en{Reduction to the Lorentz force equation}\ja{ローレンツ力の方程式への帰着}}
 \label{sec:lorentz_reduction}
@@ -411,6 +427,20 @@ components of the Lorentz force equation \eqref{eq:lorentz}.}%
 \ja{ここで $B_s$ を含む項は相殺する。以上より，$L_s$ に対するオイラー・ラグランジュ方程式はローレンツ力の
 方程式 \eqref{eq:lorentz} の 3 成分すべてを再現する。}
 
+% Slides for this section.
+\slidetitle{\en{Reduction to the Lorentz force equation}\ja{ローレンツ力の方程式への帰着}}
+\slidepoint{\en{d/ds = t' d/dt; the mixed terms leave q v x B_s}%
+            \ja{d/ds = t' d/dt では，混合項が q v × B_s として残る}}
+\slidemath{\Big(\frac{\mathrm{d}\mathbf{p}}{\mathrm{d}t}\Big)_x = q\big(v_T B_y - v_y B_s\big)}
+\slidemath{\Big(\frac{\mathrm{d}\mathbf{p}}{\mathrm{d}t}\Big)_y = q\big(v_x B_s - v_T B_x\big)}
+
+\slidetitle{\en{Tangential component and result}\ja{接線成分と結論}}
+\slidepoint{\en{The rotating left-handed frame gives the curvature term}%
+            \ja{回転する左手系の座標系が曲率の項を与える}}
+\slidemath{\Big(\frac{\mathrm{d}\mathbf{p}}{\mathrm{d}t}\Big)_T = q\,(\mathbf{v}\times\mathbf{B})_s}
+\slidepoint{\en{All three components of the Lorentz force equation are reproduced}%
+            \ja{ローレンツ力の方程式の 3 成分すべてを再現}}
+
 \section{\en{Gauge choice for dipole and quadrupole fields}%
          \ja{偏向磁石と四極磁石に対するゲージの選択}}
 \label{sec:gauge}
@@ -525,6 +555,28 @@ order and are not kept.}%
 \ja{全体の符号は規約である。基準軌道 $x = y = 0$ が平衡点であること，すなわちそこでの横方向の力がゼロになる
 ことを要求して決める。四極項の曲率補正は高次であり，本メモでは扱わない。}
 
+% Slides for this section.
+\slidetitle{\en{Gauge freedom}\ja{ゲージの自由度}}
+\slidemath{\mathbf{A} \to \mathbf{A} + \nabla\chi}
+\slidemath{A_s \to A_s + \frac{\partial_s\chi}{1+hx}, \qquad A_x \to A_x + \partial_x\chi, \qquad A_y \to A_y + \partial_y\chi}
+\slidemath{\Delta L_s = q\,\frac{\mathrm{d}\chi}{\mathrm{d}s}}
+\slidepoint{\en{A total derivative: the Euler-Lagrange equations are unchanged}%
+            \ja{全微分なので，オイラー・ラグランジュ方程式は不変}}
+
+\slidetitle{\en{The gauge A_x = A_y = 0}\ja{ゲージ A_x = A_y = 0}}
+\slidepoint{\en{Possible exactly when B_s = 0: dipoles, quadrupoles, and higher}%
+            \ja{B_s = 0 のときに限り可能（偏向・四極・六極・八極磁石）}}
+\slidemath{B_s = -\big(\partial_x A_y - \partial_y A_x\big) = 0}
+\slidepoint{\en{A solenoid breaks it}\ja{ソレノイドでは成り立たない}}
+\slidepoint{\en{Residual chi(s) is fixed by A_s = 0 on the reference orbit}%
+            \ja{残る χ(s) は基準軌道上で A_s = 0 として固定}}
+
+\slidetitle{\en{Dipole and quadrupole potentials}\ja{偏向磁石と四極磁石のポテンシャル}}
+\slidepoint{\en{Uniform field B0; the sign is fixed by the equilibrium of the reference orbit}%
+            \ja{一様な磁場 B0。符号は基準軌道の平衡条件で決まる}}
+\slidemath{-(1+hx)\,a_s = h\big(x + \tfrac{1}{2} h x^2\big)}
+\slidemath{\qquad + \tfrac{1}{2} k\,(x^2 - y^2) + k_s\,xy}
+
 \section{\en{Linearized Euler--Lagrange equations}\ja{線形化されたオイラー・ラグランジュ方程式}}
 \label{sec:el_linear}
 
@@ -619,6 +671,16 @@ $\sqrt{E^2-1}\,h(1+hx)/\sqrt{S} = P_0\,h\,(1+\delta) + \mathcal{O}(2)$. Collecti
 \en{The derivation was checked with sympy in the notebook.}%
 \ja{導出はノートブックで sympy により検証している。}
 
+% Slides for this section.
+\slidetitle{\en{Linearized Euler-Lagrange equations}\ja{線形化されたオイラー・ラグランジュ方程式}}
+\slidepoint{\en{Natural units m = c = 1 and the gauge A_x = A_y = 0}%
+            \ja{自然単位系 m = c = 1，ゲージ A_x = A_y = 0}}
+\slidemath{L_s = -\sqrt{t'^2 - (1+hx)^2 - x'^2 - y'^2} + q\,(1+hx)\,A_s}
+\slidemath{a_s = -hx + \tfrac{1}{2} h^2 x^2 - \tfrac{1}{2} k\,(x^2 - y^2) - k_s\,xy}
+\slidemath{x'' + (h^2 + k)\,x + k_s\,y = h\,\delta, \qquad y'' - k\,y + k_s\,x = 0}
+\slidenote{\en{The derivation was checked with sympy in the notebook.}%
+           \ja{導出はノートブックで sympy により検証済みである。}}
+
 \section{\en{Hamiltonian derivation and normalization}\ja{ハミルトニアンの導出と規格化}}
 \en{The generalized coordinates are $(t, x, y)$, and their conjugate momenta are}%
 \ja{一般化座標は $(t, x, y)$ であり，その共役運動量は}
@@ -701,6 +763,30 @@ Hamilton's equations.}%
 \ja{第~\ref{sec:gauge} 節の残存ゲージ自由度 $\chi = \chi(s)$ は $A_s$ を $\chi'(s)/(1+hx)$ だけずらすので，
 \eqref{eq:H_general} に $-q\chi'(s)/P_0$ を加える。これは $s$ だけの関数であるから，正準方程式を変えない。}
 
+% Slides for this section.
+\slidetitle{\en{Hamiltonian with s as the independent variable}\ja{s を独立変数とするハミルトニアン}}
+\slidepoint{\en{Legendre transform of the Lagrangian with s as the independent variable}%
+            \ja{s を独立変数とするラグランジアンのルジャンドル変換}}
+\slidemath{p_t = -E, \qquad p_x = \gamma m v_x + qA_x, \qquad p_y = \gamma m v_y + qA_y}
+\slidemath{K = -(1+hx)\Big[\sqrt{\tfrac{E^2}{c^2} - m^2c^2 - P_x^2 - P_y^2} + qA_s\Big]}
+
+\slidetitle{\en{Longitudinal pair (z, delta)}\ja{縦方向の組 (z, δ)}}
+\slidepoint{\en{Canonical transformation (t, p_t/P0) to (z, delta)}%
+            \ja{正準変換 (t, p_t/P0) から (z, δ) へ}}
+\slidemath{F_2(t,\delta;s) = -\frac{E_0\,t}{P_0} + (s - \beta_0 c\,t)\,\delta}
+\slidemath{z = s - \beta_0 c\,t, \qquad \delta = \frac{E - E_0}{\beta_0 c P_0}}
+\slidepoint{\en{z > 0: ahead of the reference particle; delta: energy deviation}%
+            \ja{z > 0 は基準粒子より前，δ はエネルギー偏差}}
+
+\slidetitle{\en{Normalized Hamiltonian}\ja{規格化されたハミルトニアン}}
+\slidepoint{\en{Normalized with P0; F_2 depends on s, so H = K/P0 + delta}%
+            \ja{P0 で規格化。F_2 が s に依存するので H = K/P0 + δ}}
+\slidemath{\Big(\frac{p}{P_0}\Big)^2 = 1 + 2\delta + \beta_0^2\delta^2}
+\slidemath{H = -(1+hx)\sqrt{1 + 2\delta + \beta_0^2\delta^2 - (p_x-a_x)^2 - (p_y-a_y)^2}}
+\slidemath{\qquad - (1+hx)\,a_s + \delta}
+\slidenote{\en{delta is a constant of motion for a static magnetic field, because H does not depend on z.}%
+           \ja{静磁場では H は z に依らないので，δ は運動の定数である。}}
+
 \section{\en{Full Hamiltonian and exact equations of motion}\ja{完全なハミルトニアンと厳密な運動方程式}}
 
 \en{With the gauge $A_x = A_y = 0$ the potential terms of \eqref{eq:H_general} are $-(1+hx)a_s$, and
@@ -754,6 +840,20 @@ other equations do not contain $z$, so $z$ is obtained by integrating
 第 1 項は偏向部で変位した軌道の経路長の変化であり，第 2 項は速さの差によるスリップで，$\beta_0 \to 1$ で消える。
 ほかの方程式は $z$ を含まないので，横方向の運動を求めてから \eqref{eq:z_eom} を積分して
 $z$ が得られる。}
+
+% Slides for this section.
+\slidetitle{\en{Full Hamiltonian}\ja{完全なハミルトニアン}}
+\slidepoint{\en{Gauge A_x = A_y = 0: the potential terms are exact}%
+            \ja{ゲージ A_x = A_y = 0 ではポテンシャル項は厳密}}
+\slidemath{H = -(1+hx)\sqrt{1 + 2\delta + \beta_0^2\delta^2 - p_x^2 - p_y^2} + \delta}
+\slidemath{\qquad + h\big(x + \tfrac{1}{2} h x^2\big) + \tfrac{1}{2} k\,(x^2 - y^2) + k_s\,xy}
+
+\slidetitle{\en{Equations of motion}\ja{運動方程式}}
+\slidemath{x' = \frac{(1+hx)\,p_x}{R}, \qquad R = \sqrt{1 + 2\delta + \beta_0^2\delta^2 - p_x^2 - p_y^2}}
+\slidemath{p_x' = -h(1+hx) + hR - kx}
+\slidemath{z' = 1 - \frac{(1+hx)(1+\beta_0^2\delta)}{R}}
+\slidenote{\en{Hamilton's equations with s as the independent variable. The reference orbit is an equilibrium, and delta' = 0.}%
+           \ja{s を独立変数とする正準方程式である。基準軌道は平衡点であり，δ' = 0 である。}}
 
 \section{\en{Linearized equations of motion}\ja{線形化された運動方程式}}
 \label{sec:linear_eom}
@@ -820,6 +920,23 @@ $h^2$ term, as expected for a horizontal bend.}%
     \ja{スキュー四極項 $k_s\,xy$ は $x$ と $y$ を線形に結合する。$k_s = 0$ とすると結合は消える。}
 \end{itemize}
 
+% Slides for this section.
+\slidetitle{\en{Linearized equations of motion}\ja{線形化された運動方程式}}
+\slidemath{x'' + (h^2 + k)\,x = h\,\delta, \qquad y'' - k\,y = 0}
+\slidemath{z' = -h\,x + \delta/\gamma_0^2}
+\slidepoint{\en{The bend adds the inhomogeneous term h delta, which generates the dispersion}%
+            \ja{偏向により非斉次項 h δ が加わり，分散が生じる}}
+\slidepoint{\en{z is driven by -hx (path length) and delta/gamma0^2 (speed difference)}%
+            \ja{z は -hx（経路長）と δ/γ0^2（速さの差）で駆動される}}
+
+\slidetitle{\en{Dispersion}\ja{分散}}
+\slidepoint{\en{D(s) from the dispersion orbit x = D(s) delta}%
+            \ja{分散軌道 x = D(s) δ から D(s) を定義}}
+\slidemath{D'' + (h^2 + k)\,D = h}
+\slidemath{D(s) = \frac{h}{K^2}\big(1 - \cos Ks\big), \qquad K^2 = h^2 + k}
+\slidepoint{\en{For D(0) = D'(0) = 0, D oscillates around h/K^2 instead of growing linearly}%
+            \ja{D(0) = D'(0) = 0 では D は h/K^2 のまわりで振動}}
+
 \section{\en{Summary and open points}\ja{まとめと未解決の点}}
 
 \begin{enumerate}
@@ -862,6 +979,22 @@ $h^2$ term, as expected for a horizontal bend.}%
     \ja{本メモの縦方向の規約: $z = s - \beta_0 c\,t$（$z > 0$ は基準粒子より前），$\delta = (E-E_0)/(\beta_0 cP_0)$。
     正準変換 $(t, p_t/P_0) \to (z, \delta)$ は厳密である。}
 \end{enumerate}
+
+% Slides for this section.
+\slidetitle{\en{Summary}\ja{まとめ}}
+\slidemath{\mathrm{d}\ell^2 = (1+hx)^2\,\mathrm{d}s^2 + \mathrm{d}x^2 + \mathrm{d}y^2}
+\slidemath{H = -(1+hx)\sqrt{1 + 2\delta + \beta_0^2\delta^2 - (p_x-a_x)^2 - (p_y-a_y)^2} - (1+hx)\,a_s + \delta}
+\slidepoint{\en{Linear EOM: Hill equations with the dispersion term h delta}%
+            \ja{線形方程式: 分散の項 h δ を持つ Hill 方程式}}
+\slidepoint{\en{The Lorentz force equation is reproduced for B_s = 0}%
+            \ja{B_s = 0 でローレンツ力の方程式を再現}}
+
+\slidetitle{\en{Checks and open points}\ja{確認事項と未解決の点}}
+\slidepoint{\en{Derivations checked with sympy in the notebook}\ja{導出はノートブックで sympy により検証済み}}
+\slidepoint{\en{RF and quadrupole curvature corrections are not included}\ja{RF と四極磁石の曲率補正は含まない}}
+\slidepoint{\en{Conventions: z > 0 is ahead of the reference particle; delta is the energy deviation}%
+            \ja{規約: z > 0 は基準粒子より前，δ はエネルギー偏差}}
+\slidemath{z = s - \beta_0 c\,t, \qquad \delta = \frac{E - E_0}{\beta_0 c P_0}}
 
 \printbibliography[title={\en{References}\ja{参考文献}}]
 

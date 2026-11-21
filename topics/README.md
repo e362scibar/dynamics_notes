@@ -26,7 +26,7 @@ The number is the document number `YYYY-NNN` registered in [common/documents.tom
 
 1. Allocate the document number with `python common/python/dynamics_common/documents.py --next`, add it to [common/documents.toml](../common/documents.toml), and regenerate [common/documents.bib](../common/documents.bib) with `python common/python/dynamics_common/documents.py --write`. The serial number restarts at `001` every year, and a number is never reused.
 2. Create `topics/<topic>/` with `<topic>.py`, `main.tex`, and `figures/`. Put `\setmemonumber{YYYY-NNN}` right after the `\input` of the preamble in `main.tex`, and write `Memo YYYY-NNN` below the title in the notebook.
-3. Add the license headers described in [LICENSING.md](../LICENSING.md).
+3. Add the license headers described in [LICENSING.md](../LICENSING.md). Write the slide markers at the end of each numbered section of `main.tex`; every section needs slides or a `% no slide: <reason>` note.
 4. Cite the references the topic uses with `\cite{key}` in `main.tex` and `[key]` in the notebook. Keys come from [common/references/references.bib](../common/references/references.bib).
 5. Add a row to the index above in the same change.
 6. Write the Japanese text in `main.tex` in the plain form (だ・である調). Do not use the polite form (です・ます調). See [AGENTS.md](../AGENTS.md).

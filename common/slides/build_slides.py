@@ -65,6 +65,7 @@ MATH_HEIGHT_IN = 1.0
 FIGURE_HEIGHT_IN = 3.6
 BLOCK_GAP_IN = 0.2
 POINT_FONT_SIZE_PT = 20
+TITLE_FONT_SIZE_PT = 32
 FOOTER_BOTTOM_MARGIN_IN = 0.55
 FOOTER_HEIGHT_IN = 0.35
 FOOTER_FONT_SIZE_PT = 12
@@ -295,6 +296,7 @@ def _add_slide(presentation: Presentation, slide: Slide, lang: str, topic_dir: P
     title_frame = title_shape.text_frame
     title_frame.text = slide.title
     for run in title_frame.paragraphs[0].runs:
+        run.font.size = Pt(TITLE_FONT_SIZE_PT)
         _style_run(run, lang)
     top = BODY_TOP_IN
     for block in slide.blocks:
