@@ -19,6 +19,7 @@ topics/<topic>/
 | Number | Topic | Notebook | LaTeX | Slides | Status |
 |---|---|---|---|---|---|
 | 2026-001 | [curvilinear_coordinates](curvilinear_coordinates/) | [curvilinear_coordinates.py](curvilinear_coordinates/curvilinear_coordinates.py) | [main.tex](curvilinear_coordinates/main.tex) (en, ja) | `build/curvilinear_coordinates/2026-001-slides-{en,ja}.pptx` via `common/slides/build_slides.py` | Draft |
+| 2026-002 | [transfer_matrix](transfer_matrix/) | [transfer_matrix.py](transfer_matrix/transfer_matrix.py) | [main.tex](transfer_matrix/main.tex) (en, ja) | `build/transfer_matrix/2026-002-slides-{en,ja}.pptx` via `common/slides/build_slides.py` | Draft |
 
 The number is the document number `YYYY-NNN` registered in [common/documents.toml](../common/documents.toml). It is used to cite a topic from other documents (`\cite{2026-001}` in LaTeX, `[2026-001]` in notebooks) and in the names of the output files, for example `build/curvilinear_coordinates/2026-001-en.pdf`.
 

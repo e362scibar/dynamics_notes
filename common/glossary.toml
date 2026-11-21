@@ -165,3 +165,37 @@ ja = "ソレノイド"
 [terms.total_derivative]
 en = "total derivative"
 ja = "全微分"
+
+[terms.transfer_matrix]
+en = "transfer matrix"
+ja = "転送行列"
+forbidden_ja = ["伝達行列", "伝送行列", "トランスファー行列"]
+note = "Accelerator-physics usage for the linear map of the phase-space vector along an element."
+
+[terms.drift_space]
+en = "drift space"
+ja = "ドリフトスペース"
+forbidden_ja = ["ドリフト空間", "自由空間"]
+
+[terms.sector_dipole_magnet]
+en = "sector dipole magnet"
+ja = "扇型偏向磁石"
+forbidden_ja = ["セクター偏向磁石", "セクター型偏向磁石"]
+note = "A dipole magnet whose end faces are perpendicular to the reference orbit, so there is no edge focusing."
+
+[terms.symplectic]
+en = "symplectic"
+ja = "シンプレクティック"
+
+[terms.matrix_exponential]
+en = "matrix exponential"
+ja = "行列指数関数"
+
+[terms.thin_lens_approximation]
+en = "thin-lens approximation"
+ja = "薄肉レンズ近似"
+forbidden_ja = ["薄いレンズ近似", "薄レンズ近似"]
+
+[terms.focal_length]
+en = "focal length"
+ja = "焦点距離"

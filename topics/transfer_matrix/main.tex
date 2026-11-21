@@ -1,0 +1,422 @@
+% topics/transfer_matrix/main.tex
+% Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center)
+% SPDX-License-Identifier: CC-BY-4.0
+%
+% Bilingual memo. Build with the commands in AGENTS.md (English: \memolang=en, Japanese: \memolang=ja).
+
+\input{common/tex/preamble.tex}
+\setmemonumber{2026-002}
+
+\title{\en{Linear transfer matrices of a drift space, a sector dipole magnet, and a quadrupole magnet}%
+       \ja{ドリフトスペース，扇型偏向磁石，四極磁石の線形転送行列}}
+\author{Hirokazu Maesaka}
+\date{Memo~\memonumber, 2026}
+
+\begin{document}
+\maketitle
+
+% Title slide. The slides of each section are written at the end of that section (see AGENTS.md).
+\slidetitle{\en{Linear transfer matrices of a drift space, a sector dipole magnet, and a quadrupole magnet}%
+            \ja{ドリフトスペース，扇型偏向磁石，四極磁石の線形転送行列}}
+\slidepoint{\en{From the linearized equations of motion in curvilinear coordinates}%
+            \ja{曲線座標での線形化された運動方程式から導く}}
+\slidenote{\en{Starts from Memo 2026-001. Results are checked with sympy and against the exact equations of motion.}%
+           \ja{メモ 2026-001 から出発する。結果は sympy と厳密な運動方程式の数値積分で確認している。}}
+
+\section{\en{Scope and conventions}\ja{対象と記号の規約}}
+
+\en{This memo derives the linear transfer matrix of a drift space, a sector dipole magnet, and a quadrupole magnet
+from the linearized equations of motion (EOM) of \cite[Sec.~11]{2026-001}. The reference orbit is planar and there is
+no $x$--$y$ coupling. The results are standard (see \cite{lee2019,wiedemann2015}); the page-level content of those
+references has not been re-checked against this memo. Every result is verified with sympy in the companion notebook
+\texttt{transfer\_matrix.py}, and numerically against the exact (nonlinear) EOM.}%
+\ja{本メモでは，\cite[第 11 節]{2026-001} の線形化された運動方程式から，ドリフトスペース，扇型偏向磁石，四極磁石の
+線形転送行列を導く。基準軌道は平面上にあり，$x$--$y$ 結合はない。結果は標準的なものであり（\cite{lee2019,wiedemann2015}
+を参照），それらの文献の該当ページの内容は本メモ執筆時に再確認していない。すべての結果は，付随するノートブック
+\texttt{transfer\_matrix.py} で sympy により検証し，さらに厳密な（非線形の）運動方程式に対して数値的にも確認している。}
+
+\en{Conventions. The phase-space vector is $\mathbf{u} = (x, p_x, y, p_y, z, \delta)^\mathsf{T}$ with the conventions
+of \cite{2026-001}: $z = s - \beta_0 c\,t$ (so $z > 0$ means ahead of the reference particle) and
+$\delta = (E - E_0)/(\beta_0 cP_0)$. To first order $p_x = x'$ and $p_y = y'$. The curvature is $h = 1/\rho$ with
+$h > 0$ when the center of curvature lies inside, and the normalized quadrupole gradient $k$ is positive for
+focusing in $x$. The following assumptions hold throughout.}%
+\ja{記号の規約。位相空間ベクトルは $\mathbf{u} = (x, p_x, y, p_y, z, \delta)^\mathsf{T}$ であり，\cite{2026-001} の規約に従う。
+すなわち $z = s - \beta_0 c\,t$（$z > 0$ は基準粒子より前），$\delta = (E - E_0)/(\beta_0 cP_0)$ である。
+1 次の範囲では $p_x = x'$，$p_y = y'$ である。曲率は $h = 1/\rho$ で，曲率中心が内側のとき $h > 0$ とする。
+規格化された四極磁場の勾配 $k$ は，$x$ 方向に集束するとき正である。以下の仮定を全体で用いる。}
+\begin{itemize}
+  \item \en{Static magnetic field only (no RF), so $\delta' = 0$.}%
+        \ja{静磁場のみ（RF なし）であり，$\delta' = 0$ である。}
+  \item \en{Each element has constant $h$ and $k$ along its length, and the fringe field is ignored (hard-edge model).}%
+        \ja{各要素の中で $h$ と $k$ は一定とし，端部の漏れ磁場は無視する（ハードエッジモデル）。}
+  \item \en{The sector dipole magnet has end faces perpendicular to the reference orbit, so it has no edge focusing.}%
+        \ja{扇型偏向磁石の端面は基準軌道に垂直であり，エッジ集束はない。}
+  \item \en{There is no skew quadrupole component: $k_s = 0$.}%
+        \ja{スキュー四極成分はない（$k_s = 0$）。}
+\end{itemize}
+
+% Slides for this section.
+\slidetitle{\en{Scope and conventions}\ja{対象と記号の規約}}
+\slidepoint{\en{Elements: drift space, sector dipole magnet, quadrupole magnet}%
+            \ja{対象: ドリフトスペース，扇型偏向磁石，四極磁石}}
+\slidemath{\mathbf{u} = (x,\, p_x,\, y,\, p_y,\, z,\, \delta)^\mathsf{T}}
+\slidepoint{\en{Static field, constant h and k per element, hard edge, k_s = 0}%
+            \ja{静磁場，要素内で h，k 一定，ハードエッジ，k_s = 0}}
+\slidepoint{\en{Conventions of Memo 2026-001: z = s - beta0 c t, delta = (E-E0)/(beta0 c P0)}%
+            \ja{メモ 2026-001 の規約: z = s - β0 c t，δ = (E-E0)/(β0 c P0)}}
+
+\section{\en{Transfer matrix and its properties}\ja{転送行列とその性質}}
+\label{sec:properties}
+
+\en{With $k_s = 0$ the linearized EOM of \cite[Sec.~11]{2026-001} are}%
+\ja{$k_s = 0$ のとき，\cite[第 11 節]{2026-001} の線形化された運動方程式は}
+\begin{equation}
+  x'' + (h^2 + k)\,x = h\,\delta, \qquad y'' - k\,y = 0, \qquad
+  z' = -h\,x + \frac{\delta}{\gamma_0^2}, \qquad \delta' = 0 .
+  \label{eq:linear_eom}
+\end{equation}
+\en{In matrix form $\mathbf{u}' = \mathbf{A}\,\mathbf{u}$ with}%
+\ja{行列で書くと $\mathbf{u}' = \mathbf{A}\,\mathbf{u}$ であり，}
+\begin{equation}
+  \mathbf{A} = \begin{pmatrix}
+    0 & 1 & 0 & 0 & 0 & 0 \\
+    -(h^2+k) & 0 & 0 & 0 & 0 & h \\
+    0 & 0 & 0 & 1 & 0 & 0 \\
+    0 & 0 & k & 0 & 0 & 0 \\
+    -h & 0 & 0 & 0 & 0 & 1/\gamma_0^2 \\
+    0 & 0 & 0 & 0 & 0 & 0
+  \end{pmatrix}.
+  \label{eq:A}
+\end{equation}
+\en{The notebook rebuilds this matrix as the Jacobian of the exact EOM at the origin.}%
+\ja{ノートブックでは，この行列を原点での厳密な運動方程式のヤコビアンとして再構成している。}
+
+\en{The transfer matrix $\mathbf{M}(s)$ of an element maps the entrance vector to the vector at the distance $s$
+from the entrance, $\mathbf{u}(s) = \mathbf{M}(s)\,\mathbf{u}(0)$. Since $\mathbf{u}' = \mathbf{A}\mathbf{u}$ holds for
+every $\mathbf{u}(0)$,}%
+\ja{要素の転送行列 $\mathbf{M}(s)$ は，入口のベクトルを入口から距離 $s$ の位置のベクトルに写す。
+すなわち $\mathbf{u}(s) = \mathbf{M}(s)\,\mathbf{u}(0)$ である。$\mathbf{u}' = \mathbf{A}\mathbf{u}$ は任意の
+$\mathbf{u}(0)$ について成り立つので，}
+\begin{equation}
+  \mathbf{M}' = \mathbf{A}\,\mathbf{M}, \qquad \mathbf{M}(0) = \mathbf{I} .
+  \label{eq:M_ode}
+\end{equation}
+\en{This initial-value problem has a unique solution. For a constant $\mathbf{A}$, that is, constant $h$ and $k$, the
+solution is the matrix exponential}%
+\ja{この初期値問題の解は一意である。$\mathbf{A}$ が一定，すなわち $h$ と $k$ が一定のとき，解は行列指数関数}
+\begin{equation}
+  \mathbf{M}(s) = \exp(\mathbf{A}\,s) .
+  \label{eq:M_exp}
+\end{equation}
+\en{Consequently $\mathbf{M}(s_1 + s_2) = \mathbf{M}(s_2)\,\mathbf{M}(s_1)$. The matrix of a chain of elements is the
+product in reverse order, $\mathbf{M}_\mathrm{tot} = \mathbf{M}_n \cdots \mathbf{M}_2\mathbf{M}_1$, with the first
+element on the right.}%
+\ja{したがって $\mathbf{M}(s_1 + s_2) = \mathbf{M}(s_2)\,\mathbf{M}(s_1)$ である。複数の要素を並べた系の行列は逆順の積
+$\mathbf{M}_\mathrm{tot} = \mathbf{M}_n \cdots \mathbf{M}_2\mathbf{M}_1$ であり，最初の要素が右端に来る。}
+
+\en{The EOM are Hamiltonian, $\mathbf{u}' = \mathbf{J}\nabla H_2$ with the quadratic part $H_2$ of the Hamiltonian
+\cite[Sec.~10]{2026-001}. Hence $\mathbf{A} = \mathbf{J}\mathbf{W}$ with the symmetric Hessian $\mathbf{W}$ of $H_2$ and
+$\mathbf{J} = \mathrm{diag}(\mathbf{J}_2, \mathbf{J}_2, \mathbf{J}_2)$,
+$\mathbf{J}_2 = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}$. Using $\mathbf{J}^\mathsf{T}\mathbf{J} = \mathbf{I}$ and
+$\mathbf{J}^2 = -\mathbf{I}$,}%
+\ja{運動方程式はハミルトニアン形式であり，ハミルトニアン \cite[第 10 節]{2026-001} の 2 次の部分 $H_2$ を用いて
+$\mathbf{u}' = \mathbf{J}\nabla H_2$ と書ける。したがって，$H_2$ の対称なヘッセ行列 $\mathbf{W}$ と
+$\mathbf{J} = \mathrm{diag}(\mathbf{J}_2, \mathbf{J}_2, \mathbf{J}_2)$，
+$\mathbf{J}_2 = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}$ により $\mathbf{A} = \mathbf{J}\mathbf{W}$ である。
+$\mathbf{J}^\mathsf{T}\mathbf{J} = \mathbf{I}$ と $\mathbf{J}^2 = -\mathbf{I}$ を用いると，}
+\begin{equation}
+  \mathbf{A}^\mathsf{T}\mathbf{J} + \mathbf{J}\mathbf{A} = 0
+  \;\Longrightarrow\;
+  \frac{d}{ds}\big(\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M}\big) = 0
+  \;\Longrightarrow\;
+  \mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M} = \mathbf{J} .
+  \label{eq:symplectic}
+\end{equation}
+\en{So $\mathbf{M}$ is symplectic, and $\det\mathbf{M} = 1$. Because $\delta' = 0$ and $z$ does not feed back, $\mathbf{M}$
+is block triangular: the vertical plane decouples, and $z$ is obtained by integrating $-h\,x + \delta/\gamma_0^2$ after
+$x$ is known.}%
+\ja{すなわち $\mathbf{M}$ はシンプレクティックであり，$\det\mathbf{M} = 1$ である。$\delta' = 0$ であり，$z$ は他の変数に
+影響しないので，$\mathbf{M}$ はブロック三角行列になる。鉛直面は分離し，$z$ は $x$ が求まった後に
+$-h\,x + \delta/\gamma_0^2$ を積分して得られる。}
+
+% Slides for this section.
+\slidetitle{\en{Transfer matrix}\ja{転送行列}}
+\slidemath{\mathbf{u}' = \mathbf{A}\,\mathbf{u}, \qquad \mathbf{u}(s) = \mathbf{M}(s)\,\mathbf{u}(0)}
+\slidemath{\mathbf{M}' = \mathbf{A}\,\mathbf{M}, \qquad \mathbf{M}(0) = \mathbf{I}}
+\slidemath{\mathbf{M}(s) = \exp(\mathbf{A}\,s) \quad (\text{constant } h, k)}
+\slidepoint{\en{A chain of elements: M_tot = M_n ... M_2 M_1}%
+            \ja{要素の列: M_tot = M_n ... M_2 M_1（最初が右端）}}
+
+\slidetitle{\en{Symplectic condition}\ja{シンプレクティック条件}}
+\slidemath{\mathbf{A}^\mathsf{T}\mathbf{J} + \mathbf{J}\mathbf{A} = 0}
+\slidemath{\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M} = \mathbf{J}, \qquad \det\mathbf{M} = 1}
+\slidepoint{\en{The vertical plane decouples; z follows from x by integration}%
+            \ja{鉛直面は分離し，z は x から積分で得られる}}
+
+\section{\en{Drift space}\ja{ドリフトスペース}}
+\label{sec:drift}
+
+\en{A drift space of length $L$ has $h = 0$ and $k = 0$. Then $\mathbf{A}$ is nilpotent, $\mathbf{A}^2 = 0$, so the
+series of the matrix exponential \eqref{eq:M_exp} stops after the linear term:}%
+\ja{長さ $L$ のドリフトスペースでは $h = 0$，$k = 0$ である。このとき $\mathbf{A}$ は冪零で $\mathbf{A}^2 = 0$ なので，
+行列指数関数 \eqref{eq:M_exp} の級数は 1 次の項で終わり，}
+\begin{equation}
+  \mathbf{M}_\mathrm{drift}(L) = \mathbf{I} + \mathbf{A}\,L = \begin{pmatrix}
+    1 & L & 0 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 & 0 & 0 \\
+    0 & 0 & 1 & L & 0 & 0 \\
+    0 & 0 & 0 & 1 & 0 & 0 \\
+    0 & 0 & 0 & 0 & 1 & L/\gamma_0^2 \\
+    0 & 0 & 0 & 0 & 0 & 1
+  \end{pmatrix}.
+  \label{eq:M_drift}
+\end{equation}
+\en{That is, $x(L) = x_0 + L\,p_{x0}$, $y(L) = y_0 + L\,p_{y0}$, and $z(L) = z_0 + L\,\delta_0/\gamma_0^2$. The
+last relation is the slip. A particle with $\delta_0 > 0$ is faster than the reference particle and moves ahead of it,
+and the slip vanishes for $\gamma_0 \to \infty$.}%
+\ja{すなわち $x(L) = x_0 + L\,p_{x0}$，$y(L) = y_0 + L\,p_{y0}$，$z(L) = z_0 + L\,\delta_0/\gamma_0^2$ である。
+最後の式はスリップを表す。$\delta_0 > 0$ の粒子は基準粒子より速く，基準粒子の前に出ていく。
+スリップは $\gamma_0 \to \infty$ で消える。}
+
+% Slides for this section.
+\slidetitle{\en{Drift space}\ja{ドリフトスペース}}
+\slidepoint{\en{h = 0 and k = 0: A is nilpotent, A^2 = 0, so exp(AL) = I + AL}%
+            \ja{h = 0，k = 0: A は冪零（A^2 = 0）で exp(AL) = I + AL}}
+\slidemath{x(L) = x_0 + L\,p_{x0}, \qquad y(L) = y_0 + L\,p_{y0}}
+\slidemath{z(L) = z_0 + \frac{L}{\gamma_0^2}\,\delta_0}
+\slidepoint{\en{The z equation is the slip due to the speed difference}%
+            \ja{z の式は速さの差によるスリップ}}
+
+\slidetitle{\en{Drift space: transfer matrix}\ja{ドリフトスペース: 転送行列}}
+\slidemath{\mathbf{M}_\mathrm{drift}(L) = \begin{pmatrix}
+  1 & L & 0 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 & 0 & 0 \\ 0 & 0 & 1 & L & 0 & 0 \\
+  0 & 0 & 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 & 1 & L/\gamma_0^2 \\ 0 & 0 & 0 & 0 & 0 & 1
+\end{pmatrix}}
+
+\section{\en{Sector dipole magnet}\ja{扇型偏向磁石}}
+\label{sec:bend}
+
+\en{A sector dipole magnet has $h \neq 0$ and $k = 0$ (uniform field, end faces perpendicular to the reference
+orbit). The horizontal equation $x'' + h^2 x = h\delta$ has the constant particular solution $x = \delta/h$, because
+$x'' = 0$ and $h^2\,\delta/h = h\delta$. Adding the homogeneous solution and imposing $x(0) = x_0$ and
+$x'(0) = p_{x0}$ gives}%
+\ja{扇型偏向磁石では $h \neq 0$，$k = 0$ である（一様磁場で，端面は基準軌道に垂直）。水平方向の方程式
+$x'' + h^2 x = h\delta$ は，$x'' = 0$ かつ $h^2\,\delta/h = h\delta$ であるから，定数の特解 $x = \delta/h$ を持つ。
+これに斉次解を加え，$x(0) = x_0$，$x'(0) = p_{x0}$ を課すと}
+\begin{equation}
+  x(L) = \cos(hL)\,x_0 + \frac{\sin(hL)}{h}\,p_{x0} + \frac{1 - \cos(hL)}{h}\,\delta_0 .
+  \label{eq:x_bend}
+\end{equation}
+\en{The coefficient of $\delta_0$ is the dispersion $D(L)$ of \cite[Sec.~11]{2026-001} for $K = h$. The vertical
+motion is free, $y'' = 0$, because $k = 0$ and a horizontal bend adds no $h^2$ term in the vertical plane. The
+longitudinal coordinate follows from $z' = -h\,x + \delta_0/\gamma_0^2$ by integration along the element:}%
+\ja{$\delta_0$ の係数は，\cite[第 11 節]{2026-001} の分散 $D(L)$ で $K = h$ としたものである。鉛直方向の運動は
+$y'' = 0$ の自由運動である。$k = 0$ であり，水平偏向は鉛直面に $h^2$ の項を加えないためである。
+縦方向の座標は，$z' = -h\,x + \delta_0/\gamma_0^2$ を要素に沿って積分して得られる。}
+\begin{equation}
+  z(L) = z_0 - \sin(hL)\,x_0 - \frac{1 - \cos(hL)}{h}\,p_{x0}
+         + \Big[\frac{L}{\gamma_0^2} - \Big(L - \frac{\sin(hL)}{h}\Big)\Big]\delta_0 .
+  \label{eq:z_bend}
+\end{equation}
+\en{Let $\theta = hL$ be the bend angle. Taking the derivatives of $\mathbf{u}(L)$ with respect to the entrance vector
+gives the transfer matrix}%
+\ja{$\theta = hL$ を偏向角とする。$\mathbf{u}(L)$ を入口のベクトルで微分すると，転送行列は}
+{\small
+\begin{equation}
+  \setlength{\arraycolsep}{3pt}
+  \mathbf{M}_\mathrm{bend}(L) = \begin{pmatrix}
+    \cos\theta & \rho\sin\theta & 0 & 0 & 0 & \rho(1-\cos\theta) \\
+    -\sin\theta/\rho & \cos\theta & 0 & 0 & 0 & \sin\theta \\
+    0 & 0 & 1 & L & 0 & 0 \\
+    0 & 0 & 0 & 1 & 0 & 0 \\
+    -\sin\theta & -\rho(1-\cos\theta) & 0 & 0 & 1 & M_{56} \\
+    0 & 0 & 0 & 0 & 0 & 1
+  \end{pmatrix},
+  \label{eq:M_bend}
+\end{equation}
+}
+\en{with}\ja{ここで}
+\begin{equation}
+  M_{56} = \frac{L}{\gamma_0^2} - \rho\,(\theta - \sin\theta).
+  \label{eq:M56_bend}
+\end{equation}
+\en{The term $-\rho(\theta - \sin\theta) = -\int_0^L h\,D\,ds$ in $M_{56}$ is the path-length change of the dispersive
+orbit in the bend, and $L/\gamma_0^2$ is the slip, as in the drift space. For $\theta \to 0$ the matrix tends to
+$\mathbf{M}_\mathrm{drift}$. The entries $M_{51} = -M_{26}$ and $M_{52} = -M_{16}$ are required by the symplectic
+condition \eqref{eq:symplectic}.}%
+\ja{$M_{56}$ の項 $-\rho(\theta - \sin\theta) = -\int_0^L h\,D\,ds$ は，偏向部での分散軌道の経路長の変化であり，
+$L/\gamma_0^2$ はドリフトスペースと同じスリップである。$\theta \to 0$ で行列は $\mathbf{M}_\mathrm{drift}$ に近づく。
+$M_{51} = -M_{26}$ と $M_{52} = -M_{16}$ は，シンプレクティック条件 \eqref{eq:symplectic} から要請される関係である。}
+
+% Slides for this section.
+\slidetitle{\en{Sector dipole magnet: horizontal plane}\ja{扇型偏向磁石: 水平面}}
+\slidepoint{\en{h > 0, k = 0: x'' + h^2 x = h delta has the particular solution x = delta/h}%
+            \ja{h > 0，k = 0: x'' + h^2 x = hδ の特解は x = δ/h}}
+\slidemath{x(L) = \cos(hL)\,x_0 + \frac{\sin(hL)}{h}\,p_{x0} + \frac{1 - \cos(hL)}{h}\,\delta_0}
+\slidepoint{\en{The delta coefficient is the dispersion D(L)}\ja{δ の係数は分散 D(L)}}
+
+\slidetitle{\en{Sector dipole magnet: vertical plane and z}\ja{扇型偏向磁石: 鉛直面と z}}
+\slidemath{y(L) = y_0 + L\,p_{y0}}
+\slidemath{z(L) = z_0 - \sin\theta\,x_0 - \rho(1-\cos\theta)\,p_{x0} + M_{56}\,\delta_0}
+\slidemath{M_{56} = \frac{L}{\gamma_0^2} - \rho\,(\theta - \sin\theta), \qquad \theta = hL}
+\slidepoint{\en{The matrix tends to the drift matrix for theta -> 0}%
+            \ja{θ → 0 で行列はドリフトスペースの行列に近づく}}
+
+\slidetitle{\en{Sector dipole magnet: transfer matrix}\ja{扇型偏向磁石: 転送行列}}
+\slidemath{\mathbf{M}_\mathrm{bend}(L) = \begin{pmatrix}
+  \cos\theta & \rho\sin\theta & 0 & 0 & 0 & \rho(1-\cos\theta) \\
+  -\sin\theta/\rho & \cos\theta & 0 & 0 & 0 & \sin\theta \\
+  0 & 0 & 1 & L & 0 & 0 \\ 0 & 0 & 0 & 1 & 0 & 0 \\
+  -\sin\theta & -\rho(1-\cos\theta) & 0 & 0 & 1 & M_{56} \\ 0 & 0 & 0 & 0 & 0 & 1
+\end{pmatrix}}
+\slidemath{M_{56} = \frac{L}{\gamma_0^2} - \rho\,(\theta - \sin\theta), \qquad \theta = hL}
+
+\section{\en{Quadrupole magnet}\ja{四極磁石}}
+\label{sec:quad}
+
+\en{A quadrupole magnet has $h = 0$ and $k \neq 0$. The planes decouple completely,
+$x'' + kx = 0$, $y'' - ky = 0$, and $z' = \delta_0/\gamma_0^2$. There is no dispersion because there is no bend, so
+$\delta$ does not enter the transverse motion. For $k = g^2 > 0$ (focusing in $x$) the horizontal plane oscillates
+and the vertical plane grows exponentially:}%
+\ja{四極磁石では $h = 0$，$k \neq 0$ である。両方の面は完全に分離し，$x'' + kx = 0$，$y'' - ky = 0$，
+$z' = \delta_0/\gamma_0^2$ である。偏向がないので分散はなく，$\delta$ は横方向の運動に現れない。
+$k = g^2 > 0$（$x$ 方向に集束）のとき，水平面は振動し，鉛直面は指数関数的に増大する。}
+{\small
+\begin{equation}
+  \setlength{\arraycolsep}{2pt}
+  \mathbf{M}_\mathrm{quad}(L) = \begin{pmatrix}
+    \cos gL & \sin(gL)/g & 0 & 0 & 0 & 0 \\
+    -g\sin gL & \cos gL & 0 & 0 & 0 & 0 \\
+    0 & 0 & \cosh gL & \sinh(gL)/g & 0 & 0 \\
+    0 & 0 & g\sinh gL & \cosh gL & 0 & 0 \\
+    0 & 0 & 0 & 0 & 1 & L/\gamma_0^2 \\
+    0 & 0 & 0 & 0 & 0 & 1
+  \end{pmatrix}, \qquad g = \sqrt{k} .
+  \label{eq:M_quad}
+\end{equation}
+}
+\en{For $k = -g^2 < 0$ the two planes are exchanged: the $x$ block is the hyperbolic one, the $y$ block is the
+trigonometric one, and $g = \sqrt{-k}$. For $k \to 0$ the matrix tends to $\mathbf{M}_\mathrm{drift}$.}%
+\ja{$k = -g^2 < 0$ では二つの面が入れ替わる。$x$ のブロックが双曲線関数，$y$ のブロックが三角関数になり，
+$g = \sqrt{-k}$ である。$k \to 0$ で行列は $\mathbf{M}_\mathrm{drift}$ に近づく。}
+
+\en{Thin-lens approximation. Let $L \to 0$ with the integrated strength $q = kL$ fixed. Then $gL = \sqrt{qL} \to 0$,
+and the two $2\times 2$ blocks tend to the matrices below.}%
+\ja{薄肉レンズ近似。積分強度 $q = kL$ を一定にして $L \to 0$ とする。このとき $gL = \sqrt{qL} \to 0$ であり，
+二つの $2\times 2$ ブロックは次の行列に近づく。}
+\begin{equation}
+  \mathbf{M}_x = \begin{pmatrix} 1 & 0 \\ -q & 1 \end{pmatrix}, \qquad
+  \mathbf{M}_y = \begin{pmatrix} 1 & 0 \\ q & 1 \end{pmatrix} .
+  \label{eq:thin_lens}
+\end{equation}
+\en{The focal length of the focusing plane is $f = 1/q = 1/(kL)$ for $k > 0$.}%
+\ja{集束する面の焦点距離は，$k > 0$ のとき $f = 1/q = 1/(kL)$ である。}
+
+% Slides for this section.
+\slidetitle{\en{Quadrupole magnet}\ja{四極磁石}}
+\slidepoint{\en{h = 0, k = g^2 > 0: focusing in x, defocusing in y, no dispersion}%
+            \ja{h = 0，k = g^2 > 0: x で集束，y で発散，分散なし}}
+\slidemath{x(L) = \cos(gL)\,x_0 + \frac{\sin(gL)}{g}\,p_{x0}}
+\slidemath{y(L) = \cosh(gL)\,y_0 + \frac{\sinh(gL)}{g}\,p_{y0}}
+\slidemath{z(L) = z_0 + \frac{L}{\gamma_0^2}\,\delta_0}
+
+\slidetitle{\en{Quadrupole magnet: k < 0 and thin lens}\ja{四極磁石: k < 0 と薄肉レンズ}}
+\slidepoint{\en{k = -g^2 < 0: the roles of x and y are exchanged}%
+            \ja{k = -g^2 < 0: x と y の役割が入れ替わる}}
+\slidepoint{\en{Thin lens: L -> 0 with q = kL fixed, focal length f = 1/(kL)}%
+            \ja{薄肉レンズ: q = kL 一定で L → 0，焦点距離 f = 1/(kL)}}
+\slidemath{\mathbf{M}_x = \begin{pmatrix} 1 & 0 \\ -q & 1 \end{pmatrix}, \qquad
+           \mathbf{M}_y = \begin{pmatrix} 1 & 0 \\ q & 1 \end{pmatrix}}
+
+\slidetitle{\en{Quadrupole magnet: transfer matrix}\ja{四極磁石: 転送行列}}
+\slidemath{\mathbf{M}_\mathrm{quad}(L) = \begin{pmatrix}
+  \cos gL & \sin(gL)/g & 0 & 0 & 0 & 0 \\ -g\sin gL & \cos gL & 0 & 0 & 0 & 0 \\
+  0 & 0 & \cosh gL & \sinh(gL)/g & 0 & 0 \\ 0 & 0 & g\sinh gL & \cosh gL & 0 & 0 \\
+  0 & 0 & 0 & 0 & 1 & L/\gamma_0^2 \\ 0 & 0 & 0 & 0 & 0 & 1
+\end{pmatrix}, \quad g = \sqrt{k}}
+
+\section{\en{Checks}\ja{確認}}
+
+\en{The notebook performs the following checks for every element.}%
+\ja{ノートブックでは，各要素について次の確認を行っている。}
+\begin{itemize}
+  \item \en{Each closed form satisfies $\mathbf{M}' = \mathbf{A}\mathbf{M}$ and $\mathbf{M}(0) = \mathbf{I}$, is symplectic,
+    and has $\det\mathbf{M} = 1$. Since the initial-value problem \eqref{eq:M_ode} has a unique solution, this proves
+    that the closed form is the transfer matrix.}%
+    \ja{各閉じた式は $\mathbf{M}' = \mathbf{A}\mathbf{M}$ と $\mathbf{M}(0) = \mathbf{I}$ を満たし，シンプレクティックで，
+    $\det\mathbf{M} = 1$ である。初期値問題 \eqref{eq:M_ode} の解は一意なので，これは閉じた式が転送行列であることを示す。}
+  \item \en{The closed forms agree with the numerical matrix exponential $\exp(\mathbf{A}L)$ (SciPy) to machine
+    precision.}%
+    \ja{閉じた式は，数値的な行列指数関数 $\exp(\mathbf{A}L)$（SciPy）と機械精度で一致する。}
+  \item \en{For a small initial vector (amplitude $10^{-6}$), the closed forms reproduce the exact nonlinear EOM
+    integrated numerically; the relative difference is of the order of the amplitude, as expected for the neglected
+    second-order terms.}%
+    \ja{小さな初期ベクトル（振幅 $10^{-6}$）に対して，閉じた式は数値積分した厳密な非線形運動方程式を再現する。
+    相対差は振幅程度であり，無視した 2 次の項から予想されるとおりである。}
+  \item \en{Composition: $\mathbf{M}(L_1 + L_2) = \mathbf{M}(L_2)\,\mathbf{M}(L_1)$ for each element.}%
+    \ja{合成: 各要素について $\mathbf{M}(L_1 + L_2) = \mathbf{M}(L_2)\,\mathbf{M}(L_1)$ が成り立つ。}
+  \item \en{Limits: $\mathbf{M}_\mathrm{bend} \to \mathbf{M}_\mathrm{drift}$ for $h \to 0$ and
+    $\mathbf{M}_\mathrm{quad} \to \mathbf{M}_\mathrm{drift}$ for $k \to 0$.}%
+    \ja{極限: $h \to 0$ で $\mathbf{M}_\mathrm{bend} \to \mathbf{M}_\mathrm{drift}$，$k \to 0$ で
+    $\mathbf{M}_\mathrm{quad} \to \mathbf{M}_\mathrm{drift}$ となる。}
+  \item \en{The $\delta_0$ column of $\mathbf{M}_\mathrm{bend}$ gives $D = \rho(1-\cos hs)$ and $D' = \sin hs$ of
+    \cite[Sec.~11]{2026-001}.}%
+    \ja{$\mathbf{M}_\mathrm{bend}$ の $\delta_0$ の列は，\cite[第 11 節]{2026-001} の $D = \rho(1-\cos hs)$，
+    $D' = \sin hs$ を与える。}
+\end{itemize}
+
+% Slides for this section.
+\slidetitle{\en{Checks}\ja{確認}}
+\slidepoint{\en{M' = AM, M(0) = I, symplectic, det M = 1 for every element}%
+            \ja{各要素で M' = AM，M(0) = I，シンプレクティック，det M = 1}}
+\slidepoint{\en{Agrees with exp(AL) to machine precision}%
+            \ja{exp(AL) と機械精度で一致}}
+\slidepoint{\en{Reproduces the exact nonlinear EOM at small amplitude}%
+            \ja{小振幅で厳密な非線形運動方程式を再現}}
+\slidepoint{\en{Composition and the limits h -> 0, k -> 0 give the drift space}%
+            \ja{合成則と，h → 0，k → 0 でドリフトスペースに帰着することを確認}}
+
+\section{\en{Summary and open points}\ja{まとめと未解決の点}}
+
+\begin{enumerate}
+  \item \en{$\mathbf{M}' = \mathbf{A}\mathbf{M}$ with $\mathbf{M}(0) = \mathbf{I}$, and $\mathbf{M} = \exp(\mathbf{A}L)$ for
+    constant $h$ and $k$. The matrices are symplectic.}%
+    \ja{$\mathbf{M}' = \mathbf{A}\mathbf{M}$，$\mathbf{M}(0) = \mathbf{I}$ であり，$h$ と $k$ が一定なら
+    $\mathbf{M} = \exp(\mathbf{A}L)$ である。行列はシンプレクティックである。}
+  \item \en{Drift space: $\mathbf{M} = \mathbf{I} + \mathbf{A}L$ with the slip $M_{56} = L/\gamma_0^2$.}%
+    \ja{ドリフトスペース: $\mathbf{M} = \mathbf{I} + \mathbf{A}L$，スリップ $M_{56} = L/\gamma_0^2$。}
+  \item \en{Sector dipole magnet: trigonometric horizontal block with $\theta = hL$, dispersion column
+    $(\rho(1-\cos\theta),\ \sin\theta)$, free vertical motion, and
+    $M_{56} = L/\gamma_0^2 - \rho(\theta - \sin\theta)$.}%
+    \ja{扇型偏向磁石: $\theta = hL$ の三角関数の水平ブロック，分散の列 $(\rho(1-\cos\theta),\ \sin\theta)$，
+    自由な鉛直運動，$M_{56} = L/\gamma_0^2 - \rho(\theta - \sin\theta)$。}
+  \item \en{Quadrupole magnet: a trigonometric block in the focusing plane, a hyperbolic block in the defocusing plane,
+    no dispersion, and $M_{56} = L/\gamma_0^2$. The thin-lens limit has the focal length $f = 1/(kL)$.}%
+    \ja{四極磁石: 集束面では三角関数，発散面では双曲線関数のブロック，分散なし，$M_{56} = L/\gamma_0^2$。
+    薄肉レンズ近似の焦点距離は $f = 1/(kL)$ である。}
+  \item \en{Open points, not covered here: edge focusing of dipole magnets with end-face angles and fringe fields; the
+    combined-function magnet ($h \neq 0$, $k \neq 0$), whose horizontal block uses $K^2 = h^2 + k$; the skew
+    quadrupole and other $x$--$y$ coupling elements; RF cavities, which make $\delta$ non-constant; nonlinear
+    elements such as sextupoles and octupoles.}%
+    \ja{本メモで扱わない点: 端面角を持つ偏向磁石のエッジ集束と端部の漏れ磁場，複合型磁石（$h \neq 0$，$k \neq 0$，
+    水平ブロックは $K^2 = h^2 + k$ を用いる），スキュー四極磁石などの $x$--$y$ 結合要素，$\delta$ を一定でなくする
+    RF 空洞，六極磁石や八極磁石などの非線形要素。}
+\end{enumerate}
+
+% Slides for this section.
+\slidetitle{\en{Summary}\ja{まとめ}}
+\slidemath{\mathbf{M}_\mathrm{drift} = \mathbf{I} + \mathbf{A}L, \qquad M_{56} = \frac{L}{\gamma_0^2}}
+\slidepoint{\en{Sector dipole magnet: cos, sin of theta = hL; dispersion column; M56 with -rho(theta - sin theta)}%
+            \ja{扇型偏向磁石: θ = hL の cos，sin，分散の列，M56 に -ρ(θ - sin θ)}}
+\slidepoint{\en{Quadrupole magnet: trigonometric and hyperbolic blocks; no dispersion}%
+            \ja{四極磁石: 三角関数と双曲線関数のブロック，分散なし}}
+\slidepoint{\en{Not covered: edge focusing, combined-function magnet, coupling, RF}%
+            \ja{未対応: エッジ集束，複合型磁石，結合，RF}}
+
+\printbibliography[title={\en{References}\ja{参考文献}}]
+
+\section*{\en{License}\ja{ライセンス}}
+\en{This document is licensed under CC BY 4.0. Code snippets are GPL-3.0-or-later. See \texttt{LICENSING.md}.}%
+\ja{本文書は CC BY 4.0 で提供する。コードの断片は GPL-3.0-or-later である。詳細は \texttt{LICENSING.md} を参照すること。}
+
+\end{document}

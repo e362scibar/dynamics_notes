@@ -22,3 +22,8 @@
 slug = "curvilinear_coordinates"
 title = "Canonical equations of motion in curvilinear (Frenet-Serret) coordinates for beamlines with bending magnets"
 status = "active"
+
+[documents."2026-002"]
+slug = "transfer_matrix"
+title = "Linear transfer matrices of a drift space, a sector dipole magnet, and a quadrupole magnet"
+status = "active"

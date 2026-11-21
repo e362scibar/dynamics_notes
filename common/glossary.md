@@ -16,9 +16,11 @@ used; `common/python/tests/test_topics_glossary.py` fails when one of them appea
 | `curvilinear_coordinates` | curvilinear coordinates | 曲線座標 | — | — |
 | `dipole_magnet` | dipole magnet | 偏向磁石 | — | Kept as is. Do not shorten to 偏向 alone. |
 | `dispersion` | dispersion | 分散 | — | — |
+| `drift_space` | drift space | ドリフトスペース | ドリフト空間, 自由空間 | — |
 | `energy_deviation` | energy deviation | エネルギー偏差 | — | — |
 | `equation_of_motion` | equation of motion | 運動方程式 | — | — |
 | `equilibrium_point` | equilibrium point | 平衡点 | — | — |
+| `focal_length` | focal length | 焦点距離 | — | — |
 | `focusing` | focusing | 集束 | 収束 | 集束 for beam focusing. 収束 is for numerical convergence. |
 | `frenet_serret_frame` | Frenet-Serret frame | Frenet-Serret 座標系 | 標構 | 標構 is a correct translation of moving frame but reads as jargon here. Use 座標系. |
 | `gauge` | gauge | ゲージ | — | — |
@@ -32,15 +34,20 @@ used; `common/python/tests/test_topics_glossary.py` fails when one of them appea
 | `line_element` | line element | 線要素 | — | — |
 | `linear_optics` | linear optics | 線形光学 | — | — |
 | `longitudinal` | longitudinal | 縦 | — | Use 縦 for the beam-axis direction, e.g. 縦成分 for the longitudinal component. Do not use 縦方向 as a noun. |
+| `matrix_exponential` | matrix exponential | 行列指数関数 | — | — |
 | `metric` | metric | 計量 | — | — |
 | `momentum_deviation` | momentum deviation | 運動量偏差 | — | p/P0 - 1. Distinct from the energy deviation delta = (E - E0)/(beta0 c P0), which is canonical to z. |
 | `normalization` | normalization | 規格化 | 正規化 | 規格化 is the accelerator-physics usage. 正規化 is the statistics usage. |
 | `octupole_magnet` | octupole magnet | 八極磁石 | — | — |
 | `quadrupole_magnet` | quadrupole magnet | 四極磁石 | — | — |
 | `reference_orbit` | reference orbit | 基準軌道 | — | — |
+| `sector_dipole_magnet` | sector dipole magnet | 扇型偏向磁石 | セクター偏向磁石, セクター型偏向磁石 | A dipole magnet whose end faces are perpendicular to the reference orbit, so there is no edge focusing. |
 | `sextupole_magnet` | sextupole magnet | 六極磁石 | — | — |
 | `solenoid` | solenoid | ソレノイド | — | — |
+| `symplectic` | symplectic | シンプレクティック | — | — |
+| `thin_lens_approximation` | thin-lens approximation | 薄肉レンズ近似 | 薄いレンズ近似, 薄レンズ近似 | — |
 | `torsion` | torsion | ねじれ | — | Use ねじれ for the geometric property (e.g. zero torsion). Use 捩率 only when a concrete value is given, e.g. 捩率 τ = 0.5 m^-1. |
 | `total_derivative` | total derivative | 全微分 | — | — |
+| `transfer_matrix` | transfer matrix | 転送行列 | 伝達行列, 伝送行列, トランスファー行列 | Accelerator-physics usage for the linear map of the phase-space vector along an element. |
 | `transverse` | transverse | 横 | — | Use 横 for the plane perpendicular to the beam axis, e.g. 横成分, 横平面. 横方向 is acceptable before a noun. |
 | `vector_potential` | vector potential | ベクトルポテンシャル | — | — |
