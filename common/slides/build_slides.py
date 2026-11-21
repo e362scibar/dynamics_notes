@@ -17,6 +17,7 @@ Usage (from the repository root)::
 
 import argparse
 import logging
+import re
 import sys
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -62,6 +63,9 @@ TITLE_HEIGHT_IN = 1.35
 BODY_TOP_IN = 1.8
 POINT_HEIGHT_IN = 0.7
 MATH_HEIGHT_IN = 1.0
+MATH_ROW_HEIGHT_IN = 0.45  # height per row of a matrix in a math block
+# TeX writes a space after a control word, so the source may read '\\begin {pmatrix}'.
+MATRIX_ENV_PATTERN = re.compile(r"\\begin\s*\{pmatrix\}")
 FIGURE_HEIGHT_IN = 3.6
 BLOCK_GAP_IN = 0.2
 POINT_FONT_SIZE_PT = 20
@@ -196,6 +200,23 @@ def _add_point(shapes: SlideShapes, text: str, lang: str, top: float) -> float:
     return top + POINT_HEIGHT_IN + BLOCK_GAP_IN
 
 
+def _math_height_in(latex: str) -> float:
+    """Return the box height of a math block in inches.
+
+    A block with a matrix environment is as tall as its rows. Other blocks use the default height.
+
+    Args:
+        latex: LaTeX math source.
+
+    Returns:
+        The height of the block in inches.
+    """
+    if MATRIX_ENV_PATTERN.search(latex) is None:
+        return MATH_HEIGHT_IN
+    rows = latex.count("\\\\") + 1
+    return max(MATH_HEIGHT_IN, rows * MATH_ROW_HEIGHT_IN)
+
+
 def _add_math(shapes: SlideShapes, latex: str, top: float) -> float:
     """Add a native equation in a text box and return the top position of the next block.
 
@@ -207,9 +228,10 @@ def _add_math(shapes: SlideShapes, latex: str, top: float) -> float:
     Returns:
         The top position of the next block in inches.
     """
-    box = shapes.add_textbox(Inches(MARGIN_LEFT_IN), Inches(top), Inches(BODY_WIDTH_IN), Inches(MATH_HEIGHT_IN))
+    height = _math_height_in(latex)
+    box = shapes.add_textbox(Inches(MARGIN_LEFT_IN), Inches(top), Inches(BODY_WIDTH_IN), Inches(height))
     _append_omml(box.text_frame.paragraphs[0]._p, latex)
-    return top + MATH_HEIGHT_IN + BLOCK_GAP_IN
+    return top + height + BLOCK_GAP_IN
 
 
 def _add_figure(shapes: SlideShapes, relative_path: str, topic_dir: Path, top: float) -> float:

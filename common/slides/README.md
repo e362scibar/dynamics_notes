@@ -16,6 +16,7 @@ Outputs go to `build/<topic>/<number>-slides-<lang>.pptx`, which is not tracked.
 ## Design
 
 - The topic's LaTeX document is the single source of content. The slide markers are written by hand at the end of each numbered section of `main.tex`, so the slides follow the document order. Every numbered section has at least one slide, or a `% no slide: <reason>` note (checked by `common/python/tests/test_topics_slides.py`). The slides are a short summary and are not generated from the equations, so update the markers of a section whenever its text changes. The slide-marker macros in `common/tex/slides.tex` write one `kind:payload` line per entry to `build/<topic>/<number>-<lang>.slides` during compilation. The kinds are `title`, `point`, `math`, `figure`, and `note`. The builder reads that file with `dynamics_common.read_slide_aux`. The format is line based instead of JSON because TeX cannot escape JSON strings reliably.
+- A math block that contains a `pmatrix` is as tall as its rows (`MATH_ROW_HEIGHT_IN` per row), so a matrix needs its own slide or at most one more block.
 - Equations: LaTeX math string → MathML (`latex2mathml`) → OMML (`mathml2omml.convert` from `mathml2omml-as`) → inserted into the slide XML with `lxml`, using `dynamics_common.latex_to_omml`. The result is native, editable PowerPoint equations.
 - Before the first build, install the shared package with `pip install -e common/python` (already listed in `environment.yml`).
 - Each slide has a short title and a few points. Longer explanation goes into speaker notes.
