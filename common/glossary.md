@@ -50,6 +50,8 @@ used; `common/python/tests/test_topics_glossary.py` fails when one of them appea
 | `thin_lens_approximation` | thin-lens approximation | 薄肉レンズ近似 | 薄いレンズ近似, 薄レンズ近似 | — |
 | `torsion` | torsion | ねじれ | — | Use ねじれ for the geometric property (e.g. zero torsion). Use 捩率 only when a concrete value is given, e.g. 捩率 τ = 0.5 m^-1. |
 | `total_derivative` | total derivative | 全微分 | — | — |
+| `transfer_map` | transfer map | 転送写像 | 伝達写像, 伝送写像 | The nonlinear generalization of the transfer matrix. The second-order transfer map has the elements T_ijk. |
 | `transfer_matrix` | transfer matrix | 転送行列 | 伝達行列, 伝送行列, トランスファー行列 | Accelerator-physics usage for the linear map of the phase-space vector along an element. |
 | `transverse` | transverse | 横 | — | Use 横 for the plane perpendicular to the beam axis, e.g. 横成分, 横平面. 横方向 is acceptable before a noun. |
+| `variation_of_constants` | variation of constants | 定数変化法 | — | Duhamel's formula for the inhomogeneous linear differential equation. |
 | `vector_potential` | vector potential | ベクトルポテンシャル | — | — |

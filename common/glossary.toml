@@ -208,3 +208,14 @@ note = "Taylor or series expansion. Write 2 次まで展開 for expansion to sec
 [terms.path_length]
 en = "path length"
 ja = "経路長"
+
+[terms.transfer_map]
+en = "transfer map"
+ja = "転送写像"
+forbidden_ja = ["伝達写像", "伝送写像"]
+note = "The nonlinear generalization of the transfer matrix. The second-order transfer map has the elements T_ijk."
+
+[terms.variation_of_constants]
+en = "variation of constants"
+ja = "定数変化法"
+note = "Duhamel's formula for the inhomogeneous linear differential equation."

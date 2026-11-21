@@ -1,0 +1,332 @@
+% topics/second_order_map/main.tex
+% Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center)
+% SPDX-License-Identifier: CC-BY-4.0
+%
+% Bilingual memo. Build with the commands in AGENTS.md (English: \memolang=en, Japanese: \memolang=ja).
+
+\input{common/tex/preamble.tex}
+\setmemonumber{2026-004}
+
+\title{\en{Second-order transfer maps of a drift space, a sector dipole magnet, and a quadrupole magnet}%
+       \ja{ドリフトスペース，扇型偏向磁石，四極磁石の 2 次の転送写像}}
+\author{Hirokazu Maesaka}
+\date{Memo~\memonumber, 2026}
+
+\begin{document}
+\maketitle
+
+% Title slide. The slides of each section are written at the end of that section (see AGENTS.md).
+\slidetitle{\en{Second-order transfer maps of a drift space, a sector dipole magnet, and a quadrupole magnet}%
+            \ja{ドリフトスペース，扇型偏向磁石，四極磁石の 2 次の転送写像}}
+\slidepoint{\en{Second-order terms T_ijk from the equations of motion through second order}%
+            \ja{2 次までの運動方程式から 2 次の項 T_ijk を導く}}
+\slidenote{\en{Starts from Memo 2026-002 (linear matrices) and Memo 2026-003 (second-order EOM).}%
+           \ja{メモ 2026-002（線形行列）とメモ 2026-003（2 次の運動方程式）から出発する。}}
+
+\section{\en{Scope and conventions}\ja{対象と記号の規約}}
+
+\en{This memo derives the second-order transfer map of a drift space, a sector dipole magnet, and a quadrupole
+magnet. The starting points are the linear transfer matrices of \cite{2026-002} and the equations of motion (EOM)
+through second order of \cite[Sec.~3]{2026-003}. The assumptions are those of \cite{2026-002}: static field,
+$k_s = 0$, constant $h$ and $k$ in each element, hard-edge model, and a sector dipole magnet with perpendicular end
+faces. Quadrupole curvature corrections, which are neglected in \cite{2026-001}, are not included. Every result is
+verified with sympy in the companion notebook \texttt{second\_order\_map.py}, and numerically against the exact
+EOM.}%
+\ja{本メモでは，ドリフトスペース，扇型偏向磁石，四極磁石の 2 次の転送写像を導く。出発点は，\cite{2026-002} の
+線形転送行列と，\cite[第 3 節]{2026-003} の 2 次までの運動方程式である。仮定は \cite{2026-002} と同じで，
+静磁場，$k_s = 0$，各要素の中で $h$ と $k$ が一定，ハードエッジモデル，端面が垂直な扇型偏向磁石である。
+\cite{2026-001} で無視した四極磁石の曲率補正は含めない。すべての結果は，付随するノートブック
+\texttt{second\_order\_map.py} で sympy により検証し，さらに厳密な運動方程式に対して数値的にも確認している。}
+
+\en{The phase-space vector is $\mathbf{u} = (x, p_x, y, p_y, z, \delta)^\mathsf{T}$ with the conventions of
+\cite{2026-001}. The momenta $p_x$ and $p_y$ are the canonical momenta normalized by $P_0$; they are not the slopes
+$x'$ and $y'$, which differ from them at second order.}%
+\ja{位相空間ベクトルは $\mathbf{u} = (x, p_x, y, p_y, z, \delta)^\mathsf{T}$ であり，記号の規約は \cite{2026-001}
+に従う。運動量 $p_x$，$p_y$ は $P_0$ で規格化した正準運動量であり，傾き $x'$，$y'$ ではない。両者は 2 次で
+異なる。}
+
+% Slides for this section.
+\slidetitle{\en{Scope and conventions}\ja{対象と記号の規約}}
+\slidepoint{\en{Elements: drift space, sector dipole magnet, quadrupole magnet}%
+            \ja{対象: ドリフトスペース，扇型偏向磁石，四極磁石}}
+\slidepoint{\en{Starting points: Memo 2026-002 (R_ij) and Memo 2026-003 (EOM)}%
+            \ja{出発点: メモ 2026-002（R_ij）とメモ 2026-003（運動方程式）}}
+\slidepoint{\en{p_x, p_y are canonical momenta normalized by P0, not slopes}%
+            \ja{p_x，p_y は P0 で規格化した正準運動量であり，傾きではない}}
+
+\section{\en{Second-order solution of the equations of motion}\ja{運動方程式の 2 次の解}}
+\label{sec:duhamel}
+
+\en{The EOM through second order of \cite[Sec.~3]{2026-003} are $\mathbf{u}' = \mathbf{A}\mathbf{u} +
+\mathbf{f}_2(\mathbf{u})$, where $\mathbf{A}$ is the matrix of \cite[Sec.~2]{2026-002} and $\mathbf{f}_2$ is the
+quadratic part obtained from the cubic Hamiltonian $H_3$,}%
+\ja{2 次までの運動方程式 \cite[第 3 節]{2026-003} は $\mathbf{u}' = \mathbf{A}\mathbf{u} +
+\mathbf{f}_2(\mathbf{u})$ である。ここで $\mathbf{A}$ は \cite[第 2 節]{2026-002} の行列であり，$\mathbf{f}_2$ は
+3 次のハミルトニアン $H_3$ から得られる 2 次の部分である。}
+\begin{equation}
+  H_3 = (hx - \delta)\,\frac{p_x^2 + p_y^2}{2} + (hx - \delta)\,\frac{\delta^2}{2\gamma_0^2},
+  \label{eq:H3}
+\end{equation}
+\begin{equation}
+  \mathbf{f}_2 = \Big(\frac{\partial H_3}{\partial p_x},\ -\frac{\partial H_3}{\partial x},\
+  \frac{\partial H_3}{\partial p_y},\ -\frac{\partial H_3}{\partial y},\ \frac{\partial H_3}{\partial \delta},\
+  0\Big)^\mathsf{T} .
+  \label{eq:f2}
+\end{equation}
+\en{Write the solution as $\mathbf{u}(L) = \mathbf{M}(L)\,\mathbf{u}_0 + \mathbf{w}(L)$, where $\mathbf{M}$ is the
+linear transfer matrix and $\mathbf{w}$ is of second order in the entrance vector $\mathbf{u}_0$. Inserting this
+into the EOM and keeping the second-order terms, where $\mathbf{f}_2$ is evaluated on the first-order solution
+$\mathbf{M}\mathbf{u}_0$, gives}%
+\ja{解を $\mathbf{u}(L) = \mathbf{M}(L)\,\mathbf{u}_0 + \mathbf{w}(L)$ と書く。$\mathbf{M}$ は線形転送行列，
+$\mathbf{w}$ は入口のベクトル $\mathbf{u}_0$ について 2 次の項である。これを運動方程式に代入し，
+$\mathbf{f}_2$ を 1 次の解 $\mathbf{M}\mathbf{u}_0$ で評価して 2 次の項を残すと}
+\begin{equation}
+  \mathbf{w}' = \mathbf{A}\,\mathbf{w} + \mathbf{f}_2\big(\mathbf{M}(L)\,\mathbf{u}_0\big), \qquad \mathbf{w}(0) = 0 .
+  \label{eq:w_ode}
+\end{equation}
+\en{With $\mathbf{w} = \mathbf{M}\mathbf{v}$ and $\mathbf{M}' = \mathbf{A}\mathbf{M}$ this becomes
+$\mathbf{v}' = \mathbf{M}^{-1}\mathbf{f}_2$, and $\mathbf{M}(L)\,\mathbf{M}(s)^{-1} = \mathbf{M}(L - s)$ for a
+constant $\mathbf{A}$. The variation-of-constants (Duhamel) solution is therefore}%
+\ja{$\mathbf{w} = \mathbf{M}\mathbf{v}$ とおき $\mathbf{M}' = \mathbf{A}\mathbf{M}$ を用いると
+$\mathbf{v}' = \mathbf{M}^{-1}\mathbf{f}_2$ となる。$\mathbf{A}$ が一定なら
+$\mathbf{M}(L)\,\mathbf{M}(s)^{-1} = \mathbf{M}(L - s)$ である。したがって定数変化法（Duhamel の公式）による解は}
+\begin{equation}
+  \mathbf{w}(L) = \int_0^L \mathbf{M}(L - s)\;\mathbf{f}_2\big(\mathbf{M}(s)\,\mathbf{u}_0\big)\,ds .
+  \label{eq:duhamel}
+\end{equation}
+\en{Each component of $\mathbf{w}$ is a quadratic form in $\mathbf{u}_0$. The second-order transfer map is defined by}%
+\ja{$\mathbf{w}$ の各成分は $\mathbf{u}_0$ の 2 次形式である。2 次の転送写像は}
+\begin{equation}
+  u_i(L) = \sum_j R_{ij}\,u_{0j} + \sum_{j \le k} T_{ijk}\,u_{0j}\,u_{0k}, \qquad R_{ij} = M_{ij},
+  \label{eq:Tijk}
+\end{equation}
+\en{so $T_{ijk}$ is the coefficient of the monomial $u_{0j}u_{0k}$ in $w_i$, with each pair $j \le k$ counted once
+(the convention of TRANSPORT). The notebook evaluates \eqref{eq:duhamel} with sympy for each element, one monomial
+at a time. All integrands are products of $\sin$, $\cos$, $\sinh$, $\cosh$, and powers of $s$.}%
+\ja{により定義する。$T_{ijk}$ は $w_i$ における単項式 $u_{0j}u_{0k}$ の係数であり，各組 $j \le k$ を 1 回だけ数える
+（TRANSPORT の規約）。ノートブックでは，各要素について \eqref{eq:duhamel} を単項式ごとに sympy で積分する。
+被積分関数は $\sin$，$\cos$，$\sinh$，$\cosh$ と $s$ の冪の積である。}
+
+% Slides for this section.
+\slidetitle{\en{Second-order solution}\ja{運動方程式の 2 次の解}}
+\slidemath{\mathbf{u}' = \mathbf{A}\mathbf{u} + \mathbf{f}_2(\mathbf{u}), \qquad \mathbf{u}(L) = \mathbf{M}\mathbf{u}_0 + \mathbf{w}(L)}
+\slidemath{\mathbf{w}' = \mathbf{A}\,\mathbf{w} + \mathbf{f}_2\big(\mathbf{M}(L)\,\mathbf{u}_0\big), \qquad \mathbf{w}(0) = 0}
+\slidemath{\mathbf{w}(L) = \int_0^L \mathbf{M}(L - s)\;\mathbf{f}_2\big(\mathbf{M}(s)\,\mathbf{u}_0\big)\,ds}
+
+\slidetitle{\en{Second-order transfer map}\ja{2 次の転送写像}}
+\slidemath{u_i(L) = \sum_j R_{ij}\,u_{0j} + \sum_{j \le k} T_{ijk}\,u_{0j}\,u_{0k}}
+\slidepoint{\en{T_ijk: coefficient of u_0j u_0k in w_i, each pair j <= k once}%
+            \ja{T_ijk は w_i における u_0j u_0k の係数（j ≤ k を 1 回ずつ）}}
+
+\section{\en{Drift space}\ja{ドリフトスペース}}
+\label{sec:drift2}
+
+\en{With $h = 0$ the only second-order terms of $\mathbf{f}_2$ are $x' \ni -\delta\,p_x$, $y' \ni -\delta\,p_y$, and
+$z' \ni -(p_x^2 + p_y^2)/2 - 3\delta^2/(2\gamma_0^2)$, and the first-order solution has constant $p_x$, $p_y$, and
+$\delta$. Integrating over $L$ gives}%
+\ja{$h = 0$ では $\mathbf{f}_2$ の 2 次の項は $x' \ni -\delta\,p_x$，$y' \ni -\delta\,p_y$，
+$z' \ni -(p_x^2 + p_y^2)/2 - 3\delta^2/(2\gamma_0^2)$ だけであり，1 次の解では $p_x$，$p_y$，$\delta$ は一定である。
+$L$ にわたって積分すると}
+\begin{equation}
+  \begin{aligned}
+    w_1 &= -L\,\delta_0\,p_{x0}, \qquad w_3 = -L\,\delta_0\,p_{y0}, \qquad w_2 = w_4 = w_6 = 0, \\
+    w_5 &= -\frac{L}{2}\,(p_{x0}^2 + p_{y0}^2) - \frac{3L}{2\gamma_0^2}\,\delta_0^2 .
+  \end{aligned}
+  \label{eq:w_drift}
+\end{equation}
+\en{The nonzero elements are $T_{126}$, $T_{346}$, $T_{522}$, $T_{544}$, and $T_{566}$. The terms $-L\delta_0 p_{x0}$
+and $-L\delta_0 p_{y0}$ are the change of the slope with the momentum, $x' = p_x/(1 + \delta) \approx p_x(1 - \delta)$,
+and $-L(p_{x0}^2 + p_{y0}^2)/2$ is the path-length increase of a slanted trajectory.}%
+\ja{非零の要素は $T_{126}$，$T_{346}$，$T_{522}$，$T_{544}$，$T_{566}$ である。$-L\delta_0 p_{x0}$ と
+$-L\delta_0 p_{y0}$ は，運動量による傾きの変化 $x' = p_x/(1 + \delta) \approx p_x(1 - \delta)$ であり，
+$-L(p_{x0}^2 + p_{y0}^2)/2$ は，傾いた軌道の経路長の増加である。}
+
+% Slides for this section.
+\slidetitle{\en{Drift space: second-order terms}\ja{ドリフトスペース: 2 次の項}}
+\slidemath{w_1 = -L\,\delta_0\,p_{x0}, \qquad w_3 = -L\,\delta_0\,p_{y0}}
+\slidemath{w_5 = -\frac{L}{2}\,(p_{x0}^2 + p_{y0}^2) - \frac{3L}{2\gamma_0^2}\,\delta_0^2}
+\slidepoint{\en{w_2 = w_4 = w_6 = 0; nonzero: T126, T346, T522, T544, T566}%
+            \ja{w_2 = w_4 = w_6 = 0。非零: T126，T346，T522，T544，T566}}
+
+\section{\en{Sector dipole magnet}\ja{扇型偏向磁石}}
+\label{sec:bend2}
+
+\en{With $h \neq 0$ and $k = 0$, let $\theta = hL$. The first-order solution of \cite[Sec.~4]{2026-002} is
+inserted into $\mathbf{f}_2$, and \eqref{eq:duhamel} contains only products of $\sin hs$ and $\cos hs$. The result
+is}%
+\ja{$h \neq 0$，$k = 0$ とし，$\theta = hL$ とおく。\cite[第 4 節]{2026-002} の 1 次の解を $\mathbf{f}_2$ に代入すると，
+\eqref{eq:duhamel} の被積分関数は $\sin hs$ と $\cos hs$ の積だけになる。結果は}
+\begin{equation}
+  \begin{aligned}
+    w_1 &= -\frac{h\sin^2\theta}{2}\,x_0^2 + \sin\theta\cos\theta\,x_0 p_{x0} + \sin^2\theta\,x_0\delta_0
+      - \frac{\sin\theta\cos\theta}{h}\,p_{x0}\delta_0 \\
+      &\quad + \frac{\cos\theta\,(1-\cos\theta)}{2h}\,p_{x0}^2 - \frac{1-\cos\theta}{2h}\,p_{y0}^2
+      - \Big[\frac{\sin^2\theta}{2h} + \frac{1-\cos\theta}{2\gamma_0^2 h}\Big]\delta_0^2 , \\
+    w_2 &= -\frac{\sin\theta}{2}\Big(p_{x0}^2 + p_{y0}^2 + \frac{\delta_0^2}{\gamma_0^2}\Big), \\
+    w_3 &= \sin\theta\,x_0 p_{y0} + \frac{1-\cos\theta}{h}\,p_{x0}p_{y0} - \frac{\sin\theta}{h}\,p_{y0}\delta_0 , \\
+    w_5 &= -\frac{\sin\theta}{2h}\,(p_{x0}^2 + p_{y0}^2) + \frac{\sin\theta}{\gamma_0^2}\,x_0\delta_0
+      + \frac{1-\cos\theta}{\gamma_0^2 h}\,p_{x0}\delta_0 - \frac{3\sin\theta}{2\gamma_0^2 h}\,\delta_0^2 , \\
+    w_4 &= w_6 = 0 .
+  \end{aligned}
+  \label{eq:w_bend}
+\end{equation}
+\en{There are 18 nonzero elements $T_{ijk}$. The terms in $w_2$ are the sagitta effect: a particle with a transverse
+slope or a momentum deviation travels on a longer arc in the bend, so $p_x$ changes by $-\sin\theta\,p_\perp^2/2$. The
+terms of $w_1$ with $\delta_0$ are the chromatic changes of the orbit, and the terms of $w_5$ are the path-length
+changes. For $h \to 0$ (with $L$ fixed) \eqref{eq:w_bend} tends to \eqref{eq:w_drift}.}%
+\ja{非零の要素 $T_{ijk}$ は 18 個ある。$w_2$ の項は矢高の効果である。横方向に傾いた粒子や運動量偏差を持つ粒子は
+偏向部でより長い弧を通るので，$p_x$ は $-\sin\theta\,p_\perp^2/2$ だけ変化する。$w_1$ の $\delta_0$ を含む項は
+軌道の運動量による変化であり，$w_5$ の項は経路長の変化である。$h \to 0$（$L$ 固定）で \eqref{eq:w_bend} は
+\eqref{eq:w_drift} に近づく。}
+
+% Slides for this section.
+\slidetitle{\en{Sector dipole magnet: x}\ja{扇型偏向磁石: x}}
+\slidepoint{\en{theta = hL; Duhamel integrals contain only sin and cos of hs}%
+            \ja{θ = hL。Duhamel の積分は sin hs と cos hs の積だけ}}
+\slidemath{w_1 = -\frac{h\sin^2\theta}{2}\,x_0^2 + \sin\theta\cos\theta\,x_0 p_{x0} + \sin^2\theta\,x_0\delta_0}
+\slidemath{\qquad - \frac{\sin\theta\cos\theta}{h}\,p_{x0}\delta_0 + \frac{\cos\theta\,(1-\cos\theta)}{2h}\,p_{x0}^2}
+\slidemath{\qquad - \frac{1-\cos\theta}{2h}\,p_{y0}^2 - \Big[\frac{\sin^2\theta}{2h} + \frac{1-\cos\theta}{2\gamma_0^2 h}\Big]\delta_0^2}
+
+\slidetitle{\en{Sector dipole magnet: p_x, y, and z}\ja{扇型偏向磁石: p_x，y，z}}
+\slidemath{w_2 = -\frac{\sin\theta}{2}\Big(p_{x0}^2 + p_{y0}^2 + \frac{\delta_0^2}{\gamma_0^2}\Big)}
+\slidemath{w_3 = \sin\theta\,x_0 p_{y0} + \frac{1-\cos\theta}{h}\,p_{x0}p_{y0} - \frac{\sin\theta}{h}\,p_{y0}\delta_0}
+\slidemath{w_5 = -\frac{\sin\theta}{2h}\,(p_{x0}^2 + p_{y0}^2) + \frac{\sin\theta}{\gamma_0^2}\,x_0\delta_0}
+\slidemath{\qquad + \frac{1-\cos\theta}{\gamma_0^2 h}\,p_{x0}\delta_0 - \frac{3\sin\theta}{2\gamma_0^2 h}\,\delta_0^2}
+
+\section{\en{Quadrupole magnet}\ja{四極磁石}}
+\label{sec:quad2}
+
+\en{With $h = 0$ and $k = g^2 > 0$, let $\varphi = gL$. In $\mathbf{f}_2$ only the terms $x' \ni -\delta p_x$,
+$y' \ni -\delta p_y$ and the $z'$ terms of the drift space remain, so the second-order terms are the effect of
+these terms on the first-order oscillation \cite[Sec.~5]{2026-002}:}%
+\ja{$h = 0$，$k = g^2 > 0$ とし，$\varphi = gL$ とおく。$\mathbf{f}_2$ に残るのは $x' \ni -\delta p_x$，
+$y' \ni -\delta p_y$ とドリフトスペースの $z'$ の項だけであり，2 次の項はこれらが 1 次の振動
+\cite[第 5 節]{2026-002} に及ぼす効果である。}
+\begin{equation}
+  \begin{aligned}
+    w_1 &= \frac{\delta_0}{2g}\Big[g^2 L\sin\varphi\;x_0 - (\varphi\cos\varphi + \sin\varphi)\,p_{x0}\Big], \\
+    w_2 &= \frac{g\,\delta_0}{2}\Big[(\varphi\cos\varphi - \sin\varphi)\,x_0 + L\sin\varphi\;p_{x0}\Big], \\
+    w_3 &= -\frac{\delta_0}{2g}\Big[g^2 L\sinh\varphi\;y_0 + (\varphi\cosh\varphi + \sinh\varphi)\,p_{y0}\Big], \\
+    w_4 &= -\frac{g\,\delta_0}{2}\Big[(\varphi\cosh\varphi - \sinh\varphi)\,y_0 + L\sinh\varphi\;p_{y0}\Big], \\
+    w_5 &= -\frac{3L}{2\gamma_0^2}\,\delta_0^2
+      - \frac{1}{8g}\Big[g^2(2\varphi - \sin 2\varphi)\,x_0^2 - 4g\sin^2\varphi\;x_0 p_{x0}
+      + (2\varphi + \sin 2\varphi)\,p_{x0}^2 \\
+      &\qquad - g^2(2\varphi - \sinh 2\varphi)\,y_0^2 + 4g\sinh^2\varphi\;y_0 p_{y0}
+      + (2\varphi + \sinh 2\varphi)\,p_{y0}^2\Big], \\
+    w_6 &= 0 .
+  \end{aligned}
+  \label{eq:w_quad}
+\end{equation}
+\en{There are 15 nonzero elements $T_{ijk}$. All second-order terms of $x$, $p_x$, $y$, and $p_y$ are proportional to
+$\delta_0$, which is the chromatic effect of $x' = p_x(1 - \delta)$ on the oscillation. The terms of $w_5$ come from
+the slopes and from $\delta_0^2$. For $k = -g^2 < 0$ the equations of the two planes are exchanged, so
+$\mathbf{w}_{k<0}(\mathbf{u}_0) = \mathbf{P}\,\mathbf{w}_{k>0}(\mathbf{P}\,\mathbf{u}_0)$, where the permutation
+$\mathbf{P}$ exchanges $(x, p_x)$ and $(y, p_y)$.}%
+\ja{非零の要素 $T_{ijk}$ は 15 個ある。$x$，$p_x$，$y$，$p_y$ の 2 次の項はすべて $\delta_0$ に比例する。これは
+$x' = p_x(1 - \delta)$ が振動に及ぼすクロマティックな効果である。$w_5$ の項は傾きと $\delta_0^2$ から生じる。
+$k = -g^2 < 0$ では二つの面の方程式が入れ替わるので，$(x, p_x)$ と $(y, p_y)$ を入れ替える置換 $\mathbf{P}$ を用いて
+$\mathbf{w}_{k<0}(\mathbf{u}_0) = \mathbf{P}\,\mathbf{w}_{k>0}(\mathbf{P}\,\mathbf{u}_0)$ である。}
+
+\en{In the thin-lens limit, $L \to 0$ with $q = kL$ fixed, all of $\mathbf{w}$ tends to zero: a thin quadrupole has no
+second-order terms in the canonical variables $x$ and $p_x$, because the kick $\Delta p_x = -q\,x$ does not depend on
+$\delta$. The chromatic focusing appears only through the conversion $x' = p_x(1 - \delta)$ in the following drift
+space.}%
+\ja{薄肉レンズ近似（$q = kL$ を一定にして $L \to 0$）では $\mathbf{w}$ はすべてゼロに近づく。キック
+$\Delta p_x = -q\,x$ は $\delta$ に依らないので，薄い四極磁石は正準変数 $x$，$p_x$ について 2 次の項を持たない。
+クロマティックな集束は，続くドリフトスペースでの $x' = p_x(1 - \delta)$ への変換を通してだけ現れる。}
+
+% Slides for this section.
+\slidetitle{\en{Quadrupole magnet (k = g^2 > 0)}\ja{四極磁石（k = g^2 > 0）}}
+\slidemath{w_1 = \frac{\delta_0}{2g}\Big[g^2 L\sin\varphi\;x_0 - (\varphi\cos\varphi + \sin\varphi)\,p_{x0}\Big]}
+\slidemath{w_2 = \frac{g\,\delta_0}{2}\Big[(\varphi\cos\varphi - \sin\varphi)\,x_0 + L\sin\varphi\;p_{x0}\Big]}
+\slidemath{w_3 = -\frac{\delta_0}{2g}\Big[g^2 L\sinh\varphi\;y_0 + (\varphi\cosh\varphi + \sinh\varphi)\,p_{y0}\Big]}
+\slidemath{w_4 = -\frac{g\,\delta_0}{2}\Big[(\varphi\cosh\varphi - \sinh\varphi)\,y_0 + L\sinh\varphi\;p_{y0}\Big]}
+
+\slidetitle{\en{Quadrupole magnet: z}\ja{四極磁石: z}}
+\slidemath{w_5 = -\frac{3L}{2\gamma_0^2}\,\delta_0^2 - \frac{1}{8g}\Big[g^2(2\varphi - \sin 2\varphi)\,x_0^2}
+\slidemath{\qquad - 4g\sin^2\varphi\;x_0 p_{x0} + (2\varphi + \sin 2\varphi)\,p_{x0}^2 + (y\ \text{terms})\Big]}
+\slidepoint{\en{k < 0: exchange (x, p_x) and (y, p_y)}\ja{k < 0: (x, p_x) と (y, p_y) を入れ替える}}
+\slidepoint{\en{Thin lens: all second-order terms vanish in the canonical variables}%
+            \ja{薄肉レンズ近似: 正準変数では 2 次の項はすべて消える}}
+
+\section{\en{Checks}\ja{確認}}
+
+\en{The notebook performs the following checks for every element, including the quadrupole with $k < 0$.}%
+\ja{ノートブックでは，$k < 0$ の四極磁石を含む各要素について次の確認を行っている。}
+\begin{enumerate}
+  \item \en{Duhamel's integrals agree with the closed forms \eqref{eq:w_drift}--\eqref{eq:w_quad}.}%
+        \ja{Duhamel の積分は閉じた式 \eqref{eq:w_drift}--\eqref{eq:w_quad} と一致する。}
+  \item \en{The closed forms satisfy \eqref{eq:w_ode} and $\mathbf{w}(0) = 0$ (residual of the order of $10^{-16}$).}%
+        \ja{閉じた式は \eqref{eq:w_ode} と $\mathbf{w}(0) = 0$ を満たす（残差は $10^{-16}$ 程度）。}
+  \item \en{Second-order symplectic condition. The map $\mathbf{P}(\mathbf{u}_0) = \mathbf{M}\mathbf{u}_0 +
+    \mathbf{w}(\mathbf{u}_0)$ is symplectic through first order in $\mathbf{u}_0$ if
+    $\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{W} + \mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{M} = 0$ with
+    $\mathbf{W} = \partial\mathbf{w}/\partial\mathbf{u}_0$. This relates elements of $T_{ijk}$ and $R_{ij}$, and it
+    holds for all elements.}%
+        \ja{2 次のシンプレクティック条件。写像 $\mathbf{P}(\mathbf{u}_0) = \mathbf{M}\mathbf{u}_0 +
+        \mathbf{w}(\mathbf{u}_0)$ が $\mathbf{u}_0$ の 1 次までシンプレクティックであるための条件は，
+        $\mathbf{W} = \partial\mathbf{w}/\partial\mathbf{u}_0$ として
+        $\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{W} + \mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{M} = 0$ である。
+        これは $T_{ijk}$ と $R_{ij}$ の要素を結びつけ，すべての要素で成り立つ。}
+  \item \en{Composition: for two sections of the same element,
+    $\mathbf{w}(L_1 + L_2) = \mathbf{M}(L_2)\,\mathbf{w}(L_1) + \mathbf{w}_{L_2}(\mathbf{M}(L_1)\,\mathbf{u}_0)$.}%
+        \ja{合成則: 同じ要素の二つの区間について，
+        $\mathbf{w}(L_1 + L_2) = \mathbf{M}(L_2)\,\mathbf{w}(L_1) + \mathbf{w}_{L_2}(\mathbf{M}(L_1)\,\mathbf{u}_0)$
+        が成り立つ。}
+  \item \en{Limits: the dipole tends to the drift space for $h \to 0$ and the quadrupole for $g \to 0$.}%
+        \ja{極限: $h \to 0$ で偏向磁石が，$g \to 0$ で四極磁石がドリフトスペースに近づく。}
+  \item \en{Comparison with the exact EOM, integrated numerically for the amplitude $a = 2\times 10^{-3}$ and for
+    $a/2$: the error of the linear map scales as $a^2$ (ratio 4.0), and that of the second-order map as $a^3$
+    (ratio 8.0), for every element. At $a = 2\times 10^{-3}$ the second-order map is more accurate than the
+    linear map by a factor of 300 to 400.}%
+        \ja{厳密な運動方程式との比較。振幅 $a = 2\times 10^{-3}$ と $a/2$ で数値積分すると，すべての要素で，
+        線形写像の誤差は $a^2$（比 4.0），2 次の写像の誤差は $a^3$（比 8.0）に比例する。$a = 2\times 10^{-3}$ では，
+        2 次の写像は線形写像より 300 倍から 400 倍精度が高い。}
+\end{enumerate}
+
+% Slides for this section.
+\slidetitle{\en{Checks}\ja{確認}}
+\slidepoint{\en{Duhamel integrals match the closed forms; ODE residual about 1e-16}%
+            \ja{Duhamel の積分は閉じた式と一致，ODE の残差は 1e-16 程度}}
+\slidepoint{\en{Second-order symplectic condition and composition hold for every element}%
+            \ja{2 次のシンプレクティック条件と合成則が全要素で成立}}
+\slidepoint{\en{Error scaling against the exact EOM: a^2 (linear), a^3 (second order)}%
+            \ja{厳密な運動方程式との誤差: 線形は a^2，2 次は a^3}}
+
+\section{\en{Summary and open points}\ja{まとめと未解決の点}}
+
+\begin{enumerate}
+  \item \en{$\mathbf{w}(L) = \int_0^L \mathbf{M}(L-s)\,\mathbf{f}_2(\mathbf{M}(s)\mathbf{u}_0)\,ds$, and $T_{ijk}$ is the
+    coefficient of $u_{0j}u_{0k}$ ($j \le k$) in $w_i$.}%
+        \ja{$\mathbf{w}(L) = \int_0^L \mathbf{M}(L-s)\,\mathbf{f}_2(\mathbf{M}(s)\mathbf{u}_0)\,ds$ であり，
+        $T_{ijk}$ は $w_i$ における $u_{0j}u_{0k}$（$j \le k$）の係数である。}
+  \item \en{Drift space: \eqref{eq:w_drift}, 5 nonzero elements. Sector dipole magnet: \eqref{eq:w_bend}, 18 nonzero
+    elements. Quadrupole magnet: \eqref{eq:w_quad}, 15 nonzero elements.}%
+        \ja{ドリフトスペース: \eqref{eq:w_drift}，非零の要素は 5 個。扇型偏向磁石: \eqref{eq:w_bend}，18 個。
+        四極磁石: \eqref{eq:w_quad}，15 個。}
+  \item \en{A thin quadrupole has no second-order terms in the canonical variables.}%
+        \ja{薄い四極磁石は，正準変数では 2 次の項を持たない。}
+  \item \en{Open points, not covered here: the chromaticity of a ring from these maps (it needs a periodic ring and
+    the dispersion) and the conversion of $T_{ijk}$ to the slopes $x'$ and $y'$; fringe fields, edge focusing, and
+    the combined-function magnet; sextupole and octupole terms, quadrupole curvature corrections, the skew
+    quadrupole, and RF.}%
+        \ja{本メモで扱わない点: これらの写像から得られるリングのクロマティシティ（周期的なリングと分散が必要）と，
+        $T_{ijk}$ から傾き $x'$，$y'$ への変換，端部の漏れ磁場，エッジ集束，複合型磁石，六極磁石と八極磁石の項，
+        四極磁石の曲率補正，スキュー四極磁石，RF。}
+\end{enumerate}
+
+% Slides for this section.
+\slidetitle{\en{Summary}\ja{まとめ}}
+\slidemath{\mathbf{w}(L) = \int_0^L \mathbf{M}(L-s)\,\mathbf{f}_2\big(\mathbf{M}(s)\mathbf{u}_0\big)\,ds}
+\slidepoint{\en{Nonzero T_ijk: drift 5, sector dipole 18, quadrupole 15}%
+            \ja{非零の T_ijk: ドリフト 5 個，偏向磁石 18 個，四極磁石 15 個}}
+\slidepoint{\en{Not covered: chromaticity of a ring, edge focusing, sextupoles, RF}%
+            \ja{未対応: リングのクロマティシティ，エッジ集束，六極磁石，RF}}
+
+\printbibliography[title={\en{References}\ja{参考文献}}]
+
+\section*{\en{License}\ja{ライセンス}}
+\en{This document is licensed under CC BY 4.0. Code snippets are GPL-3.0-or-later. See \texttt{LICENSING.md}.}%
+\ja{本文書は CC BY 4.0 で提供する。コードの断片は GPL-3.0-or-later である。詳細は \texttt{LICENSING.md} を参照すること。}
+
+\end{document}

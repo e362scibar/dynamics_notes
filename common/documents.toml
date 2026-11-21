@@ -32,3 +32,8 @@ status = "active"
 slug = "second_order_eom"
 title = "Canonical equations of motion expanded to second order in curvilinear coordinates"
 status = "active"
+
+[documents."2026-004"]
+slug = "second_order_map"
+title = "Second-order transfer maps of a drift space, a sector dipole magnet, and a quadrupole magnet"
+status = "active"
