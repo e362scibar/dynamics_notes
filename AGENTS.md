@@ -60,7 +60,8 @@ Rules:
 - **Push to both remotes.** When a push is requested, push to `origin` and to `github`. Do not push to only one of them.
   - Push `devel` first: `git push origin devel` and `git push github devel`.
   - To fast-forward `main`, run `git push origin devel:main` and `git push github devel:main`. Do not force-push `main`.
-  - Check that the remotes are in sync afterwards (for example with `git fetch --all` and `git status -sb`).
+  - Whenever `main` is fast-forwarded on the remotes, fast-forward the local `main` branch as well, without being asked again. Stay on `devel` and run `git fetch . devel:main`, which refuses anything that is not a fast-forward. Do not check out `main`, and do not use `git branch -f`.
+  - Check that the remotes are in sync afterwards (for example with `git fetch --all` and `git status -sb`), and that local `main`, `origin/main`, and `github/main` point to the same commit as `devel`.
 - **Never commit reference PDFs.** Under `common/references/`, only `README.md` and `references.bib` are tracked. Do not `git add -f` other files there. Check `git status` before every commit.
 
 ## Environment
