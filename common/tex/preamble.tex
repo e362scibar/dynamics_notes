@@ -18,6 +18,11 @@
 \usepackage{luatexja-preset}
 \usepackage{etoolbox}
 \usepackage{amsmath,amssymb}
+% Japanese names for floats. The English build keeps the defaults.
+\ifx\memolang\memolangJA
+  \renewcommand{\figurename}{図}
+  \renewcommand{\tablename}{表}
+\fi
 \usepackage[style=numeric,backend=biber,sorting=none]{biblatex}
 \addbibresource{common/references/references.bib}
 % Memo numbers (YYYY-NNN) of the topics, generated from common/documents.toml. Cite a memo with \cite{YYYY-NNN}.
@@ -41,6 +46,8 @@
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.6em}
+% Allow a little extra stretch so that long bibliography entries and inline math do not overflow the margin.
+\setlength{\emergencystretch}{2em}
 
 % Slide markers (write build/<topic>/<jobname>.slides for common/slides/build_slides.py).
 \input{common/tex/slides.tex}

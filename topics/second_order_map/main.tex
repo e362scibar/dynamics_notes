@@ -249,6 +249,148 @@ $\Delta p_x = -q\,x$ は $\delta$ に依らないので，薄い四極磁石は�
 \slidepoint{\en{Thin lens: all second-order terms vanish in the canonical variables}%
             \ja{薄肉レンズ近似: 正準変数では 2 次の項はすべて消える}}
 
+\section{\en{Symplecticity of the truncated map}\ja{打ち切った写像のシンプレクティック性}}
+\label{sec:symplectic}
+
+\en{The exact map is symplectic. The map truncated at second order is not, and this section quantifies the defect.
+Write $\mathbf{D} = \partial\mathbf{P}/\partial\mathbf{u}_0 = \mathbf{M} + \mathbf{W}$ with
+$\mathbf{W} = \partial\mathbf{w}/\partial\mathbf{u}_0$. Since $\mathbf{M}$ is symplectic,
+$\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M} = \mathbf{J}$, the defect splits into two orders,}%
+\ja{厳密な写像はシンプレクティックである。2 次で打ち切った写像はそうではなく，本節ではその欠陥を定量化する。
+$\mathbf{D} = \partial\mathbf{P}/\partial\mathbf{u}_0 = \mathbf{M} + \mathbf{W}$，$\mathbf{W} = \partial\mathbf{w}/\partial\mathbf{u}_0$
+とおく。$\mathbf{M}$ はシンプレクティックで $\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{M} = \mathbf{J}$ であるから，
+欠陥は 2 つの次数に分かれる。}
+\begin{equation}
+  \mathbf{D}^\mathsf{T}\mathbf{J}\mathbf{D} - \mathbf{J}
+  = \underbrace{\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{W} + \mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{M}}_{\mathcal{O}(u_0)}
+  + \underbrace{\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}}_{\mathcal{O}(u_0^2)} .
+  \label{eq:defect_split}
+\end{equation}
+\en{The first group vanishes identically for every element: this is the second-order symplectic condition checked
+below. The first non-vanishing term is therefore $\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}$, which is quadratic in
+$\mathbf{u}_0$. The map truncated at second order is thus symplectic through first order in $\mathbf{u}_0$ and not
+beyond.}%
+\ja{第 1 群はすべての要素で恒等的にゼロである。これが以下で確認する 2 次のシンプレクティック条件である。
+したがって最初に残る項は $\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}$ であり，$\mathbf{u}_0$ について 2 次である。
+2 次で打ち切った写像は $\mathbf{u}_0$ の 1 次までシンプレクティックであり，それ以上ではない。}
+
+\en{The result for the three elements is summarised in Table~\ref{tab:defect}.}%
+\ja{3 つの要素についての結果を表~\ref{tab:defect} にまとめる。}
+\begin{table}[htbp]
+  \centering
+  \begin{tabular}{lll}
+    \hline
+    \en{Element}\ja{要素} & $\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}$ & $\det\mathbf{D} - 1$ \\
+    \hline
+    \en{Drift space}\ja{ドリフトスペース} & $0$ (\en{exact}\ja{厳密}) & $0$ (\en{exact}\ja{厳密}) \\
+    \en{Sector dipole}\ja{扇型偏向磁石} & $\sin^2\theta \times$ \en{rank 2}\ja{階数 2} & $-p_{x0}\,p_x(L)\sin^2\theta$ \\
+    \en{Quadrupole}\ja{四極磁石} & $\delta_0^2 \times$ \en{rank 4}\ja{階数 4} & $\approx L^4\delta_0^2 g^4/6$ \\
+    \hline
+  \end{tabular}
+  \caption{\en{Defect of the second-order map.}\ja{2 次の写像の欠陥。}}
+  \label{tab:defect}
+\end{table}
+
+\en{\textbf{Drift space.} The truncated map is the exact flow of the polynomial Hamiltonian}%
+\ja{\textbf{ドリフトスペース。}打ち切った写像は，多項式ハミルトニアン}
+\begin{equation}
+  K = (1-\delta)\,\frac{p_x^2 + p_y^2}{2} + \frac{\delta^2}{2\gamma_0^2} - \frac{\delta^3}{2\gamma_0^2}
+  \label{eq:K_drift}
+\end{equation}
+\en{because $K$ does not depend on $x$, $y$, or $z$, so the momenta are constant and $x' = \partial K/\partial p_x$,
+$y' = \partial K/\partial p_y$, $z' = \partial K/\partial\delta$ integrate directly. A flow of a Hamiltonian is
+symplectic, so the drift map is symplectic to all orders, not only through second order.}%
+\ja{の厳密な流れである。$K$ は $x$，$y$，$z$ に依らないので運動量は一定であり，
+$x' = \partial K/\partial p_x$，$y' = \partial K/\partial p_y$，$z' = \partial K/\partial\delta$ はそのまま積分できる。
+ハミルトニアンの流れはシンプレクティックであるから，ドリフトの写像は 2 次までではなくすべての次数で
+シンプレクティックである。}
+
+\en{\textbf{Sector dipole magnet.} The defect is proportional to $\sin^2\theta$, so it is small for a weak bend but
+never vanishes. The determinant gives a compact measure,}%
+\ja{\textbf{扇型偏向磁石。}欠陥は $\sin^2\theta$ に比例するので，弱い偏向では小さいがゼロにはならない。
+行列式が簡潔な指標を与える。}
+\begin{equation}
+  \det\mathbf{D} - 1 = -p_{x0}\,p_x(L)\,\sin^2\theta ,
+  \qquad p_x(L) = \delta_0\sin\theta - h x_0\sin\theta + p_{x0}\cos\theta .
+  \label{eq:det_bend}
+\end{equation}
+\en{The defect vanishes on the reference orbit and for a particle with $p_{x0} = 0$ or $p_x(L) = 0$, and it is of
+order $\theta$ in the $(y, p_y, \delta)$ block and of order $\theta^2$ in the $(x, p_x)$ block.}%
+\ja{欠陥は基準軌道上で，また $p_{x0} = 0$ または $p_x(L) = 0$ の粒子でゼロになり，$(y, p_y, \delta)$ ブロックでは
+$\theta$ の次数，$(x, p_x)$ ブロックでは $\theta^2$ の次数である。}
+
+\en{\textbf{Quadrupole magnet.} With $A = (Lg)^2 - \sin^2(Lg)$ and $B = (Lg)^2 - \sinh^2(Lg)$, the twelve nonzero
+entries of $\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}$ are}%
+\ja{\textbf{四極磁石。}$A = (Lg)^2 - \sin^2(Lg)$，$B = (Lg)^2 - \sinh^2(Lg)$ とすると，
+$\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}$ の非零成分 12 個は}
+\begin{equation}
+  \begin{aligned}
+    \big(\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}\big)_{12} &= \frac{\delta_0^2 A}{4} , &
+    \big(\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}\big)_{16} &= \frac{\delta_0 p_{x0} A}{4} , &
+    \big(\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}\big)_{26} &= -\frac{\delta_0 x_0 A}{4} , \\
+    \big(\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}\big)_{34} &= -\frac{\delta_0^2 B}{4} , &
+    \big(\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}\big)_{36} &= -\frac{\delta_0 p_{y0} B}{4} , &
+    \big(\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}\big)_{46} &= \frac{\delta_0 y_0 B}{4} ,
+  \end{aligned}
+  \label{eq:defect_quad}
+\end{equation}
+\en{with the antisymmetric partners. The defect is proportional to $\delta_0^2$, so it vanishes for a particle at the
+reference momentum, and it vanishes in the thin-lens limit because $A, B = \mathcal{O}((Lg)^4)$ while the map itself
+is of order $L$.}%
+\ja{と反対称の成分である。欠陥は $\delta_0^2$ に比例するので基準運動量の粒子ではゼロになり，薄肉レンズ極限でも
+ゼロになる。$A$，$B$ は $\mathcal{O}((Lg)^4)$ である一方，写像自体は $L$ の次数だからである。}
+
+\en{\textbf{Why the defect appears.} The exact map is symplectic, so the third-order terms $\mathbf{t}$ of the map
+compensate the second-order defect,}%
+\ja{\textbf{欠陥が現れる理由。}厳密な写像はシンプレクティックであるから，写像の 3 次の項 $\mathbf{t}$ が
+2 次の欠陥を補償する。}
+\begin{equation}
+  \mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}
+  = -\big(\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{T} + \mathbf{T}^\mathsf{T}\mathbf{J}\mathbf{M}\big)
+  + \mathcal{O}(u_0^3) ,
+  \qquad \mathbf{T} = \frac{\partial\mathbf{t}}{\partial\mathbf{u}_0} .
+  \label{eq:defect_compensation}
+\end{equation}
+\en{The defect is therefore not an error of the coefficients $T_{ijk}$ but a consequence of truncating at second
+order.}%
+\ja{したがって欠陥は係数 $T_{ijk}$ の誤りではなく，2 次で打ち切ったことの結果である。}
+
+\en{\textbf{Generating function.} A symplectic map has a generating function. For a type-2 function
+$G(\mathbf{q}_0, \mathbf{p}_0)$ the second-order part must satisfy $\mathbf{w}_q = \partial G/\partial\mathbf{p}_0$ and
+$\mathbf{w}_p = -\partial G/\partial\mathbf{q}_0$, which requires}%
+\ja{\textbf{生成関数。}シンプレクティック写像は生成関数を持つ。2 型の関数 $G(\mathbf{q}_0, \mathbf{p}_0)$ に対して
+2 次の部分は $\mathbf{w}_q = \partial G/\partial\mathbf{p}_0$，$\mathbf{w}_p = -\partial G/\partial\mathbf{q}_0$ を
+満たす必要があり，そのためには}
+\begin{equation}
+  \frac{\partial w_{q,i}}{\partial q_{0j}} + \frac{\partial w_{p,j}}{\partial p_{0i}} = 0
+  \label{eq:integrability}
+\end{equation}
+\en{for all $i, j$. The drift space satisfies \eqref{eq:integrability} with $G = L\,K$ of \eqref{eq:K_drift}. The
+sector dipole magnet violates it in one entry and the quadrupole magnet in four, which is an independent proof that
+their second-order maps are not symplectic.}%
+\ja{がすべての $i$，$j$ について成り立つ必要がある。ドリフトスペースは \eqref{eq:K_drift} の $G = L\,K$ により
+\eqref{eq:integrability} を満たす。扇型偏向磁石は 1 箇所，四極磁石は 4 箇所でこれを破り，これらの 2 次の写像が
+シンプレクティックでないことの独立な証明になる。}
+
+\en{\textbf{Practical consequence.} Composing second-order maps of many elements accumulates the defect, because
+each map contributes an $\mathcal{O}(u_0^2)$ error that is not cancelled by the next one. For long-term tracking or
+for a ring, either keep the third-order terms or use a symplectic integrator, which splits the Hamiltonian into
+exactly solvable symplectic pieces instead of truncating the map.}%
+\ja{\textbf{実用上の帰結。}多数の要素の 2 次の写像を合成すると欠陥が蓄積する。各写像が
+$\mathcal{O}(u_0^2)$ の誤差を持ち，次の写像では相殺されないためである。長期のトラッキングやリングに対しては，
+3 次の項を残すか，写像を打ち切る代わりにハミルトニアンを厳密に解けるシンプレクティックな部分に分割する
+シンプレクティック積分器を用いる必要がある。}
+
+% Slides for this section.
+\slidetitle{\en{Symplecticity of the truncated map}\ja{打ち切った写像のシンプレクティック性}}
+\slidemath{\mathbf{D}^\mathsf{T}\mathbf{J}\mathbf{D} - \mathbf{J} = \big(\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{W} + \mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{M}\big) + \mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}}
+\slidepoint{\en{The O(u_0) group vanishes; the first defect is W^T J W, quadratic in u_0}%
+            \ja{O(u_0) の群はゼロ。最初の欠陥は W^T J W で u_0 の 2 次}}
+\slidepoint{\en{Drift: exact (flow of a polynomial Hamiltonian); dipole: sin^2(theta); quadrupole: delta_0^2}%
+            \ja{ドリフト: 厳密（多項式ハミルトニアンの流れ），偏向: sin^2(theta)，四極: delta_0^2}}
+\slidepoint{\en{The third-order terms compensate the defect: truncation, not a coefficient error}%
+            \ja{3 次の項が欠陥を補償する。係数の誤りではなく打ち切りの結果}}
+
 \section{\en{Checks}\ja{確認}}
 
 \en{The notebook performs the following checks for every element, including the quadrupole with $k < 0$.}%
@@ -306,13 +448,21 @@ $\Delta p_x = -q\,x$ は $\delta$ に依らないので，薄い四極磁石は�
         四極磁石: \eqref{eq:w_quad}，15 個。}
   \item \en{A thin quadrupole has no second-order terms in the canonical variables.}%
         \ja{薄い四極磁石は，正準変数では 2 次の項を持たない。}
+  \item \en{Symplecticity: the map truncated at second order is symplectic through first order in $\mathbf{u}_0$ only.
+    The first defect is $\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}$, quadratic in $\mathbf{u}_0$. It vanishes
+    identically for the drift space, scales as $\sin^2\theta$ for the sector dipole magnet, and as $\delta_0^2$ for
+    the quadrupole magnet. The third-order terms of the exact map compensate it.}%
+        \ja{シンプレクティック性: 2 次で打ち切った写像は $\mathbf{u}_0$ の 1 次までしかシンプレクティックでない。
+        最初の欠陥は $\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}$ で $\mathbf{u}_0$ の 2 次である。ドリフトスペースでは
+        恒等的にゼロ，扇型偏向磁石では $\sin^2\theta$，四極磁石では $\delta_0^2$ に比例する。厳密な写像の 3 次の項が
+        これを補償する。}
   \item \en{Open points, not covered here: the chromaticity of a ring from these maps (it needs a periodic ring and
-    the dispersion) and the conversion of $T_{ijk}$ to the slopes $x'$ and $y'$; fringe fields, edge focusing, and
-    the combined-function magnet; sextupole and octupole terms, quadrupole curvature corrections, the skew
-    quadrupole, and RF.}%
+    the dispersion) and the conversion of $T_{ijk}$ to the slopes $x'$ and $y'$; the third-order map and its
+    comparison with a symplectic integrator; fringe fields, edge focusing, and the combined-function magnet;
+    sextupole and octupole terms, quadrupole curvature corrections, the skew quadrupole, and RF.}%
         \ja{本メモで扱わない点: これらの写像から得られるリングのクロマティシティ（周期的なリングと分散が必要）と，
-        $T_{ijk}$ から傾き $x'$，$y'$ への変換，端部の漏れ磁場，エッジ集束，複合型磁石，六極磁石と八極磁石の項，
-        四極磁石の曲率補正，スキュー四極磁石，RF。}
+        $T_{ijk}$ から傾き $x'$，$y'$ への変換，3 次の写像とシンプレクティック積分器との比較，端部の漏れ磁場，
+        エッジ集束，複合型磁石，六極磁石と八極磁石の項，四極磁石の曲率補正，スキュー四極磁石，RF。}
 \end{enumerate}
 
 % Slides for this section.
@@ -320,6 +470,8 @@ $\Delta p_x = -q\,x$ は $\delta$ に依らないので，薄い四極磁石は�
 \slidemath{\mathbf{w}(L) = \int_0^L \mathbf{M}(L-s)\,\mathbf{f}_2\big(\mathbf{M}(s)\mathbf{u}_0\big)\,ds}
 \slidepoint{\en{Nonzero T_ijk: drift 5, sector dipole 18, quadrupole 15}%
             \ja{非零の T_ijk: ドリフト 5 個，偏向磁石 18 個，四極磁石 15 個}}
+\slidepoint{\en{Second-order map: symplectic only through first order; defect W^T J W}%
+            \ja{2 次の写像は 1 次までしかシンプレクティックでない。欠陥は W^T J W}}
 \slidepoint{\en{Not covered: chromaticity of a ring, edge focusing, sextupoles, RF}%
             \ja{未対応: リングのクロマティシティ，エッジ集束，六極磁石，RF}}
 

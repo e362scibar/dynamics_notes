@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.6
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: dynamics_notes
 #     language: python
@@ -341,6 +341,17 @@ for name, w in w_results.items():
 # 3. Second-order symplectic condition. The map $\mathbf{P}(\mathbf{u}_0) = \mathbf{M}\mathbf{u}_0 + \mathbf{w}(\mathbf{u}_0)$
 #    is symplectic through first order in $\mathbf{u}_0$ if $\mathbf{M}^\mathsf{T}\mathbf{J}\mathbf{W} +
 #    \mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{M} = 0$ with $\mathbf{W} = \partial\mathbf{w}/\partial\mathbf{u}_0$.
+# 3b. Defect of the truncated map. Since $\mathbf{M}$ is symplectic, the first non-vanishing term of
+#    $\mathbf{D}^\mathsf{T}\mathbf{J}\mathbf{D} - \mathbf{J}$ is $\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}$, which is
+#    quadratic in $\mathbf{u}_0$. It vanishes identically for the drift space and is nonzero for the bend and the
+#    quadrupole.
+# 3c. Determinant. $\det\mathbf{D} - 1 = 0$ for the drift space and $p_{x0}\,p_x(L)\sin^2\theta$ for the bend.
+# 3d. Quadrupole closed form. The defect is $\delta_0^2$ times a combination of $A = (Lg)^2 - \sin^2(Lg)$ and
+#    $B = (Lg)^2 - \sinh^2(Lg)$.
+# 3e. Thin-lens limit of the quadrupole defect.
+# 3f. Generating function. The type-2 integrability condition holds for the drift space and fails for the bend and the
+#    quadrupole.
+# 3g. Third-order compensation: the defect equals the contribution of the third-order terms of the exact map.
 # 4. Composition: the map of a length $L_1 + L_2$ equals the map of $L_1$ followed by the map of $L_2$, through second
 #    order: $\mathbf{w}(L_1 + L_2) = \mathbf{M}(L_2)\,\mathbf{w}(L_1) + \mathbf{w}_{L_2}(\mathbf{M}(L_1)\,\mathbf{u}_0)$.
 # 5. Limits: the bend tends to the drift space for $h \to 0$ and the quadrupole for $g \to 0$.
@@ -396,12 +407,152 @@ for name, (M_of, h_value, k_value) in ELEMENTS.items():
 # Check 3: second-order symplectic condition.
 J2 = sp.Matrix([[0, 1], [-1, 0]])
 J_sym = sp.diag(J2, J2, J2)
+J_sym_np = np.array(J_sym.tolist(), dtype=float)
 for name, (M_of, _h, _k) in ELEMENTS.items():
     W = w_expected[name].jacobian(u0)
     condition = M_of(L).T * J_sym * W + W.T * J_sym * M_of(L)
     residual = max_residual(condition)
     print(f"{name:9s} M^T J W + W^T J M: {residual:.1e}")
     assert residual < RESIDUAL_TOLERANCE
+
+# %%
+# Check 3b: defect of the truncated map. The O(u0) group vanishes, so the first non-vanishing term is W^T J W.
+defect = {}
+for name, (M_of, _h, _k) in ELEMENTS.items():
+    W = w_expected[name].jacobian(u0)
+    defect[name] = sp.expand(W.T * J_sym * W)
+    residual = max_residual(defect[name])
+    print(f"{name:9s} W^T J W: {residual:.1e}")
+assert sp.expand(defect["drift"]) == sp.zeros(6, 6)
+for name in ("bend", "quad k>0", "quad k<0"):
+    assert max_residual(defect[name]) > 1.0e-6
+
+# The defect is quadratic in u0: scaling u0 by epsilon scales the defect by epsilon^2.
+eps_scale = sp.Symbol("epsilon", positive=True)
+for name in defect:
+    scaled = defect[name].subs({v: eps_scale * v for v in u0}, simultaneous=True)
+    assert sp.simplify(scaled - eps_scale**2 * defect[name]) == sp.zeros(6, 6)
+print("the defect is quadratic in u0 for every element")
+
+# %%
+# Check 3c: determinant of the truncated map.
+for name, (M_of, _h, _k) in ELEMENTS.items():
+    D_map = (M_of(L) * u0 + w_expected[name]).jacobian(u0)
+    det_defect = sp.simplify(sp.expand(D_map.det() - 1))
+    print(f"{name:9s} det(D) - 1: {max_residual(sp.Matrix([det_defect])):.1e}")
+    if name == "drift":
+        assert sp.simplify(det_defect) == 0
+    elif name == "bend":
+        theta = h * L
+        p_x_exit = d0 * sp.sin(theta) - h * x0 * sp.sin(theta) + px0 * sp.cos(theta)
+        assert sp.simplify(det_defect + px0 * p_x_exit * sp.sin(theta) ** 2) == 0
+        display(sp.Eq(sp.Symbol(r"\det\mathbf{D} - 1"), -px0 * p_x_exit * sp.sin(theta) ** 2))
+
+# %%
+# Check 3d: closed form of the quadrupole defect with A = (Lg)^2 - sin^2(Lg) and B = (Lg)^2 - sinh^2(Lg).
+varphi = g * L
+A_def = varphi**2 - sp.sin(varphi) ** 2
+B_def = varphi**2 - sp.sinh(varphi) ** 2
+quad_entries = {
+    (0, 1): d0**2 * A_def / 4, (0, 5): d0 * px0 * A_def / 4, (1, 5): -d0 * x0 * A_def / 4,
+    (2, 3): -d0**2 * B_def / 4, (2, 5): -d0 * py0 * B_def / 4, (3, 5): d0 * y0 * B_def / 4,
+}
+quad_closed = sp.zeros(6, 6)
+for (i, j), value in quad_entries.items():
+    quad_closed[i, j] = value
+    quad_closed[j, i] = -value
+assert sp.simplify(defect["quad k>0"] - quad_closed) == sp.zeros(6, 6)
+display(sp.Eq(sp.Symbol("A"), A_def))
+display(sp.Eq(sp.Symbol("B"), B_def))
+print("quadrupole defect matches the A, B closed form")
+
+# %%
+# Check 3e: the quadrupole defect vanishes in the thin-lens limit L -> 0 with kL = q fixed.
+q_thin = sp.Symbol("q", positive=True)
+thin_defect = defect["quad k>0"].subs(g, sp.sqrt(q_thin / L))
+for i in range(6):
+    for j in range(6):
+        entry = sp.simplify(thin_defect[i, j])
+        if entry != 0:
+            assert sp.simplify(sp.limit(entry, L, 0, "+")) == 0
+print("the quadrupole defect vanishes in the thin-lens limit")
+
+# %%
+# Check 3f: type-2 generating function. w_q = dG/dp0 and w_p = -dG/dq0 require
+# d w_q[i]/d q0[j] + d w_p[j]/d p0[i] = 0 for all i, j.
+q0 = [x0, y0, z0]
+p0 = [px0, py0, d0]
+integrability = {}
+for name in ELEMENTS:
+    w = w_expected[name]
+    w_q = [w[0], w[2], w[4]]
+    w_p = [w[1], w[3], w[5]]
+    violations = 0
+    for i in range(3):
+        for j in range(3):
+            entry = sp.simplify(sp.diff(w_q[i], q0[j]) + sp.diff(w_p[j], p0[i]))
+            if entry != 0:
+                violations += 1
+    integrability[name] = violations
+    print(f"{name:9s} integrability violations: {violations}")
+assert integrability["drift"] == 0
+assert integrability["bend"] > 0
+assert integrability["quad k>0"] > 0
+print("only the drift space has a type-2 generating function")
+
+# %%
+# Check 3g: the third-order terms of the exact map compensate the defect. Numerically, with the exact map of
+# [2026-001, Sec. 10] and finite differences.
+R_exact_check = sp.sqrt(1 + 2 * d + (1 - 1 / gamma0**2) * d**2 - px**2 - py**2)
+H_exact_check = -(1 + h * x_) * R_exact_check + d + h * (x_ + h * x_**2 / 2) + k_sym * (x_**2 - y_**2) / 2
+rhs_check = [sp.diff(H_exact_check, px), -sp.diff(H_exact_check, x_), sp.diff(H_exact_check, py),
+             -sp.diff(H_exact_check, y_), sp.diff(H_exact_check, d), -sp.diff(H_exact_check, z_s)]
+rhs_check_func = sp.lambdify([*state, h, k_sym, gamma0], rhs_check, "numpy")
+
+
+def exact_jacobian(u_start: np.ndarray, h_num: float, k_num: float, length: float, step: float) -> np.ndarray:
+    """Jacobian of the exact map by central differences."""
+    jac = np.zeros((6, 6))
+    for i in range(6):
+        delta_vec = np.zeros(6)
+        delta_vec[i] = step
+        plus = solve_ivp(lambda _s, u: rhs_check_func(*u, h_num, k_num, GAMMA0_NUM), (0.0, length),
+                         u_start + delta_vec, rtol=ODE_RTOL, atol=ODE_ATOL, method="DOP853").y[:, -1]
+        minus = solve_ivp(lambda _s, u: rhs_check_func(*u, h_num, k_num, GAMMA0_NUM), (0.0, length),
+                          u_start - delta_vec, rtol=ODE_RTOL, atol=ODE_ATOL, method="DOP853").y[:, -1]
+        jac[:, i] = (plus - minus) / (2.0 * step)
+    return jac
+
+
+def quadratic_jacobian(w: sp.Matrix, u_start: np.ndarray, params: dict, length: float, step: float) -> np.ndarray:
+    """Jacobian of the quadratic part w by central differences."""
+    w_func = sp.lambdify([*u0], w.subs({**params, gamma0: GAMMA0_NUM, L: length}), "numpy")
+    jac = np.zeros((6, 6))
+    for i in range(6):
+        delta_vec = np.zeros(6)
+        delta_vec[i] = step
+        plus = np.array(w_func(*(u_start + delta_vec)), dtype=float).reshape(6)
+        minus = np.array(w_func(*(u_start - delta_vec)), dtype=float).reshape(6)
+        jac[:, i] = (plus - minus) / (2.0 * step)
+    return jac
+
+
+COMPENSATION_CASES = {"bend": (0.2, 0.0, 1.5), "quad k>0": (0.0, 2.0, 0.4)}
+COMPENSATION_AMPLITUDE = 1.0e-2
+COMPENSATION_STEP = 1.0e-7
+for case, (h_num, k_num, length) in COMPENSATION_CASES.items():
+    params = {h: h_num, g: float(np.sqrt(abs(k_num)))}
+    u_start = COMPENSATION_AMPLITUDE * ENTRANCE_DIRECTION
+    M_num = np.array(ELEMENTS[case][0](L).subs({**params, gamma0: GAMMA0_NUM, L: length}).evalf(), dtype=float)
+    W_num = quadratic_jacobian(w_expected[case], u_start, params, length, COMPENSATION_STEP)
+    D_exact = exact_jacobian(u_start, h_num, k_num, length, COMPENSATION_STEP)
+    T_num = D_exact - M_num - W_num
+    lhs = W_num.T @ J_sym_np @ W_num
+    rhs = -(M_num.T @ J_sym_np @ T_num + T_num.T @ J_sym_np @ M_num)
+    residual = np.max(np.abs(lhs - rhs))
+    print(f"{case:9s} |W^T J W| = {np.max(np.abs(lhs)):.2e}, "
+          f"|defect + third-order contribution| = {residual:.2e}")
+    assert residual < 0.1 * np.max(np.abs(lhs))
 
 # Check 4: composition of two sections of the same element.
 L1, L2 = sp.symbols("L_1 L_2", positive=True)
@@ -498,13 +649,18 @@ for case in NUMERIC_CASES:
 # 4. Quadrupole magnet: all second-order terms of $x$, $p_x$, $y$, $p_y$ are proportional to $\delta_0$ (chromatic
 #    effect of $x' = p_x(1 - \delta)$), those of $z$ come from the slope and $\delta_0^2$. A thin quadrupole has no
 #    second-order terms in the canonical variables.
-# 5. Checks: ODE residual, second-order symplectic condition, composition, limits, and the error scaling
+# 5. Symplecticity: the map truncated at second order is symplectic through first order in $\mathbf{u}_0$ only. The
+#    first defect is $\mathbf{W}^\mathsf{T}\mathbf{J}\mathbf{W}$, quadratic in $\mathbf{u}_0$. It vanishes
+#    identically for the drift space, scales as $\sin^2\theta$ for the bend, and as $\delta_0^2$ for the quadrupole.
+#    The third-order terms of the exact map compensate it.
+# 6. Checks: ODE residual, second-order symplectic condition, composition, limits, and the error scaling
 #    $a^2 \to a^3$ against the exact EOM.
 #
 # Open points (not covered here):
 #
 # - Chromaticity from the second-order terms of a ring (needs a periodic ring and the dispersion), and the conversion
 #   of $T_{ijk}$ to the slope variables $x'$, $y'$.
+# - The third-order map and its comparison with a symplectic integrator.
 # - Fringe fields, edge focusing, and the combined-function magnet.
 # - Sextupole and octupole terms, quadrupole curvature corrections, skew quadrupole, and RF.
 

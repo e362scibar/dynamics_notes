@@ -99,6 +99,28 @@ Version constraints in `environment.yml` should use lower bounds (`>=`) unless a
 
 Replace `<topic>` with the topic directory name. Run all commands from the repository root.
 
+### Build every topic
+
+To build all topics at once, loop over the topic directories. The document number is looked up per topic, so the
+output names stay correct when a topic is added or renumbered:
+
+```bash
+for topic in topics/*/; do
+  topic=$(basename "$topic")
+  [ -f "topics/$topic/main.tex" ] || continue
+  NUM=$(python common/python/dynamics_common/documents.py --number "$topic")
+  for lang in en ja; do
+    latexmk -lualatex -pretex="\def\memolang{$lang}" -usepretex \
+      -jobname="$NUM-$lang" -outdir="build/$topic" "topics/$topic/main.tex"
+    python common/slides/build_slides.py --topic "$topic" --lang "$lang"
+  done
+done
+```
+
+The LaTeX build must run before the slide build of the same language, because it writes
+`build/<topic>/<number>-<lang>.slides`. Add `-g` to `latexmk` to force a rebuild when the sources did not change but
+the shared preamble did.
+
 ### Jupytext and notebooks
 
 Edit only the `.py` files. Sync them to the `.ipynb` files:
@@ -203,6 +225,8 @@ After every source edit, run the build and the tests before reporting the work a
 3. Build the affected topic's LaTeX document in both languages (see LaTeX documents). Also regenerate the slides when the LaTeX content or the slide generator changed.
 4. Sync and, when a notebook changed, execute it (see Jupytext and notebooks).
 5. Report failures together with their output. If a step was not run, say so.
+
+When the shared preamble (`common/tex/`) or the slide generator changes, rebuild every topic, not only the one you edited, and check that no topic gains an overfull box or an undefined reference. Use the loop in [Build every topic](#build-every-topic) with `-g` added to `latexmk`.
 
 Delete temporary logs you create while building. Do not leave them in the repository.
 

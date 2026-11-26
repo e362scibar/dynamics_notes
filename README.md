@@ -73,11 +73,35 @@ python common/slides/build_slides.py --topic <topic> --lang ja
 
 Decks are written to `build/<topic>/$NUM-slides-en.pptx` and `build/<topic>/$NUM-slides-ja.pptx`. Slide content comes from the topic's LaTeX document, so update the document first. Equations are inserted as native PowerPoint equations.
 
+### Build every topic
+
+```bash
+for topic in topics/*/; do
+  topic=$(basename "$topic")
+  [ -f "topics/$topic/main.tex" ] || continue
+  NUM=$(python common/python/dynamics_common/documents.py --number "$topic")
+  for lang in en ja; do
+    latexmk -lualatex -pretex="\def\memolang{$lang}" -usepretex \
+      -jobname="$NUM-$lang" -outdir="build/$topic" "topics/$topic/main.tex"
+    python common/slides/build_slides.py --topic "$topic" --lang "$lang"
+  done
+done
+```
+
+The LaTeX build of a language must run before its slide build, because it writes `build/<topic>/<number>-<lang>.slides`.
+
 ## Topics
 
-The index is in [topics/README.md](topics/README.md). Planned topics are placeholders:
+The index is in [topics/README.md](topics/README.md). Current topics:
 
-- Transverse linear optics: transfer matrices, Twiss parameters, betatron tune
+- 2026-001 `curvilinear_coordinates`: canonical equations of motion in curvilinear (Frenet-Serret) coordinates
+- 2026-002 `transfer_matrix`: linear transfer matrices of a drift, a sector dipole, and a quadrupole
+- 2026-003 `second_order_eom`: canonical equations of motion expanded to second order
+- 2026-004 `second_order_map`: second-order transfer maps of a drift, a sector dipole, and a quadrupole
+
+Planned topics are placeholders:
+
+- Transverse linear optics: Twiss parameters, betatron tune
 - Dispersion and chromaticity
 - Closed-orbit distortion and orbit correction
 - Synchrotron radiation and radiation damping
