@@ -37,3 +37,8 @@ status = "active"
 slug = "second_order_map"
 title = "Second-order transfer maps of a drift space, a sector dipole magnet, and a quadrupole magnet"
 status = "active"
+
+[documents."2026-005"]
+slug = "linear_dispersion"
+title = "Time evolution of the dispersion function through a drift space, a sector dipole magnet, and a quadrupole magnet"
+status = "active"

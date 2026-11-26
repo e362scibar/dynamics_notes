@@ -219,3 +219,32 @@ note = "The nonlinear generalization of the transfer matrix. The second-order tr
 en = "variation of constants"
 ja = "定数変化法"
 note = "Duhamel's formula for the inhomogeneous linear differential equation."
+
+[terms.dispersion_function]
+en = "dispersion function"
+ja = "分散関数"
+note = "D(s), the coefficient of the momentum deviation in the transverse position. The bare 分散 is the phenomenon."
+
+[terms.homogeneous_solution]
+en = "homogeneous solution"
+ja = "斉次解"
+note = "The solution of the equation without the inhomogeneous term. 斉次解 is the form used in the existing memos."
+
+[terms.particular_solution]
+en = "particular solution"
+ja = "特解"
+note = "A solution of the inhomogeneous equation. The general solution is the sum of a particular solution and the homogeneous solution."
+
+[terms.off_momentum]
+en = "off-momentum particle"
+ja = "運動量の異なる粒子"
+note = "A particle with delta != 0. Its orbit differs from the reference orbit by the dispersion."
+
+[terms.closed_orbit]
+en = "closed orbit"
+ja = "閉軌道"
+
+[terms.periodic_dispersion]
+en = "periodic dispersion"
+ja = "周期分散"
+note = "The dispersion of a ring, periodic in s."

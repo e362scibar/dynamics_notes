@@ -22,6 +22,7 @@ topics/<topic>/
 | 2026-002 | [transfer_matrix](transfer_matrix/) | [transfer_matrix.py](transfer_matrix/transfer_matrix.py) | [main.tex](transfer_matrix/main.tex) (en, ja) | `build/transfer_matrix/2026-002-slides-{en,ja}.pptx` via `common/slides/build_slides.py` | Draft |
 | 2026-003 | [second_order_eom](second_order_eom/) | [second_order_eom.py](second_order_eom/second_order_eom.py) | [main.tex](second_order_eom/main.tex) (en, ja) | `build/second_order_eom/2026-003-slides-{en,ja}.pptx` via `common/slides/build_slides.py` | Draft |
 | 2026-004 | [second_order_map](second_order_map/) | [second_order_map.py](second_order_map/second_order_map.py) | [main.tex](second_order_map/main.tex) (en, ja) | `build/second_order_map/2026-004-slides-{en,ja}.pptx` via `common/slides/build_slides.py` | Draft |
+| 2026-005 | [linear_dispersion](linear_dispersion/) | [linear_dispersion.py](linear_dispersion/linear_dispersion.py) | [main.tex](linear_dispersion/main.tex) (en, ja) | `build/linear_dispersion/2026-005-slides-{en,ja}.pptx` via `common/slides/build_slides.py` | Draft |
 
 The number is the document number `YYYY-NNN` registered in [common/documents.toml](../common/documents.toml). It is used to cite a topic from other documents (`\cite{2026-001}` in LaTeX, `[2026-001]` in notebooks) and in the names of the output files, for example `build/curvilinear_coordinates/2026-001-en.pdf`.
 

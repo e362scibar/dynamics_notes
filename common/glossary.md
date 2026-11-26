@@ -10,12 +10,14 @@ used; `common/python/tests/test_topics_glossary.py` fails when one of them appea
 | Key | English | Japanese | Forbidden | Note |
 |---|---|---|---|---|
 | `canonical` | canonical | 正準 | — | — |
+| `closed_orbit` | closed orbit | 閉軌道 | — | — |
 | `conjugate` | conjugate | 共役 | — | — |
 | `constant_of_motion` | constant of motion | 運動の定数 | — | — |
 | `curvature` | curvature | 曲率 | — | — |
 | `curvilinear_coordinates` | curvilinear coordinates | 曲線座標 | — | — |
 | `dipole_magnet` | dipole magnet | 偏向磁石 | — | Kept as is. Do not shorten to 偏向 alone. |
 | `dispersion` | dispersion | 分散 | — | — |
+| `dispersion_function` | dispersion function | 分散関数 | — | D(s), the coefficient of the momentum deviation in the transverse position. The bare 分散 is the phenomenon. |
 | `drift_space` | drift space | ドリフトスペース | ドリフト空間, 自由空間 | — |
 | `energy_deviation` | energy deviation | エネルギー偏差 | — | — |
 | `equation_of_motion` | equation of motion | 運動方程式 | — | — |
@@ -28,6 +30,7 @@ used; `common/python/tests/test_topics_glossary.py` fails when one of them appea
 | `gauge_transformation` | gauge transformation | ゲージ変換 | — | — |
 | `gradient` | gradient | 勾配 | — | — |
 | `hamiltonian` | Hamiltonian | ハミルトニアン | — | — |
+| `homogeneous_solution` | homogeneous solution | 斉次解 | — | The solution of the equation without the inhomogeneous term. 斉次解 is the form used in the existing memos. |
 | `ideal_orbit` | ideal orbit | 理想軌道 | — | — |
 | `independent_variable` | independent variable | 独立変数 | — | — |
 | `lagrangian` | Lagrangian | ラグランジアン | — | — |
@@ -40,7 +43,10 @@ used; `common/python/tests/test_topics_glossary.py` fails when one of them appea
 | `momentum_deviation` | momentum deviation | 運動量偏差 | — | p/P0 - 1. Distinct from the energy deviation delta = (E - E0)/(beta0 c P0), which is canonical to z. |
 | `normalization` | normalization | 規格化 | 正規化 | 規格化 is the accelerator-physics usage. 正規化 is the statistics usage. |
 | `octupole_magnet` | octupole magnet | 八極磁石 | — | — |
+| `off_momentum` | off-momentum particle | 運動量の異なる粒子 | — | A particle with delta != 0. Its orbit differs from the reference orbit by the dispersion. |
+| `particular_solution` | particular solution | 特解 | — | A solution of the inhomogeneous equation. The general solution is the sum of a particular solution and the homogeneous solution. |
 | `path_length` | path length | 経路長 | — | — |
+| `periodic_dispersion` | periodic dispersion | 周期分散 | — | The dispersion of a ring, periodic in s. |
 | `quadrupole_magnet` | quadrupole magnet | 四極磁石 | — | — |
 | `reference_orbit` | reference orbit | 基準軌道 | — | — |
 | `sector_dipole_magnet` | sector dipole magnet | 扇型偏向磁石 | セクター偏向磁石, セクター型偏向磁石 | A dipole magnet whose end faces are perpendicular to the reference orbit, so there is no edge focusing. |

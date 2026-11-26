@@ -98,6 +98,7 @@ The index is in [topics/README.md](topics/README.md). Current topics:
 - 2026-002 `transfer_matrix`: linear transfer matrices of a drift, a sector dipole, and a quadrupole
 - 2026-003 `second_order_eom`: canonical equations of motion expanded to second order
 - 2026-004 `second_order_map`: second-order transfer maps of a drift, a sector dipole, and a quadrupole
+- 2026-005 `linear_dispersion`: time evolution of the dispersion function through the three basic elements
 
 Planned topics are placeholders:
 

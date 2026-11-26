@@ -1,0 +1,561 @@
+% topics/linear_dispersion/main.tex
+% Copyright (C) 2026 Hirokazu Maesaka (RIKEN SPring-8 Center)
+% SPDX-License-Identifier: CC-BY-4.0
+%
+% Bilingual memo. Build with the commands in AGENTS.md (English: \memolang=en, Japanese: \memolang=ja).
+
+\input{common/tex/preamble.tex}
+\setmemonumber{2026-005}
+
+\title{\en{Time evolution of the dispersion function through a drift space, a sector dipole magnet, and a quadrupole magnet}%
+       \ja{ドリフトスペース，扇型偏向磁石，四極磁石における分散関数の時間発展}}
+\author{Hirokazu Maesaka}
+\date{Memo~\memonumber, 2026}
+
+\begin{document}
+\maketitle
+
+% Title slide. The slides of each section are written at the end of that section (see AGENTS.md).
+\slidetitle{\en{Time evolution of the dispersion function}%
+            \ja{分散関数の時間発展}}
+\slidepoint{\en{From the linear equations of motion of Memo 2026-001}%
+            \ja{メモ 2026-001 の線形運動方程式から導く}}
+\slidenote{\en{Drift space, sector dipole magnet, and quadrupole magnet. The off-momentum case is treated explicitly.}%
+           \ja{ドリフトスペース，扇型偏向磁石，四極磁石。運動量の異なる場合を陽に扱う。}}
+
+\section{\en{Scope and conventions}\ja{対象と記号の規約}}
+
+\en{This memo derives the dispersion function $D(s)$ and its slope $D'(s) = dD/ds$ through a drift space, a sector
+dipole magnet, and a quadrupole magnet, starting from the linear equations of motion (EOM) of
+\cite[Sec.~11]{2026-001}. The dispersion is the response of the transverse position to the momentum deviation, so it
+describes an off-momentum particle. The assumptions are those of \cite{2026-002}: static field, $k_s = 0$, constant
+$h$ and $k$ in each element, hard-edge model, and a sector dipole magnet with perpendicular end faces. The last
+section extends the result to a particle with a finite betatron amplitude, where the second-order terms of the
+transfer map of \cite{2026-004} add an amplitude-dependent dispersion. Every result is verified with sympy in the
+companion notebook \texttt{linear\_dispersion.py}, and numerically against the exact EOM.}%
+\ja{本メモでは，\cite[第 11 節]{2026-001} の線形運動方程式から，ドリフトスペース，扇型偏向磁石，四極磁石における
+分散関数 $D(s)$ とその傾き $D'(s) = dD/ds$ を導く。分散は横方向の位置の運動量偏差に対する応答であるから，
+運動量の異なる粒子を記述する。仮定は \cite{2026-002} と同じで，静磁場，$k_s = 0$，各要素の中で $h$ と $k$ が一定，
+ハードエッジモデル，端面が垂直な扇型偏向磁石である。最後の節では，有限のベータトロン振幅を持つ粒子に結果を
+拡張する。そこでは \cite{2026-004} の転送写像の 2 次の項が振幅に依存する分散を加える。すべての結果は，
+付随するノートブック \texttt{linear\_dispersion.py} で sympy により検証し，さらに厳密な運動方程式に対して
+数値的にも確認している。}
+
+\en{Conventions. The phase-space vector is $\mathbf{u} = (x, p_x, y, p_y, z, \delta)^\mathsf{T}$ with the conventions
+of \cite{2026-001}: $z = s - \beta_0 c\,t$ and $\delta = (E - E_0)/(\beta_0 cP_0)$. To first order $p_x = x'$. The
+curvature is $h = 1/\rho$ with $h > 0$ when the center of curvature lies inside, and the normalized quadrupole
+gradient $k$ is positive for focusing in $x$.}%
+\ja{記号の規約。位相空間ベクトルは $\mathbf{u} = (x, p_x, y, p_y, z, \delta)^\mathsf{T}$ であり，\cite{2026-001} の
+規約に従う。すなわち $z = s - \beta_0 c\,t$，$\delta = (E - E_0)/(\beta_0 cP_0)$ である。1 次の範囲では
+$p_x = x'$ である。曲率は $h = 1/\rho$ で，曲率中心が内側のとき $h > 0$ とする。規格化された四極磁場の勾配 $k$ は，
+$x$ 方向に集束するとき正である。}
+
+% Slides for this section.
+\slidetitle{\en{Scope and conventions}\ja{対象と記号の規約}}
+\slidepoint{\en{Dispersion D(s) and slope D'(s) = dD/ds for three elements}%
+            \ja{3 つの要素について分散 D(s) と傾き D'(s) = dD/ds}}
+\slidepoint{\en{Starting point: the linear EOM of Memo 2026-001, Sec. 11}%
+            \ja{出発点: メモ 2026-001 第 11 節の線形運動方程式}}
+\slidepoint{\en{Assumptions of Memo 2026-002: static field, k_s = 0, hard edge, perpendicular end faces}%
+            \ja{メモ 2026-002 の仮定: 静磁場，k_s = 0，ハードエッジ，垂直端面}}
+
+\section{\en{Dispersion equation}\ja{分散の方程式}}
+\label{sec:dispersion_eq}
+
+\en{The linear horizontal EOM of \cite[Sec.~11]{2026-001} with $k_s = 0$ is}%
+\ja{\cite[第 11 節]{2026-001} の線形水平運動方程式は，$k_s = 0$ として}
+\begin{equation}
+  x'' + (h^2 + k)\,x = h\,\delta .
+  \label{eq:el_x}
+\end{equation}
+\en{The momentum deviation $\delta$ is a constant of motion in a static magnetic field, so \eqref{eq:el_x} is a
+linear inhomogeneous equation for $x(s)$ with the constant right-hand side $h\delta$. Its general solution is the sum
+of a particular solution and the homogeneous solution.}%
+\ja{静磁場では運動量偏差 $\delta$ は運動の定数であるから，\eqref{eq:el_x} は右辺が定数 $h\delta$ の $x(s)$ に
+対する線形非斉次方程式である。一般解は特解と斉次解の和である。}
+
+\en{Write the solution as}%
+\ja{解を}
+\begin{equation}
+  x(s) = x_\beta(s) + D(s)\,\delta
+  \label{eq:x_split}
+\end{equation}
+\en{where $x_\beta$ is the betatron part, which solves the homogeneous equation $x_\beta'' + (h^2+k)\,x_\beta = 0$ with
+the entrance conditions of the particle, and $D(s)$ is the dispersion function. Inserting \eqref{eq:x_split} into
+\eqref{eq:el_x} and using the homogeneous equation for $x_\beta$ leaves}%
+\ja{と書く。$x_\beta$ はベータトロン部分で，粒子の入口条件の下で斉次方程式
+$x_\beta'' + (h^2+k)\,x_\beta = 0$ を満たす。$D(s)$ が分散関数である。\eqref{eq:x_split} を \eqref{eq:el_x} に
+代入し，$x_\beta$ が斉次方程式を満たすことを用いると}
+\begin{equation}
+  D'' + (h^2 + k)\,D = h .
+  \label{eq:D_ode}
+\end{equation}
+\en{The dispersion is therefore the solution of \eqref{eq:D_ode} with the entrance conditions $D(0) = D_0$ and
+$D'(0) = D'_0$. Write $D = D_p + \tilde{D}$, where $D_p$ is a particular solution of \eqref{eq:D_ode} and
+$\tilde{D}$ solves the homogeneous equation. Then $(\tilde{D}, \tilde{D}')$ propagates with the same $2\times2$ block
+as $(x, p_x)$ in the transfer matrix of \cite{2026-002}, and $D_p$ is the dispersion generated by the element itself.
+For a drift space and a quadrupole $D_p = 0$; for a sector dipole magnet $D_p = 1/h = \rho$.}%
+\ja{したがって分散は，入口条件 $D(0) = D_0$，$D'(0) = D'_0$ の下での \eqref{eq:D_ode} の解である。
+$D = D_p + \tilde{D}$ と書き，$D_p$ を \eqref{eq:D_ode} の特解，$\tilde{D}$ を斉次方程式の解とする。このとき
+$(\tilde{D}, \tilde{D}')$ は \cite{2026-002} の転送行列の $(x, p_x)$ と同じ $2\times2$ ブロックで伝播し，
+$D_p$ はその要素自身が生成する分散である。ドリフトスペースと四極磁石では $D_p = 0$，扇型偏向磁石では
+$D_p = 1/h = \rho$ である。}
+
+\en{Two cases must be distinguished.}%
+\ja{2 つの場合を区別する必要がある。}
+\begin{itemize}
+  \item \en{On-momentum particle, $\delta = 0$. Then $x = x_\beta$ and the dispersion plays no role: the particle
+    follows the betatron oscillation around the reference orbit. This is the case $x = p_x = y = p_y = 0$ at the
+    entrance, where the motion is trivial.}%
+    \ja{運動量が基準値の粒子，$\delta = 0$。このとき $x = x_\beta$ であり分散は寄与しない。粒子は基準軌道のまわりを
+    ベータトロン振動する。入口で $x = p_x = y = p_y = 0$ の場合がこれにあたり，運動は自明である。}
+  \item \en{Off-momentum particle, $\delta \neq 0$. Then $x$ contains the additional term $D(s)\,\delta$, which is the
+    closed orbit of that momentum. Even with $x_0 = p_{x0} = 0$ the particle does not stay on the reference orbit:
+    it follows the dispersive orbit $D(s)\,\delta$.}%
+    \ja{運動量が基準値と異なる粒子，$\delta \neq 0$。このとき $x$ には $D(s)\,\delta$ の項が加わり，これがその
+    運動量の閉軌道である。$x_0 = p_{x0} = 0$ でも粒子は基準軌道にとどまらず，分散軌道 $D(s)\,\delta$ に沿って
+    進む。}
+\end{itemize}
+
+\en{The vertical plane has no inhomogeneous term, because a horizontal bend and a normal quadrupole produce no
+vertical field component proportional to $\delta$. Hence $y_\beta$ alone describes the vertical motion and there is
+no vertical dispersion in this model.}%
+\ja{鉛直面には非斉次項がない。水平偏向とノーマル四極磁石は $\delta$ に比例する鉛直磁場成分を作らないためである。
+したがって鉛直方向の運動は $y_\beta$ だけで記述され，このモデルに鉛直分散はない。}
+
+% Slides for this section.
+\slidetitle{\en{Dispersion equation}\ja{分散の方程式}}
+\slidemath{x'' + (h^2 + k)\,x = h\,\delta, \qquad x = x_\beta + D\,\delta}
+\slidemath{D'' + (h^2 + k)\,D = h}
+\slidepoint{\en{delta = 0: x = x_beta, no dispersion (the trivial case)}%
+            \ja{delta = 0: x = x_beta で分散は寄与しない（自明な場合）}}
+\slidepoint{\en{delta != 0: the extra term D(s) delta is the closed orbit of that momentum}%
+            \ja{delta != 0: 余分な項 D(s) delta がその運動量の閉軌道}}
+\slidepoint{\en{No vertical dispersion: the vertical equation has no inhomogeneous term}%
+            \ja{鉛直分散なし: 鉛直の方程式に非斉次項はない}}
+
+\section{\en{Drift space}\ja{ドリフトスペース}}
+\label{sec:drift}
+
+\en{A drift space has $h = 0$ and $k = 0$, so \eqref{eq:D_ode} reduces to $D'' = 0$. Integrating twice with the
+entrance conditions gives}%
+\ja{ドリフトスペースでは $h = 0$，$k = 0$ であるから，\eqref{eq:D_ode} は $D'' = 0$ に帰着する。入口条件の下で
+2 回積分すると}
+\begin{equation}
+  D(L) = D_0 + L\,D'_0 , \qquad D'(L) = D'_0 .
+  \label{eq:D_drift}
+\end{equation}
+\en{The dispersion is a straight line in $s$ and the slope is constant. A drift space does not generate dispersion,
+but it does propagate an existing dispersion and its slope.}%
+\ja{分散は $s$ の 1 次式であり，傾きは一定である。ドリフトスペースは分散を生成しないが，既存の分散とその傾きを
+伝播させる。}
+
+\en{For an off-momentum particle with $x_0 = p_{x0} = 0$ the orbit is $x(L) = L\,D'_0\,\delta_0$. If in addition
+$D'_0 = 0$ the particle stays on the reference orbit even though $\delta_0 \neq 0$: a drift space has no focusing and
+no bend, so a momentum deviation alone does not move the particle.}%
+\ja{$x_0 = p_{x0} = 0$ の運動量の異なる粒子の軌道は $x(L) = L\,D'_0\,\delta_0$ である。さらに $D'_0 = 0$ なら，
+$\delta_0 \neq 0$ でも粒子は基準軌道にとどまる。ドリフトスペースには集束も偏向もないので，運動量偏差だけでは
+粒子は動かない。}
+
+% Slides for this section.
+\slidetitle{\en{Drift space}\ja{ドリフトスペース}}
+\slidemath{D(L) = D_0 + L\,D'_0, \qquad D'(L) = D'_0}
+\slidepoint{\en{No dispersion is generated, but an existing one is propagated}%
+            \ja{分散は生成されないが，既存の分散は伝播する}}
+\slidepoint{\en{With x_0 = p_x0 = 0 and D'_0 = 0 the particle stays on the reference orbit}%
+            \ja{x_0 = p_x0 = 0 かつ D'_0 = 0 なら粒子は基準軌道にとどまる}}
+
+\section{\en{Sector dipole magnet}\ja{扇型偏向磁石}}
+\label{sec:bend}
+
+\en{A sector dipole magnet has $h \neq 0$ and $k = 0$, so \eqref{eq:D_ode} becomes $D'' + h^2 D = h$. The constant
+particular solution is $D = 1/h$, because $D'' = 0$ and $h^2\,(1/h) = h$. Adding the homogeneous solution and imposing
+$D(0) = D_0$, $D'(0) = D'_0$ gives}%
+\ja{扇型偏向磁石では $h \neq 0$，$k = 0$ であるから，\eqref{eq:D_ode} は $D'' + h^2 D = h$ になる。定数の特解は
+$D = 1/h$ である。$D'' = 0$ かつ $h^2\,(1/h) = h$ だからである。斉次解を加え，$D(0) = D_0$，$D'(0) = D'_0$ を
+課すと}
+\begin{equation}
+  \begin{aligned}
+    D(L) &= \frac{1}{h} + \Big(D_0 - \frac{1}{h}\Big)\cos(hL) + \frac{D'_0}{h}\sin(hL) , \\
+    D'(L) &= -h\Big(D_0 - \frac{1}{h}\Big)\sin(hL) + D'_0\cos(hL) .
+  \end{aligned}
+  \label{eq:D_bend}
+\end{equation}
+\en{With $\theta = hL$ and $\rho = 1/h$ this is}%
+\ja{$\theta = hL$，$\rho = 1/h$ とすると}
+\begin{equation}
+  \begin{aligned}
+    D(L) &= \rho\,(1-\cos\theta) + D_0\cos\theta + \rho\,D'_0\sin\theta , \\
+    D'(L) &= \Big(1 - \frac{D_0}{\rho}\Big)\sin\theta + D'_0\cos\theta .
+  \end{aligned}
+  \label{eq:D_bend_theta}
+\end{equation}
+\en{The first term $\rho(1-\cos\theta)$ is the dispersion generated by the bend itself, starting from $D_0 = D'_0 = 0$.
+It is the same expression as the $M_{16}$ element of the transfer matrix of \cite[Sec.~5]{2026-002}.}%
+\ja{第 1 項 $\rho(1-\cos\theta)$ は，$D_0 = D'_0 = 0$ から出発して偏向自体が生成する分散である。
+\cite[第 5 節]{2026-002} の転送行列の $M_{16}$ 要素と同じ表式である。}
+
+\en{For an off-momentum particle with $x_0 = p_{x0} = 0$ the orbit is $x(L) = \rho(1-\cos\theta)\,\delta_0$. This is
+the classic result that a bend separates momenta: the particle with $\delta_0 > 0$ is displaced outward by
+$\rho(1-\cos\theta)\,\delta_0$ at the exit. The displacement is second order in $\theta$ for a weak bend, because
+$1-\cos\theta \approx \theta^2/2$.}%
+\ja{$x_0 = p_{x0} = 0$ の運動量の異なる粒子の軌道は $x(L) = \rho(1-\cos\theta)\,\delta_0$ である。これは偏向が
+運動量を分離するという古典的な結果であり，$\delta_0 > 0$ の粒子は出口で $\rho(1-\cos\theta)\,\delta_0$ だけ
+外側に変位する。弱い偏向では $1-\cos\theta \approx \theta^2/2$ であるから，変位は $\theta$ の 2 次である。}
+
+\en{The path length also changes. The longitudinal equation $z' = -h\,x + \delta/\gamma_0^2$ with $x = D\,\delta$ gives
+the additional term $-\int_0^L h\,D\,ds\,\delta$, which is the $M_{56}$ element of \cite[Sec.~5]{2026-002}.}%
+\ja{経路長も変化する。縦方向の方程式 $z' = -h\,x + \delta/\gamma_0^2$ に $x = D\,\delta$ を代入すると，
+追加の項 $-\int_0^L h\,D\,ds\,\delta$ が得られる。これが \cite[第 5 節]{2026-002} の $M_{56}$ 要素である。}
+
+% Slides for this section.
+\slidetitle{\en{Sector dipole magnet}\ja{扇型偏向磁石}}
+\slidemath{D'' + h^2 D = h \;\Longrightarrow\; D = \frac{1}{h} + \Big(D_0 - \frac{1}{h}\Big)\cos hL + \frac{D'_0}{h}\sin hL}
+\slidepoint{\en{The bend generates the dispersion rho(1 - cos theta) from D_0 = D'_0 = 0}%
+            \ja{偏向は D_0 = D'_0 = 0 から分散 rho(1 - cos theta) を生成する}}
+\slidepoint{\en{Off-momentum with x_0 = p_x0 = 0: x(L) = rho(1 - cos theta) delta_0}%
+            \ja{x_0 = p_x0 = 0 の運動量の異なる粒子: x(L) = rho(1 - cos theta) delta_0}}
+\slidepoint{\en{The path length changes by -int h D ds delta (the M_56 element)}%
+            \ja{経路長は -int h D ds delta だけ変化する（M_56 要素）}}
+
+\section{\en{Quadrupole magnet}\ja{四極磁石}}
+\label{sec:quad}
+
+\en{A quadrupole magnet has $h = 0$, so \eqref{eq:D_ode} becomes $D'' + k\,D = 0$. The right-hand side vanishes: a
+quadrupole does not generate dispersion, it only focuses or defocuses an existing one.}%
+\ja{四極磁石では $h = 0$ であるから，\eqref{eq:D_ode} は $D'' + k\,D = 0$ になる。右辺がゼロである。四極磁石は
+分散を生成せず，既存の分散を集束または発散させるだけである。}
+
+\en{For $k = g^2 > 0$ (focusing in $x$),}%
+\ja{$k = g^2 > 0$（$x$ 方向に集束）では}
+\begin{equation}
+  \begin{aligned}
+    D(L) &= D_0\cos(gL) + \frac{D'_0}{g}\sin(gL) , \\
+    D'(L) &= -g\,D_0\sin(gL) + D'_0\cos(gL) .
+  \end{aligned}
+  \label{eq:D_quad_focus}
+\end{equation}
+\en{For $k = -g^2 < 0$ (defocusing in $x$),}%
+\ja{$k = -g^2 < 0$（$x$ 方向に発散）では}
+\begin{equation}
+  \begin{aligned}
+    D(L) &= D_0\cosh(gL) + \frac{D'_0}{g}\sinh(gL) , \\
+    D'(L) &= g\,D_0\sinh(gL) + D'_0\cosh(gL) .
+  \end{aligned}
+  \label{eq:D_quad_defocus}
+\end{equation}
+\en{These are the same $2\times2$ blocks as the $(x, p_x)$ block of the transfer matrix of \cite[Sec.~6]{2026-002},
+which is expected because the homogeneous part of $D$ obeys the same equation as $x_\beta$.}%
+\ja{これらは \cite[第 6 節]{2026-002} の転送行列の $(x, p_x)$ ブロックと同じ $2\times2$ ブロックである。
+$D$ の斉次部分が $x_\beta$ と同じ方程式に従うことから予想されるとおりである。}
+
+\en{For an off-momentum particle with $x_0 = p_{x0} = 0$ the orbit is $x(L) = (D'_0/g)\sin(gL)\,\delta_0$ in the
+focusing plane. A quadrupole therefore converts a dispersion slope into a displacement, but it cannot create a
+dispersion from zero: if $D_0 = D'_0 = 0$ at the entrance, then $D \equiv 0$ inside the quadrupole.}%
+\ja{$x_0 = p_{x0} = 0$ の運動量の異なる粒子の軌道は，集束する面で $x(L) = (D'_0/g)\sin(gL)\,\delta_0$ である。
+したがって四極磁石は分散の傾きを変位に変換するが，ゼロから分散を作ることはできない。入口で $D_0 = D'_0 = 0$ なら，
+四極磁石の内部でも $D \equiv 0$ である。}
+
+\en{Thin-lens limit. Let $L \to 0$ with $q = kL$ fixed. Then $gL \to 0$ and \eqref{eq:D_quad_focus} gives
+$D(L) \to D_0$ and $D'(L) \to D'_0 - q\,D_0$: the thin quadrupole changes only the slope, by the same kick as the
+betatron motion.}%
+\ja{薄肉レンズ近似。$q = kL$ を一定にして $L \to 0$ とする。このとき $gL \to 0$ であり，
+\eqref{eq:D_quad_focus} から $D(L) \to D_0$，$D'(L) \to D'_0 - q\,D_0$ が得られる。薄い四極磁石は傾きだけを
+変え，そのキックはベータトロン運動と同じである。}
+
+% Slides for this section.
+\slidetitle{\en{Quadrupole magnet}\ja{四極磁石}}
+\slidemath{D'' + k\,D = 0 \quad (h = 0)}
+\slidemath{k = g^2 > 0:\; D(L) = D_0\cos gL + \frac{D'_0}{g}\sin gL}
+\slidemath{k = -g^2 < 0:\; D(L) = D_0\cosh gL + \frac{D'_0}{g}\sinh gL}
+\slidepoint{\en{A quadrupole does not generate dispersion; it focuses or defocuses an existing one}%
+            \ja{四極磁石は分散を生成しない。既存の分散を集束または発散させる}}
+\slidepoint{\en{Thin lens: D -> D_0, D' -> D'_0 - q D_0}%
+            \ja{薄肉レンズ: D → D_0，D' → D'_0 - q D_0}}
+
+\section{\en{Off-momentum particles and the closed orbit}\ja{運動量の異なる粒子と閉軌道}}
+\label{sec:off_momentum}
+
+\en{The decomposition \eqref{eq:x_split} separates the betatron motion from the dispersive orbit. For a particle with
+$\delta_0 \neq 0$ the term $D(s)\,\delta_0$ is the closed orbit of that momentum: it is the orbit the particle would
+follow if it had no betatron oscillation. The betatron part $x_\beta$ oscillates around it.}%
+\ja{分解 \eqref{eq:x_split} はベータトロン運動と分散軌道を分離する。$\delta_0 \neq 0$ の粒子では，
+$D(s)\,\delta_0$ の項がその運動量の閉軌道である。ベータトロン振動がない場合に粒子がたどる軌道である。
+ベータトロン部分 $x_\beta$ はそのまわりを振動する。}
+
+\en{The trivial case $x = p_x = y = p_y = 0$ at the entrance deserves a comment. If in addition $\delta_0 = 0$, the
+particle is the reference particle and stays on the reference orbit. If $\delta_0 \neq 0$, the entrance conditions
+$x_0 = p_{x0} = 0$ do not mean that the particle stays on the reference orbit: the dispersion equation
+\eqref{eq:D_ode} still has the inhomogeneous term $h\delta_0$, so the particle leaves the reference orbit as soon as
+it enters a bend. The displacement is $D(s)\,\delta_0$, with $D$ from \eqref{eq:D_bend} for a bend and
+\eqref{eq:D_drift} for a drift space.}%
+\ja{入口で $x = p_x = y = p_y = 0$ という自明な場合には注意が必要である。さらに $\delta_0 = 0$ なら粒子は基準粒子で
+あり，基準軌道にとどまる。$\delta_0 \neq 0$ なら，入口条件 $x_0 = p_{x0} = 0$ は粒子が基準軌道にとどまることを
+意味しない。分散の方程式 \eqref{eq:D_ode} には依然として非斉次項 $h\delta_0$ があるので，偏向に入った時点で
+粒子は基準軌道から離れる。変位は $D(s)\,\delta_0$ であり，$D$ は偏向では \eqref{eq:D_bend}，ドリフトスペースでは
+\eqref{eq:D_drift} で与えられる。}
+
+\en{The dispersion is therefore not a property of a single particle but of the lattice: it is the orbit that a
+particle of unit momentum deviation follows. Its value at the entrance, $D_0$ and $D'_0$, is fixed by the upstream
+elements. In a ring the periodicity requires $D(s + C) = D(s)$ and $D'(s + C) = D'(s)$, which selects the periodic
+dispersion; in a transfer line it is fixed by the source.}%
+\ja{したがって分散は個々の粒子の性質ではなく，ラティスの性質である。単位の運動量偏差を持つ粒子がたどる軌道である。
+入口での値 $D_0$，$D'_0$ は上流の要素で決まる。リングでは周期性から $D(s + C) = D(s)$，$D'(s + C) = D'(s)$ が
+要求され，これが周期分散を選ぶ。トランスファーラインでは光源で決まる。}
+
+\en{The vertical plane has no dispersion in this model, so an off-momentum particle moves vertically only through its
+betatron oscillation $y_\beta$. A skew quadrupole or a solenoid would couple the planes and generate vertical
+dispersion; both are outside the scope of this memo.}%
+\ja{このモデルでは鉛直面に分散がないので，運動量の異なる粒子が鉛直方向に動くのはベータトロン振動 $y_\beta$ を
+通してだけである。スキュー四極磁石やソレノイドは二つの面を結合して鉛直分散を生成するが，いずれも本メモの
+対象外である。}
+
+% Slides for this section.
+\slidetitle{\en{Off-momentum particles}\ja{運動量の異なる粒子}}
+\slidepoint{\en{x = x_beta + D delta: the second term is the closed orbit of that momentum}%
+            \ja{x = x_beta + D delta。第 2 項がその運動量の閉軌道}}
+\slidepoint{\en{x_0 = p_x0 = 0 with delta_0 != 0 does not mean the reference orbit}%
+            \ja{x_0 = p_x0 = 0 でも delta_0 != 0 なら基準軌道にとどまらない}}
+\slidepoint{\en{The dispersion is a property of the lattice, fixed by the upstream elements}%
+            \ja{分散はラティスの性質であり，上流の要素で決まる}}
+\slidepoint{\en{No vertical dispersion without skew quadrupoles or solenoids}%
+            \ja{スキュー四極磁石やソレノイドがなければ鉛直分散はない}}
+
+\section{\en{Dispersion generated by a finite betatron amplitude}\ja{有限のベータトロン振幅が生成する分散}}
+\label{sec:finite_amplitude}
+
+\en{The previous sections assume $x_0 = p_{x0} = y_0 = p_{y0} = 0$, so that the only source of the transverse
+displacement is $\delta_0$. For a particle with a finite betatron amplitude the second-order terms of the transfer map
+also depend on $\delta_0$, and they add a dispersion-like displacement. This section derives that contribution.}%
+\ja{前節までは $x_0 = p_{x0} = y_0 = p_{y0} = 0$ を仮定し，横方向の変位の源を $\delta_0$ だけとした。有限の
+ベータトロン振幅を持つ粒子では，転送写像の 2 次の項も $\delta_0$ に依存するので，分散に似た変位が加わる。
+本節ではその寄与を導く。}
+
+\en{Write the map through second order as $\mathbf{P}(\mathbf{u}_0) = \mathbf{M}\mathbf{u}_0 + \mathbf{w}(\mathbf{u}_0)$
+with the notation of \cite{2026-004}. Differentiating with respect to $\delta_0$ gives}%
+\ja{2 次までの写像を \cite{2026-004} の記号で $\mathbf{P}(\mathbf{u}_0) = \mathbf{M}\mathbf{u}_0 +
+\mathbf{w}(\mathbf{u}_0)$ と書く。$\delta_0$ で微分すると}
+\begin{equation}
+  \frac{\partial\mathbf{P}}{\partial\delta_0}
+  = \mathbf{R}_{:,6} + \mathbf{A}\,\mathbf{u}_0 ,
+  \qquad
+  A_{ij} = \frac{\partial^2 w_i}{\partial\delta_0\,\partial u_{0j}} ,
+  \label{eq:dP_ddelta}
+\end{equation}
+\en{where $\mathbf{R}_{:,6}$ is the sixth column of the linear transfer matrix, that is the dispersion column
+$(\ldots, D, \ldots, D', \ldots)^\mathsf{T}$ of \cite{2026-002}. The first term is the linear dispersion of the
+previous sections; the second term is the contribution of the finite betatron amplitude. Because $\mathbf{w}$ is
+quadratic in $\mathbf{u}_0$, the matrix $\mathbf{A}$ is independent of $\mathbf{u}_0$ and is a property of the
+element alone.}%
+\ja{ここで $\mathbf{R}_{:,6}$ は線形転送行列の第 6 列，すなわち \cite{2026-002} の分散の列であり，
+第 1 成分が $D$，第 2 成分が $D'$ である。第 1 項が前節までの線形分散，第 2 項が有限のベータトロン振幅の
+寄与である。$\mathbf{w}$ は $\mathbf{u}_0$ について 2 次であるから，行列 $\mathbf{A}$ は $\mathbf{u}_0$ に
+依らず，要素だけで決まる。}
+
+\en{The matrix $\mathbf{A}$ is the coefficient of $\delta_0 u_{0j}$ in $w_i$, so it is the set of $T_{ij6}$ with the
+factor 2 of the symmetric sum removed: $A_{ij} = T_{ij6}$ for $j \neq 6$ and $A_{i6} = 2\,T_{i66}$. The factor 2
+appears because $\partial^2(\delta_0^2)/\partial\delta_0^2 = 2$.}%
+\ja{行列 $\mathbf{A}$ は $w_i$ における $\delta_0 u_{0j}$ の係数であるから，対称和の因子 2 を除いた $T_{ij6}$ の
+組である。$j \neq 6$ では $A_{ij} = T_{ij6}$，$A_{i6} = 2\,T_{i66}$ である。因子 2 は
+$\partial^2(\delta_0^2)/\partial\delta_0^2 = 2$ から現れる。}
+
+\en{\textbf{Drift space.} Only $w_1 = -L\delta_0 p_{x0}$, $w_3 = -L\delta_0 p_{y0}$, and
+$w_5 = -L(p_{x0}^2+p_{y0}^2)/2 - 3L\delta_0^2/(2\gamma_0^2)$ contribute, so}%
+\ja{\textbf{ドリフトスペース。}$w_1 = -L\delta_0 p_{x0}$，$w_3 = -L\delta_0 p_{y0}$，
+$w_5 = -L(p_{x0}^2+p_{y0}^2)/2 - 3L\delta_0^2/(2\gamma_0^2)$ だけが寄与するので}
+\begin{equation}
+  \mathbf{A}_\mathrm{drift}\,\mathbf{u}_0
+  = \big(-L\,p_{x0},\ 0,\ -L\,p_{y0},\ 0,\ -3L\,\delta_0/\gamma_0^2,\ 0\big)^\mathsf{T} .
+  \label{eq:A_drift}
+\end{equation}
+\en{The drift space therefore does generate a dispersion-like term, but only from the betatron momenta $p_{x0}$ and
+$p_{y0}$ and from $\delta_0$ itself; there is no term in $x_0$. With $p_{x0} = p_{y0} = 0$ it vanishes, which is the
+result of Section~\ref{sec:drift}. The physical origin is the momentum dependence of the effective drift length: a
+particle with a finite slope travels a longer path, so its displacement grows with $\delta_0$.}%
+\ja{したがってドリフトスペースも分散に似た項を生成するが，それはベータトロン運動量 $p_{x0}$，$p_{y0}$ と
+$\delta_0$ 自身からのみで，$x_0$ の項はない。$p_{x0} = p_{y0} = 0$ ならゼロになり，第~\ref{sec:drift} 節の結果に
+一致する。物理的な起源は実効的なドリフト長の運動量依存性である。有限の傾きを持つ粒子はより長い経路を進むので，
+その変位は $\delta_0$ とともに増える。}
+
+\en{\textbf{Sector dipole magnet.} With $\theta = hL$ and $\rho = 1/h$,}%
+\ja{\textbf{扇型偏向磁石。}$\theta = hL$，$\rho = 1/h$ として}
+\begin{equation}
+  \begin{aligned}
+    \big(\mathbf{A}_\mathrm{bend}\mathbf{u}_0\big)_1 &= \sin^2\theta\,x_0
+      - \frac{\sin 2\theta}{2h}\,p_{x0}
+      - \Big[\frac{\sin^2\theta}{h} + \frac{1-\cos\theta}{\gamma_0^2 h}\Big]\delta_0 , \\
+    \big(\mathbf{A}_\mathrm{bend}\mathbf{u}_0\big)_2 &= -\frac{\sin\theta}{\gamma_0^2}\,\delta_0 , \\
+    \big(\mathbf{A}_\mathrm{bend}\mathbf{u}_0\big)_3 &= -\frac{\sin\theta}{h}\,p_{y0} , \\
+    \big(\mathbf{A}_\mathrm{bend}\mathbf{u}_0\big)_5 &= \frac{\sin\theta}{\gamma_0^2}\,x_0
+      + \frac{1-\cos\theta}{\gamma_0^2 h}\,p_{x0}
+      - \frac{3\sin\theta}{\gamma_0^2 h}\,\delta_0 .
+  \end{aligned}
+  \label{eq:A_bend}
+\end{equation}
+\en{The terms in $x_0$ and $p_{x0}$ are the new contribution: a particle with a finite betatron amplitude in a bend
+acquires an additional momentum-dependent displacement, which is the chromatic effect of the bend on the betatron
+orbit. The term in $p_{y0}$ is the coupling of the vertical slope to the horizontal displacement through the bend.}%
+\ja{$x_0$ と $p_{x0}$ の項が新しい寄与である。偏向の中で有限のベータトロン振幅を持つ粒子は，運動量に依存する
+追加の変位を得る。これは偏向がベータトロン軌道に及ぼすクロマティックな効果である。$p_{y0}$ の項は，偏向を通した
+鉛直傾きの水平変位への結合である。}
+
+\en{\textbf{Quadrupole magnet.} With $\varphi = gL$,}%
+\ja{\textbf{四極磁石。}$\varphi = gL$ として}
+\begin{equation}
+  \begin{aligned}
+    \big(\mathbf{A}_\mathrm{quad}\mathbf{u}_0\big)_1 &= \frac{gL\sin\varphi}{2}\,x_0
+      - \frac{\varphi\cos\varphi + \sin\varphi}{2g}\,p_{x0} , \\
+    \big(\mathbf{A}_\mathrm{quad}\mathbf{u}_0\big)_2 &= \frac{g\,(\varphi\cos\varphi - \sin\varphi)}{2}\,x_0
+      + \frac{gL\sin\varphi}{2}\,p_{x0} , \\
+    \big(\mathbf{A}_\mathrm{quad}\mathbf{u}_0\big)_3 &= -\frac{gL\sinh\varphi}{2}\,y_0
+      - \frac{\varphi\cosh\varphi + \sinh\varphi}{2g}\,p_{y0} , \\
+    \big(\mathbf{A}_\mathrm{quad}\mathbf{u}_0\big)_4 &= -\frac{g\,(\varphi\cosh\varphi - \sinh\varphi)}{2}\,y_0
+      - \frac{gL\sinh\varphi}{2}\,p_{y0} , \\
+    \big(\mathbf{A}_\mathrm{quad}\mathbf{u}_0\big)_5 &= -\frac{3L}{\gamma_0^2}\,\delta_0 .
+  \end{aligned}
+  \label{eq:A_quad}
+\end{equation}
+\en{A quadrupole therefore also generates a dispersion-like term, proportional to the betatron amplitude and to
+$\delta_0$. It vanishes for $x_0 = p_{x0} = y_0 = p_{y0} = 0$, which is why Section~\ref{sec:quad} found no
+dispersion generation.}%
+\ja{したがって四極磁石も，ベータトロン振幅と $\delta_0$ に比例する分散に似た項を生成する。
+$x_0 = p_{x0} = y_0 = p_{y0} = 0$ ならゼロになり，第~\ref{sec:quad} 節で分散が生成されないと結論した理由である。}
+
+\en{\textbf{Interpretation.} The full dependence of the transverse position on $\delta_0$ is}%
+\ja{\textbf{解釈。}横方向の位置の $\delta_0$ 依存性は全体として}
+\begin{equation}
+  \mathbf{P}(\mathbf{u}_0) = \mathbf{P}\big|_{\delta_0 = 0} + \Big[\mathbf{R}_{:,6} + \mathbf{A}\,\mathbf{u}_0\Big]\delta_0
+  + \mathcal{O}(\delta_0^2) ,
+  \label{eq:P_delta_expansion}
+\end{equation}
+\en{so the effective dispersion seen by a particle of finite amplitude is $D_\mathrm{eff} = D + (\mathbf{A}\mathbf{u}_0)_1$
+in the horizontal plane. The amplitude-dependent part is of second order in the betatron amplitude, so it is small for
+a well-behaved beam, but it is the origin of the amplitude-dependent dispersion and of the chromaticity of the
+betatron motion.}%
+\ja{であるから，有限振幅の粒子が見る実効的な分散は，水平面で $D_\mathrm{eff} = D + (\mathbf{A}\mathbf{u}_0)_1$ で
+ある。振幅に依存する部分はベータトロン振幅について 2 次であるから，行儀のよいビームでは小さいが，これが
+振幅依存の分散とベータトロン運動のクロマティシティの起源である。}
+
+\en{The limits are consistent: $\mathbf{A}_\mathrm{bend} \to \mathbf{A}_\mathrm{drift}$ for $h \to 0$ and
+$\mathbf{A}_\mathrm{quad} \to \mathbf{A}_\mathrm{drift}$ for $g \to 0$.}%
+\ja{極限も整合している。$h \to 0$ で $\mathbf{A}_\mathrm{bend} \to \mathbf{A}_\mathrm{drift}$，$g \to 0$ で
+$\mathbf{A}_\mathrm{quad} \to \mathbf{A}_\mathrm{drift}$ である。}
+
+% Slides for this section.
+\slidetitle{\en{Dispersion from a finite betatron amplitude}\ja{有限のベータトロン振幅が生成する分散}}
+\slidemath{\frac{\partial\mathbf{P}}{\partial\delta_0} = \mathbf{R}_{:,6} + \mathbf{A}\,\mathbf{u}_0, \qquad
+           A_{ij} = \frac{\partial^2 w_i}{\partial\delta_0\,\partial u_{0j}}}
+\slidepoint{\en{The first term is the linear dispersion; the second is the finite-amplitude contribution}%
+            \ja{第 1 項が線形分散，第 2 項が有限振幅の寄与}}
+\slidepoint{\en{Drift: A u0 = (-L p_x0, 0, -L p_y0, 0, -3L delta_0/gamma_0^2, 0)}%
+            \ja{ドリフト: A u0 = (-L p_x0, 0, -L p_y0, 0, -3L delta_0/gamma_0^2, 0)}}
+\slidepoint{\en{Bend and quadrupole: the betatron amplitude adds a term proportional to delta_0}%
+            \ja{偏向と四極: ベータトロン振幅が delta_0 に比例する項を加える}}
+\slidepoint{\en{Effective dispersion D_eff = D + (A u0)_1; the correction is second order in the amplitude}%
+            \ja{実効分散 D_eff = D + (A u0)_1。補正は振幅について 2 次}}
+
+\section{\en{Checks}\ja{確認}}
+
+\en{The notebook performs the following checks for every element.}%
+\ja{ノートブックでは，各要素について次の確認を行っている。}
+\begin{enumerate}
+  \item \en{Each closed form satisfies \eqref{eq:D_ode} and the entrance conditions $D(0) = D_0$, $D'(0) = D'_0$.}%
+        \ja{各閉じた式は \eqref{eq:D_ode} と入口条件 $D(0) = D_0$，$D'(0) = D'_0$ を満たす。}
+  \item \en{The homogeneous part $(\tilde{D}, \tilde{D}')$ propagates with the $(x, p_x)$ block of the transfer
+    matrix of \cite{2026-002}, with the particular solution $D_p = 0$ for the drift space and the quadrupole and
+    $D_p = \rho$ for the bend.}%
+        \ja{斉次部分 $(\tilde{D}, \tilde{D}')$ は \cite{2026-002} の転送行列の $(x, p_x)$ ブロックで伝播する。
+        特解はドリフトスペースと四極磁石で $D_p = 0$，偏向で $D_p = \rho$ である。}
+  \item \en{The dispersion column of the transfer matrix, that is the response to $\delta_0$ with
+    $x_0 = p_{x0} = 0$, agrees with $D(L)$ from the closed forms.}%
+        \ja{転送行列の分散の列，すなわち $x_0 = p_{x0} = 0$ での $\delta_0$ への応答は，閉じた式の $D(L)$ と一致する。}
+  \item \en{The exact nonlinear EOM integrated numerically for a small amplitude reproduces $x(L) = D(L)\,\delta_0$
+    for an off-momentum particle with $x_0 = p_{x0} = 0$, up to the neglected second-order terms.}%
+        \ja{小振幅で数値積分した厳密な非線形運動方程式は，$x_0 = p_{x0} = 0$ の運動量の異なる粒子について，
+        無視した 2 次の項の範囲で $x(L) = D(L)\,\delta_0$ を再現する。}
+  \item \en{Limits: the bend dispersion tends to the drift space for $h \to 0$, and the quadrupole dispersion tends
+    to the drift space for $k \to 0$.}%
+        \ja{極限: $h \to 0$ で偏向の分散はドリフトスペースに，$k \to 0$ で四極磁石の分散はドリフトスペースに
+        近づく。}
+  \item \en{Composition: $D(L_1 + L_2)$ from the closed form equals the result of propagating $(D, D')$ through
+    $L_1$ and then $L_2$.}%
+        \ja{合成: 閉じた式の $D(L_1 + L_2)$ は，$(D, D')$ を $L_1$，次に $L_2$ と伝播した結果に一致する。}
+  \item \en{$\partial\mathbf{P}/\partial\delta_0 = \mathbf{R}_{:,6} + \mathbf{A}\mathbf{u}_0$ for every element,
+    with $A_{ij} = T_{ij6}$ for $j \neq 6$ and $A_{i6} = 2\,T_{i66}$.}%
+        \ja{各要素について $\partial\mathbf{P}/\partial\delta_0 = \mathbf{R}_{:,6} + \mathbf{A}\mathbf{u}_0$ が
+        成り立ち，$j \neq 6$ では $A_{ij} = T_{ij6}$，$A_{i6} = 2\,T_{i66}$ である。}
+  \item \en{$\mathbf{A}_\mathrm{bend} \to \mathbf{A}_\mathrm{drift}$ for $h \to 0$ and
+    $\mathbf{A}_\mathrm{quad} \to \mathbf{A}_\mathrm{drift}$ for $g \to 0$.}%
+        \ja{$h \to 0$ で $\mathbf{A}_\mathrm{bend} \to \mathbf{A}_\mathrm{drift}$，$g \to 0$ で
+        $\mathbf{A}_\mathrm{quad} \to \mathbf{A}_\mathrm{drift}$ である。}
+\end{enumerate}
+
+% Slides for this section.
+\slidetitle{\en{Checks}\ja{確認}}
+\slidepoint{\en{Each closed form satisfies the dispersion equation and the entrance conditions}%
+            \ja{各閉じた式は分散の方程式と入口条件を満たす}}
+\slidepoint{\en{Agrees with the (x, p_x) block and the dispersion column of Memo 2026-002}%
+            \ja{メモ 2026-002 の (x, p_x) ブロックと分散の列に一致}}
+\slidepoint{\en{Reproduces the exact EOM for an off-momentum particle at small amplitude}%
+            \ja{小振幅の運動量の異なる粒子について厳密な運動方程式を再現}}
+\slidepoint{\en{Limits h -> 0 and k -> 0 give the drift space; composition holds}%
+            \ja{h → 0 と k → 0 の極限でドリフトスペースに帰着し，合成則が成り立つ}}
+\slidepoint{\en{dP/ddelta_0 = R_:,6 + A u_0, and A reduces to A_drift in the limits}%
+            \ja{dP/ddelta_0 = R_:,6 + A u_0。極限で A は A_drift に帰着する}}
+
+\section{\en{Summary and open points}\ja{まとめと未解決の点}}
+
+\begin{enumerate}
+  \item \en{The dispersion solves $D'' + (h^2+k)\,D = h$ with the entrance conditions $D_0$, $D'_0$. Its homogeneous
+    part propagates with the $(x, p_x)$ block of the transfer matrix, and the particular solution $D_p$ is the
+    dispersion generated by the element.}%
+        \ja{分散は入口条件 $D_0$，$D'_0$ の下で $D'' + (h^2+k)\,D = h$ を満たす。斉次部分は転送行列の
+        $(x, p_x)$ ブロックで伝播し，特解 $D_p$ がその要素の生成する分散である。}
+  \item \en{Drift space: $D = D_0 + L D'_0$, $D' = D'_0$. No dispersion is generated.}%
+        \ja{ドリフトスペース: $D = D_0 + L D'_0$，$D' = D'_0$。分散は生成されない。}
+  \item \en{Sector dipole magnet: $D = \rho(1-\cos\theta) + D_0\cos\theta + \rho D'_0\sin\theta$. The bend generates
+    $\rho(1-\cos\theta)$ from zero.}%
+        \ja{扇型偏向磁石: $D = \rho(1-\cos\theta) + D_0\cos\theta + \rho D'_0\sin\theta$。偏向はゼロから
+        $\rho(1-\cos\theta)$ を生成する。}
+  \item \en{Quadrupole magnet: $D = D_0\cos(gL) + (D'_0/g)\sin(gL)$ for $k > 0$ and the hyperbolic form for $k < 0$.
+    No dispersion is generated.}%
+        \ja{四極磁石: $k > 0$ では $D = D_0\cos(gL) + (D'_0/g)\sin(gL)$，$k < 0$ では双曲線関数の形。分散は
+        生成されない。}
+  \item \en{Off-momentum particles: $x = x_\beta + D\,\delta$. With $x_0 = p_{x0} = 0$ and $\delta_0 \neq 0$ the
+    particle follows the dispersive orbit $D(s)\,\delta_0$, not the reference orbit.}%
+        \ja{運動量の異なる粒子: $x = x_\beta + D\,\delta$。$x_0 = p_{x0} = 0$ かつ $\delta_0 \neq 0$ なら，粒子は
+        基準軌道ではなく分散軌道 $D(s)\,\delta_0$ に沿って進む。}
+  \item \en{Finite betatron amplitude: $\partial\mathbf{P}/\partial\delta_0 = \mathbf{R}_{:,6} +
+    \mathbf{A}\mathbf{u}_0$ with $A_{ij} = \partial^2 w_i/\partial\delta_0\partial u_{0j}$. The drift space
+    contributes only through $p_{x0}$, $p_{y0}$, and $\delta_0$; the bend and the quadrupole contribute through the
+    betatron amplitude as well. The effective dispersion is $D_\mathrm{eff} = D + (\mathbf{A}\mathbf{u}_0)_1$.}%
+        \ja{有限のベータトロン振幅: $A_{ij} = \partial^2 w_i/\partial\delta_0\partial u_{0j}$ として
+        $\partial\mathbf{P}/\partial\delta_0 = \mathbf{R}_{:,6} + \mathbf{A}\mathbf{u}_0$ である。ドリフトスペースは
+        $p_{x0}$，$p_{y0}$，$\delta_0$ を通してのみ寄与し，偏向と四極磁石はベータトロン振幅を通しても寄与する。
+        実効的な分散は $D_\mathrm{eff} = D + (\mathbf{A}\mathbf{u}_0)_1$ である。}
+  \item \en{Open points, not covered here: the periodic dispersion of a ring and the momentum compaction factor; the
+    vertical dispersion from skew quadrupoles and solenoids; the dispersion in the presence of sextupoles, where it
+    becomes amplitude dependent; and the second-order correction to the dispersion.}%
+        \ja{本メモで扱わない点: リングの周期分散と運動量圧縮因子，スキュー四極磁石とソレノイドによる鉛直分散，
+        六極磁石がある場合の分散（振幅依存になる），分散の 2 次の補正。}
+\end{enumerate}
+
+% Slides for this section.
+\slidetitle{\en{Summary}\ja{まとめ}}
+\slidemath{D'' + (h^2+k)\,D = h, \qquad x = x_\beta + D\,\delta}
+\slidepoint{\en{Drift: D = D_0 + L D'_0. Bend: rho(1 - cos theta) + ... Quadrupole: cos(gL), cosh(gL)}%
+            \ja{ドリフト: D = D_0 + L D'_0。偏向: rho(1 - cos theta) + ...。四極: cos(gL)，cosh(gL)}}
+\slidepoint{\en{Only the bend generates dispersion; the drift and the quadrupole propagate it}%
+            \ja{分散を生成するのは偏向だけ。ドリフトと四極磁石は伝播させる}}
+\slidepoint{\en{Finite amplitude adds A u_0 to the dispersion column: D_eff = D + (A u_0)_1}%
+            \ja{有限振幅は分散の列に A u_0 を加える: D_eff = D + (A u_0)_1}}
+\slidepoint{\en{Not covered: periodic dispersion, momentum compaction, vertical dispersion, sextupoles}%
+            \ja{未対応: 周期分散，運動量圧縮因子，鉛直分散，六極磁石}}
+
+\printbibliography[title={\en{References}\ja{参考文献}}]
+
+\section*{\en{License}\ja{ライセンス}}
+\en{This document is licensed under CC BY 4.0. Code snippets are GPL-3.0-or-later. See \texttt{LICENSING.md}.}%
+\ja{本文書は CC BY 4.0 で提供する。コードの断片は GPL-3.0-or-later である。詳細は \texttt{LICENSING.md} を参照すること。}
+
+\end{document}
